@@ -62,7 +62,8 @@ export function GraphView() {
   const [error, setError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState<GraphNode[]>([]);
-  const [maxNodes, setMaxNodes] = useState(500);
+  const [maxNodes, setMaxNodes] = useState(5000);
+  const [maxDepth, setMaxDepth] = useState(5);
   const [onlyRelevant, setOnlyRelevant] = useState(false);
 
   const fetchGraph = useCallback(async () => {
@@ -70,7 +71,7 @@ export function GraphView() {
       setIsLoading(true);
       setError(null);
       const response = await fetch(
-        `${API_BASE}/graph?max_nodes=${maxNodes}&only_relevant=${onlyRelevant}`
+        `${API_BASE}/graph?max_nodes=${maxNodes}&only_relevant=${onlyRelevant}&max_depth=${maxDepth}`
       );
       if (!response.ok) throw new Error("Failed to fetch graph");
       const data: GraphData = await response.json();
@@ -80,7 +81,7 @@ export function GraphView() {
     } finally {
       setIsLoading(false);
     }
-  }, [maxNodes, onlyRelevant]);
+  }, [maxNodes, onlyRelevant, maxDepth]);
 
   useEffect(() => {
     fetchGraph();
@@ -156,23 +157,40 @@ export function GraphView() {
       const actualNode = graphData.nodes.find(
         (n) => n.id === nodeFromSearch.id
       );
-      if (
-        actualNode &&
-        actualNode.x !== undefined &&
-        actualNode.y !== undefined
-      ) {
+      if (actualNode) {
+        console.log('Focus on node:', actualNode.handle, 'x:', actualNode.x, 'y:', actualNode.y);
         setSelectedNode(actualNode);
-        // Use a two-step approach: first zoom, then center after zoom starts
-        // This prevents the animations from conflicting
+
+        // Check if coordinates are set
+        if (actualNode.x === undefined || actualNode.y === undefined) {
+          console.warn('Node coordinates not set - simulation may not have completed');
+          return;
+        }
+
         const fg = graphRef.current;
-        fg.zoom(4, 400);
-        // After zoom animation starts, center on the node
-        setTimeout(() => {
+
+        // Get current zoom to calculate proper animation
+        const currentZoom = fg.zoom();
+        const targetZoom = 4;
+
+        // If we're already zoomed in, zoom out first for better transition
+        if (currentZoom > 2) {
+          fg.zoom(1, 200);
+          setTimeout(() => {
+            fg.centerAt(actualNode.x, actualNode.y, 400);
+            setTimeout(() => {
+              fg.zoom(targetZoom, 400);
+            }, 450);
+          }, 250);
+        } else {
+          // Zoom out slightly first, then center, then zoom in
           fg.centerAt(actualNode.x, actualNode.y, 600);
-        }, 100);
+          setTimeout(() => {
+            fg.zoom(targetZoom, 400);
+          }, 650);
+        }
       } else {
-        // Node not in current view or not positioned yet, just select it
-        setSelectedNode(nodeFromSearch);
+        console.warn('Node not found in graph data:', nodeFromSearch.id);
       }
     }
   };
@@ -342,14 +360,26 @@ export function GraphView() {
         <div style={styles.section}>
           <div style={styles.sectionTitle}>Display</div>
           <div style={styles.field}>
-            <label style={styles.label}>Max Nodes: {maxNodes}</label>
+            <label style={styles.label}>Max Nodes: {maxNodes.toLocaleString()}</label>
             <input
               type="range"
-              min={100}
-              max={5000}
-              step={100}
+              min={500}
+              max={20000}
+              step={500}
               value={maxNodes}
               onChange={(e) => setMaxNodes(Number(e.target.value))}
+              style={styles.range}
+            />
+          </div>
+          <div style={{ ...styles.field, marginTop: '12px' }}>
+            <label style={styles.label}>Max Depth: {maxDepth}</label>
+            <input
+              type="range"
+              min={1}
+              max={10}
+              step={1}
+              value={maxDepth}
+              onChange={(e) => setMaxDepth(Number(e.target.value))}
               style={styles.range}
             />
           </div>

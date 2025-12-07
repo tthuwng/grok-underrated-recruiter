@@ -31,7 +31,9 @@ export function CandidateDetailView({ handle, onClose, isSaved, onToggleSave }: 
   };
 
   const renderScoreCard = (title: string, breakdown: ScoreBreakdown | undefined) => {
-    if (!breakdown) return null;
+    // Skip if no breakdown or if it has no meaningful data (score 0 and no evidence)
+    if (!breakdown || (breakdown.score === 0 && !breakdown.evidence)) return null;
+
     const scoreColor = breakdown.score >= 8 ? 'var(--accent-green)'
       : breakdown.score >= 6 ? 'var(--accent-primary)'
       : breakdown.score >= 4 ? 'var(--accent-orange)'
@@ -43,7 +45,7 @@ export function CandidateDetailView({ handle, onClose, isSaved, onToggleSave }: 
           <span style={styles.scoreTitle}>{title}</span>
           <span style={{ ...styles.scoreValue, color: scoreColor }}>{breakdown.score}/10</span>
         </div>
-        <p style={styles.scoreEvidence}>{breakdown.evidence}</p>
+        {breakdown.evidence && <p style={styles.scoreEvidence}>{breakdown.evidence}</p>}
       </div>
     );
   };
@@ -140,6 +142,16 @@ export function CandidateDetailView({ handle, onClose, isSaved, onToggleSave }: 
             {renderScoreCard('Exceptional Ability', candidate.exceptional_ability)}
             {renderScoreCard('Communication', candidate.communication)}
           </div>
+          {/* Show fallback if no score cards rendered */}
+          {!candidate.technical_depth?.evidence &&
+           !candidate.project_evidence?.evidence &&
+           !candidate.mission_alignment?.evidence &&
+           !candidate.exceptional_ability?.evidence &&
+           !candidate.communication?.evidence && (
+            <p style={styles.noScoresText}>
+              Detailed score breakdown not available for this candidate.
+            </p>
+          )}
         </div>
 
         {candidate.concerns && candidate.concerns.length > 0 && (
@@ -425,6 +437,12 @@ const styles: Record<string, React.CSSProperties> = {
     color: 'var(--text-muted)',
     lineHeight: 1.5,
     margin: 0,
+  },
+  noScoresText: {
+    fontSize: '14px',
+    color: 'var(--text-muted)',
+    fontStyle: 'italic',
+    marginTop: '8px',
   },
   repoList: {
     display: 'flex',

@@ -113,10 +113,17 @@ export function DMComposer({ candidate, onClose }: DMComposerProps) {
               )}
             </div>
             <div style={styles.messageBox} ref={messageRef}>
-              <pre style={styles.messageText}>
-                {generatedMessage || (isGenerating ? '' : 'Generating...')}
-                {isGenerating && <span style={styles.cursor}>|</span>}
-              </pre>
+              {isGenerating && !generatedMessage ? (
+                <div style={styles.loadingContainer}>
+                  <div style={styles.spinner} />
+                  <span style={styles.loadingText}>Generating personalized message...</span>
+                </div>
+              ) : (
+                <pre style={styles.messageText}>
+                  {generatedMessage}
+                  {isGenerating && <span style={styles.cursor}>|</span>}
+                </pre>
+              )}
             </div>
 
             {!isGenerating && generatedMessage && !generatedMessage.startsWith('Error') && (
@@ -366,5 +373,25 @@ const styles: Record<string, React.CSSProperties> = {
     borderRadius: '8px',
     color: 'white',
     cursor: 'pointer',
+  },
+  loadingContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: '32px 16px',
+    gap: '16px',
+  },
+  spinner: {
+    width: '32px',
+    height: '32px',
+    border: '3px solid var(--border-color)',
+    borderTopColor: 'var(--accent-primary)',
+    borderRadius: '50%',
+    animation: 'spin 1s linear infinite',
+  },
+  loadingText: {
+    fontSize: '14px',
+    color: 'var(--text-muted)',
   },
 };
