@@ -1,0 +1,112 @@
+# Grok Recruiter - Seed Configuration
+# Root accounts to start graph discovery from
+
+roots:
+  - elonmusk
+  - A5_Wagyu
+  - APrerepa
+  - AdamSliwakowski
+  - a2xai
+  - adityagupta
+  - aknowntheory
+  - Alexjpeng
+  - alsiens
+  - AndyKim99999
+  - anzhit
+  - ArashBidgoli
+  - arnab_iitk
+  - ArnoCandel
+  - attilablenesi
+  - b0ch4r0v
+  - BillyuChenLin
+  - billyuchenlin
+  - cph816
+  - CrisGiardina
+  - CtrlAltHero
+  - DMananniko56701
+  - dma_running
+  - DrakeJWong
+  - dustinvtran
+  - edwinboyan
+  - El1flem
+  - endernewton
+  - ericli_
+  - fraser_cook
+  - GrahamSeamans
+  - GrantEMatheson
+  - TheGregYang # gregyang (listed as @TheGregYang)
+  - Guodzh
+  - haowengeget
+  - hexianghu
+  - houndstongue
+  - imhaotian
+  - ironsoul0
+  - jaesungtae
+  - jitrc
+  - JohnBoccio
+  - JohnOn1337
+  - jonnylangefeld
+  - kevngg
+  - KyleZaragoza
+  - larrabearr
+  - LiangchenLuo
+  - lm_zheng
+  - mindbergh
+  - MohitMittal26
+  - nmswede
+  - Nitemaeric
+  - onhachoe1
+  - pablo_pensees
+  - pengshangfu
+  - phroo
+  - prolificgoober
+  - rabahtahraoui
+  - Randxie29
+  - rayhotate
+  - riley_trett43
+  - rochan_hm
+  - rpoo
+  - RonghangHu
+  - Saaaang94
+  - sahiljain314
+  - satu0king
+  - shengs1123
+  - shefys
+  - sishaar
+  - skory_by
+  - spencersharkey
+  - stepango
+  - StewartSlocum1
+  - textangel
+  - thebigreesh
+  - ThePenguinCo
+  - TobyPhln
+  - tylerkniess
+  - tylervstorm
+  - WillFuxAI
+  - wyudun
+  - x_hanyu
+  - xiaobinwu
+  - Yang1fan2
+  - YangNaruto
+  - yiwenyuan98
+  - zhangir_azerbay
+  - zheweishi
+  # Add more xAI employee handles here as needed
+
+settings:
+  # Graph expansion settings
+  max_depth: 1 # Number of hops from root (start with 1)
+
+  # Underrated candidate threshold
+  max_followers_candidate: 50000 # Accounts with more followers are not "underrated"
+  min_followers_candidate: 50 # Filter out very low follower accounts (likely spam)
+
+  # API request limits (to manage rate limits)
+  # Priority: following > retweets > replies > likes
+  max_following_per_root: 500 # Max accounts to fetch that each seed follows (strongest signal!)
+  max_liked_tweets: 100 # Max liked tweets to fetch per root
+  max_root_tweets: 50 # Max tweets to fetch per root
+  max_likers_per_tweet: 100 # Max liking users per tweet
+  max_retweeters_per_tweet: 100 # Max retweeting users per tweet
+  max_replies_per_conversation: 50 # Max replies to fetch per conversation

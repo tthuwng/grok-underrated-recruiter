@@ -1,0 +1,153 @@
+# xAI Candidate Evaluation Criteria
+# Based on actual xAI job postings + Elon Musk's hiring philosophy
+
+company_context: |
+  xAI's mission is to create AI systems that can accurately understand the universe
+  and aid humanity in its pursuit of knowledge.
+
+  Culture:
+  - Small, highly motivated team focused on engineering excellence
+  - Flat organizational structure - all employees hands-on
+  - Leadership given to those who show initiative and consistently deliver excellence
+  - Strong work ethic and prioritization skills
+  - All engineers expected to have strong communication skills
+
+  Musk's Core Filter:
+  - "Evidence of exceptional ability" is the only non-negotiable
+  - Deep ownership of hard problems (not on the periphery)
+  - Extreme drive & willingness to work intensely for the mission
+  - Mission obsession over careerist polish
+  - Track record of solving hard problems, not degrees
+
+# The key question xAI asks every candidate:
+key_question: "What exceptional work have you done?"
+
+evaluation_criteria:
+  # 1. EXCEPTIONAL ABILITY (most important)
+  exceptional_ability:
+    weight: 0.35
+    description: "Evidence of building something exceptional"
+    signals:
+      strong:
+        - Built and shipped a product that people use
+        - Open source project with real adoption (stars, forks, users)
+        - Published research with novel contributions
+        - Solved a hard technical problem with measurable impact
+        - Created tools/frameworks others depend on
+      moderate:
+        - Active contributor to significant open source projects
+        - Technical blog posts showing deep understanding
+        - Side projects demonstrating skill breadth
+      weak:
+        - Only talks about what they want to build
+        - Retweets others without adding insight
+        - Generic tech commentary without depth
+
+  # 2. TECHNICAL DEPTH
+  technical_depth:
+    weight: 0.25
+    description: "Deep understanding, not buzzwords"
+    signals:
+      strong:
+        - Shows code, math, benchmarks, experiments in posts
+        - Explains tradeoffs and design decisions
+        - Debugs/optimizes complex systems publicly
+        - Discusses implementation details, not just concepts
+      moderate:
+        - Asks insightful technical questions
+        - Engages substantively in technical threads
+        - Shows understanding of fundamentals
+      weak:
+        - Only high-level buzzword content
+        - Parrots popular opinions without analysis
+        - No evidence of hands-on work
+
+  # 3. MISSION ALIGNMENT (xAI specific)
+  mission_alignment:
+    weight: 0.20
+    description: "Obsessed with the right problems"
+    topics:
+      xai_relevant:
+        - LLMs, language models, transformers
+        - Training at scale, distributed systems
+        - RLHF, alignment, safety
+        - Inference optimization, serving
+        - Reasoning, planning, world models
+        - Evals, benchmarks, red-teaming
+        - GPU/TPU programming, CUDA, Triton
+        - JAX, XLA, PyTorch internals
+      adjacent:
+        - Robotics, embodied AI
+        - Compilers, systems programming
+        - HPC, networking, low-latency systems
+      red_flags:
+        - Pure crypto/NFT focus
+        - Marketing/growth hacking focus
+        - Generic startup advice
+
+  # 4. OWNERSHIP & AGENCY
+  ownership:
+    weight: 0.15
+    description: "Did THEY do the work?"
+    signals:
+      strong:
+        - Uses "I built" not "we built" when appropriate
+        - Describes specific contributions to team projects
+        - Takes responsibility for failures, not just successes
+        - Shows initiative beyond assigned work
+      weak:
+        - Vague about their actual contributions
+        - Only worked on periphery of interesting projects
+        - Waits to be told what to do
+
+  # 5. COMMUNICATION
+  communication:
+    weight: 0.05
+    description: "Clear, concise, accurate"
+    signals:
+      strong:
+        - Explains complex topics simply
+        - Writes clearly and concisely
+        - Responds thoughtfully to criticism
+      weak:
+        - Unclear or rambling explanations
+        - Defensive or dismissive in discussions
+
+# Tech stack signals (from job postings)
+tech_stack:
+  core:
+    - Python
+    - Rust
+    - C++
+    - CUDA
+    - JAX/XLA
+    - Triton
+  infrastructure:
+    - Linux/POSIX
+    - Distributed systems
+    - NCCL, NVLink
+    - HPC clusters
+  ml:
+    - Transformers
+    - FSDP, Megatron, pipeline parallelism
+    - ML compilers (XLA, MLIR)
+    - Training optimization
+
+# Underratedness criteria
+underrated_definition:
+  ideal_follower_range: [100, 50000]
+  description: |
+    High signal from taste graph (xAI/Elon interactions)
+    but low global visibility (not yet famous).
+
+    The 800-follower engineer who Elon likes >
+    The 1M-follower influencer with weak technical signal
+
+# Red flags (immediate disqualification signals)
+red_flags:
+  - Pure promotional content without substance
+  - Only retweets, no original thinking
+  - Crypto/forex/trading focus without technical depth
+  - Toxic or abusive behavior
+  - Spam patterns
+  - Account age < 90 days with suspicious activity

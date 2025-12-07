@@ -1,0 +1,20 @@
+[project]
+name = "xai-hack"
+version = "0.1.0"
+description = "Add your description here"
+requires-python = ">=3.13"
+dependencies = [
+    "matplotlib>=3.10.7",
+    "networkx>=3.6",
+    "pandas>=2.3.3",
+    "python-dotenv>=1.2.1",
+    "pyyaml>=6.0.3",
+    "requests>=2.32.5",
+    "requests-oauthlib>=2.0.0",
+    "scipy>=1.16.3",
+]
+
+[dependency-groups]
+dev = [
+    "ipykernel>=7.1.0",
+]
