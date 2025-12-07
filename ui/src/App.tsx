@@ -153,7 +153,7 @@ function App() {
     setCandidates([]);
 
     try {
-      await searchCandidatesStream(query, 30, {
+      await searchCandidatesStream(query, 100, {
         onThinking: (chunk) => {
           setThinking((prev) => (prev || '') + chunk);
         },
