@@ -3,6 +3,7 @@ SQLite database for Grok Underrated Recruiter.
 Stores saved candidates and DM history.
 """
 
+import json
 import sqlite3
 from contextlib import contextmanager
 from datetime import datetime
@@ -81,6 +82,7 @@ def init_db():
                 grok_role TEXT,
                 grok_evaluated INTEGER DEFAULT 0,
                 final_score REAL,
+                deep_eval_data TEXT,
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                 updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             );
@@ -134,6 +136,16 @@ def migrate_db():
             # Create index for user_id
             conn.execute(
                 "CREATE INDEX IF NOT EXISTS idx_saved_user ON saved_candidates(user_id)"
+            )
+
+        # Check if deep_eval_data column exists in graph_nodes
+        cursor = conn.execute("PRAGMA table_info(graph_nodes)")
+        graph_columns = [row[1] for row in cursor.fetchall()]
+
+        if "deep_eval_data" not in graph_columns:
+            # Add deep_eval_data column to store full evaluation JSON
+            conn.execute(
+                "ALTER TABLE graph_nodes ADD COLUMN deep_eval_data TEXT"
             )
 
 
@@ -439,6 +451,38 @@ def update_submission_stage(submission_id: str, stage: str) -> bool:
         return result.rowcount > 0
 
 
+def delete_submission(submission_id: str) -> bool:
+    """Delete a submission by ID."""
+    with get_db() as conn:
+        result = conn.execute(
+            "DELETE FROM submissions WHERE id = ?",
+            (submission_id,)
+        )
+        return result.rowcount > 0
+
+
+def delete_failed_submissions() -> int:
+    """Delete all failed submissions. Returns count of deleted rows."""
+    with get_db() as conn:
+        result = conn.execute(
+            "DELETE FROM submissions WHERE status = 'failed'"
+        )
+        return result.rowcount
+
+
+def get_all_submissions() -> List[dict]:
+    """Get all submissions."""
+    with get_db() as conn:
+        rows = conn.execute(
+            """SELECT id, handle, submitted_by, submitted_at, stage, status,
+                      approval_status, error_message
+               FROM submissions
+               ORDER BY submitted_at DESC"""
+        ).fetchall()
+
+    return [dict(row) for row in rows]
+
+
 # --- Graph Operations ---
 
 
@@ -452,8 +496,8 @@ def upsert_graph_node(node_data: dict) -> dict:
                 id, handle, name, bio, followers_count, following_count,
                 is_seed, is_candidate, discovered_via, depth,
                 pagerank_score, underratedness_score, grok_relevant, grok_role,
-                grok_evaluated, final_score, created_at, updated_at
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                grok_evaluated, final_score, deep_eval_data, created_at, updated_at
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             ON CONFLICT(id) DO UPDATE SET
                 handle = excluded.handle,
                 name = excluded.name,
@@ -470,6 +514,7 @@ def upsert_graph_node(node_data: dict) -> dict:
                 grok_role = excluded.grok_role,
                 grok_evaluated = excluded.grok_evaluated,
                 final_score = excluded.final_score,
+                deep_eval_data = excluded.deep_eval_data,
                 updated_at = excluded.updated_at
             """,
             (
@@ -489,6 +534,7 @@ def upsert_graph_node(node_data: dict) -> dict:
                 node_data.get("grok_role"),
                 1 if node_data.get("grok_evaluated") else 0,
                 node_data.get("final_score"),
+                node_data.get("deep_eval_data"),
                 now,
                 now,
             ),
@@ -526,6 +572,14 @@ def get_graph_node_by_handle(handle: str) -> Optional[dict]:
 
 def _row_to_node_dict(row) -> dict:
     """Convert a database row to a node dict."""
+    # Parse deep_eval_data JSON if present
+    deep_eval_data = None
+    if row["deep_eval_data"]:
+        try:
+            deep_eval_data = json.loads(row["deep_eval_data"])
+        except (json.JSONDecodeError, TypeError):
+            pass
+
     return {
         "id": row["id"],
         "handle": row["handle"],
@@ -543,16 +597,23 @@ def _row_to_node_dict(row) -> dict:
         "grok_role": row["grok_role"],
         "grok_evaluated": bool(row["grok_evaluated"]),
         "final_score": row["final_score"],
+        "deep_eval_data": deep_eval_data,
     }
 
 
-def get_all_graph_nodes(limit: int = 5000) -> List[dict]:
-    """Get all graph nodes."""
+def get_all_graph_nodes(limit: int = None) -> List[dict]:
+    """Get all graph nodes. If limit is None, returns all nodes."""
     with get_db() as conn:
-        rows = conn.execute(
-            "SELECT * FROM graph_nodes ORDER BY pagerank_score DESC LIMIT ?",
-            (limit,)
-        ).fetchall()
+        if limit:
+            rows = conn.execute(
+                "SELECT * FROM graph_nodes ORDER BY pagerank_score DESC LIMIT ?",
+                (limit,)
+            ).fetchall()
+        else:
+            # Load all nodes - important for graph visualization
+            rows = conn.execute(
+                "SELECT * FROM graph_nodes ORDER BY pagerank_score DESC"
+            ).fetchall()
 
     return [_row_to_node_dict(row) for row in rows]
 
@@ -657,3 +718,83 @@ def delete_graph_node(node_id: str) -> bool:
         conn.execute("DELETE FROM graph_edges WHERE source_id = ? OR target_id = ?", (node_id, node_id))
         result = conn.execute("DELETE FROM graph_nodes WHERE id = ?", (node_id,))
         return result.rowcount > 0
+
+
+def get_evaluated_candidates() -> list:
+    """Get all candidates that have been evaluated (grok_evaluated=True or final_score set)."""
+    with get_db() as conn:
+        rows = conn.execute(
+            """SELECT * FROM graph_nodes
+               WHERE grok_evaluated = 1 OR final_score IS NOT NULL
+               ORDER BY final_score DESC"""
+        ).fetchall()
+
+    results = []
+    for row in rows:
+        # Parse deep_eval_data JSON if present
+        deep_eval_data = None
+        if row["deep_eval_data"]:
+            try:
+                deep_eval_data = json.loads(row["deep_eval_data"])
+            except (json.JSONDecodeError, TypeError):
+                pass
+
+        candidate = {
+            "handle": row["handle"],
+            "name": row["name"],
+            "bio": row["bio"],
+            "followers_count": row["followers_count"],
+            "following_count": row["following_count"],
+            "pagerank_score": row["pagerank_score"],
+            "underratedness_score": row["underratedness_score"],
+            "final_score": row["final_score"],
+            "grok_role": row["grok_role"],
+            "grok_relevant": row["grok_relevant"],
+            "recommended_role": row["grok_role"],  # Alias for compatibility
+        }
+
+        # Merge deep_eval_data fields if available
+        if deep_eval_data:
+            candidate["summary"] = deep_eval_data.get("summary")
+            candidate["strengths"] = deep_eval_data.get("strengths")
+            candidate["concerns"] = deep_eval_data.get("concerns")
+            candidate["recommended_role"] = deep_eval_data.get("recommended_role", row["grok_role"])
+            candidate["technical_depth"] = deep_eval_data.get("technical_depth")
+            candidate["project_evidence"] = deep_eval_data.get("project_evidence")
+            candidate["mission_alignment"] = deep_eval_data.get("mission_alignment")
+            candidate["exceptional_ability"] = deep_eval_data.get("exceptional_ability")
+            candidate["communication"] = deep_eval_data.get("communication")
+            candidate["github_url"] = deep_eval_data.get("github_url")
+            candidate["linkedin_url"] = deep_eval_data.get("linkedin_url")
+            candidate["top_repos"] = deep_eval_data.get("top_repos")
+
+        results.append(candidate)
+
+    return results
+
+
+def get_relevant_candidates() -> list:
+    """Get all candidates that passed Grok relevance filter."""
+    with get_db() as conn:
+        rows = conn.execute(
+            """SELECT * FROM graph_nodes
+               WHERE grok_relevant = 1
+               ORDER BY pagerank_score DESC"""
+        ).fetchall()
+
+    return [
+        {
+            "handle": row["handle"],
+            "name": row["name"],
+            "bio": row["bio"],
+            "followers_count": row["followers_count"],
+            "following_count": row["following_count"],
+            "pagerank_score": row["pagerank_score"],
+            "underratedness_score": row["underratedness_score"],
+            "final_score": row["final_score"],
+            "grok_role": row["grok_role"],
+            "grok_relevant": row["grok_relevant"],
+            "recommended_role": row["grok_role"],
+        }
+        for row in rows
+    ]

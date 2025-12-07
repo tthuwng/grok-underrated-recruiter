@@ -62,9 +62,10 @@ export function GraphView() {
   const [error, setError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState<GraphNode[]>([]);
-  const [maxNodes, setMaxNodes] = useState(5000);
-  const [maxDepth, setMaxDepth] = useState(5);
+  const [maxNodes, setMaxNodes] = useState(10000);
+  const [maxDepth, setMaxDepth] = useState(10);
   const [onlyRelevant, setOnlyRelevant] = useState(false);
+  const [hoveredNode, setHoveredNode] = useState<GraphNode | null>(null);
 
   const fetchGraph = useCallback(async () => {
     try {
@@ -265,23 +266,26 @@ export function GraphView() {
     return baseSize * scaleFactor;
   };
 
+  // The active node is either selected or hovered (selected takes priority)
+  const activeNode = selectedNode || hoveredNode;
+
   // Get connected node IDs for highlighting edges - used in nodeCanvasObject callback below
   const connectedNodeIds = React.useMemo(() => {
-    if (!selectedNode || !graphData) return new Set<string>();
+    if (!activeNode || !graphData) return new Set<string>();
     const ids = new Set<string>();
     graphData.edges.forEach(edge => {
-      if (edge.source === selectedNode.id || edge.target === selectedNode.id) {
+      if (edge.source === activeNode.id || edge.target === activeNode.id) {
         ids.add(edge.source);
         ids.add(edge.target);
       }
     });
     return ids;
-  }, [selectedNode, graphData]);
+  }, [activeNode, graphData]);
 
-  // Check if an edge is connected to the selected node
+  // Check if an edge is connected to the active (selected or hovered) node
   const isEdgeConnected = (source: string, target: string) => {
-    if (!selectedNode) return false;
-    return source === selectedNode.id || target === selectedNode.id;
+    if (!activeNode) return false;
+    return source === activeNode.id || target === activeNode.id;
   };
 
   // Custom node rendering with labels
@@ -295,15 +299,15 @@ export function GraphView() {
     const x = node.x || 0;
     const y = node.y || 0;
 
-    // Check if this node is connected to the selected node
-    const isConnected = selectedNode && connectedNodeIds.has(node.id);
-    const isSelected = selectedNode?.id === node.id;
+    // Check if this node is connected to the active (selected/hovered) node
+    const isConnected = activeNode && connectedNodeIds.has(node.id);
+    const isActive = activeNode?.id === node.id;
 
-    // Dim nodes that are not connected when a node is selected
-    const dimNode = selectedNode && !isConnected && !isSelected;
+    // Dim nodes that are not connected when a node is active
+    const dimNode = activeNode && !isConnected && !isActive;
 
-    // Draw highlight ring for selected or connected nodes
-    if (isSelected) {
+    // Draw highlight ring for active or connected nodes
+    if (isActive) {
       ctx.beginPath();
       ctx.arc(x, y, size + 4, 0, 2 * Math.PI, false);
       ctx.fillStyle = "rgba(96, 165, 250, 0.3)";
@@ -325,12 +329,12 @@ export function GraphView() {
     ctx.fillStyle = dimNode ? `${color}40` : color; // Add transparency if dimmed
     ctx.fill();
 
-    // Draw white text label for seeds and high PageRank nodes, or connected/selected nodes
+    // Draw white text label for seeds and high PageRank nodes, or connected/active nodes
     const showLabel =
       node.is_seed ||
       node.pagerank_score > 0.001 ||
       node.grok_relevant === true ||
-      isSelected ||
+      isActive ||
       isConnected;
     if (showLabel) {
       const label = `@${node.handle}`;
@@ -341,7 +345,7 @@ export function GraphView() {
       ctx.fillStyle = dimNode ? "rgba(255, 255, 255, 0.3)" : "#ffffff";
       ctx.fillText(label, x, y + size + 2);
     }
-  }, [selectedNode, connectedNodeIds, graphData]);
+  }, [activeNode, connectedNodeIds, graphData]);
 
   return (
     <div style={styles.container}>
@@ -548,16 +552,16 @@ export function GraphView() {
               const sourceId = typeof link.source === 'object' ? (link.source as GraphNode).id : link.source;
               const targetId = typeof link.target === 'object' ? (link.target as GraphNode).id : link.target;
 
-              // Highlight edges connected to selected node
-              if (selectedNode && isEdgeConnected(sourceId as string, targetId as string)) {
-                return "rgba(96, 165, 250, 0.8)"; // accent-blue with high opacity
+              // Highlight edges connected to active (selected/hovered) node
+              if (activeNode && isEdgeConnected(sourceId as string, targetId as string)) {
+                return "rgba(96, 165, 250, 0.9)"; // accent-blue with high opacity
               }
 
               const nodeCount = graphData?.nodes.length || 200;
-              // Dim other edges when a node is selected
-              const alpha = selectedNode
-                ? 0.03
-                : nodeCount > 1000 ? 0.08 : nodeCount > 500 ? 0.12 : 0.15;
+              // Dim other edges when a node is active, but keep edges more visible by default
+              const alpha = activeNode
+                ? 0.05
+                : nodeCount > 5000 ? 0.15 : nodeCount > 1000 ? 0.2 : nodeCount > 500 ? 0.25 : 0.3;
               return `rgba(113, 113, 122, ${alpha})`;
             }}
             linkWidth={(link) => {
@@ -565,16 +569,17 @@ export function GraphView() {
               const sourceId = typeof link.source === 'object' ? (link.source as GraphNode).id : link.source;
               const targetId = typeof link.target === 'object' ? (link.target as GraphNode).id : link.target;
 
-              // Make edges connected to selected node thicker
-              if (selectedNode && isEdgeConnected(sourceId as string, targetId as string)) {
-                return 2;
+              // Make edges connected to active node thicker
+              if (activeNode && isEdgeConnected(sourceId as string, targetId as string)) {
+                return 2.5;
               }
 
               const nodeCount = graphData?.nodes.length || 200;
-              return nodeCount > 1000 ? 0.3 : nodeCount > 500 ? 0.4 : 0.5;
+              return nodeCount > 5000 ? 0.3 : nodeCount > 1000 ? 0.4 : 0.6;
             }}
             backgroundColor="#09090b"
             onNodeClick={(node) => setSelectedNode(node as GraphNode)}
+            onNodeHover={(node) => setHoveredNode(node as GraphNode | null)}
             onBackgroundClick={() => setSelectedNode(null)}
             d3AlphaDecay={0.02}
             d3VelocityDecay={0.3}

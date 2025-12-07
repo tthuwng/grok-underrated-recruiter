@@ -58,6 +58,7 @@ def load_deep_eval_data():
                 deep_evals[handle] = {
                     "grok_evaluated": True,
                     "final_score": data.get("final_score", 0),
+                    "deep_eval_data": json.dumps(data),  # Store full JSON
                 }
         except Exception as e:
             print(f"  Warning: Could not load {f}: {e}")
@@ -73,6 +74,7 @@ def load_deep_eval_data():
                     deep_evals[handle] = {
                         "grok_evaluated": True,
                         "final_score": c.get("final_score", 0),
+                        "deep_eval_data": json.dumps(c),  # Store full JSON
                     }
         except Exception as e:
             print(f"  Warning: Could not load candidates_deep_eval.json: {e}")
@@ -107,6 +109,7 @@ def load_nodes_from_csv(path: Path, fast_screen: dict, deep_evals: dict):
                 "grok_role": None,
                 "grok_evaluated": False,
                 "final_score": None,
+                "deep_eval_data": None,
             }
 
             # Merge fast screen data
@@ -119,6 +122,7 @@ def load_nodes_from_csv(path: Path, fast_screen: dict, deep_evals: dict):
             if handle in deep_evals:
                 node["grok_evaluated"] = deep_evals[handle]["grok_evaluated"]
                 node["final_score"] = deep_evals[handle]["final_score"]
+                node["deep_eval_data"] = deep_evals[handle].get("deep_eval_data")
                 merged_deep += 1
 
             nodes.append(node)

@@ -4,6 +4,7 @@ import type { SubmissionStatus } from '../api/client';
 interface SubmissionStatusCardProps {
   submission: SubmissionStatus;
   onRefresh?: () => void;
+  onRemove?: () => void;
 }
 
 function formatTimeAgo(dateString: string): string {
@@ -44,7 +45,7 @@ function getStatusLabel(status: string, approvalStatus: string, stage: string): 
   }
 }
 
-export function SubmissionStatusCard({ submission, onRefresh }: SubmissionStatusCardProps) {
+export function SubmissionStatusCard({ submission, onRefresh, onRemove }: SubmissionStatusCardProps) {
   const statusColor = getStatusColor(submission.status, submission.approval_status);
   const statusLabel = getStatusLabel(submission.status, submission.approval_status, submission.stage);
   const isProcessing = submission.status === 'processing';
@@ -80,11 +81,18 @@ export function SubmissionStatusCard({ submission, onRefresh }: SubmissionStatus
         </div>
       )}
 
-      {onRefresh && (isProcessing || submission.status === 'pending') && (
-        <button style={styles.refreshButton} onClick={onRefresh}>
-          Refresh
-        </button>
-      )}
+      <div style={styles.actions}>
+        {onRefresh && (isProcessing || submission.status === 'pending') && (
+          <button style={styles.refreshButton} onClick={onRefresh}>
+            Refresh
+          </button>
+        )}
+        {onRemove && (
+          <button style={styles.removeButton} onClick={onRemove}>
+            Remove
+          </button>
+        )}
+      </div>
     </div>
   );
 }
@@ -152,8 +160,12 @@ const styles: Record<string, React.CSSProperties> = {
     fontSize: '12px',
     color: 'var(--text-muted)',
   },
-  refreshButton: {
+  actions: {
+    display: 'flex',
+    gap: '8px',
     marginTop: '12px',
+  },
+  refreshButton: {
     padding: '6px 12px',
     fontSize: '12px',
     color: 'var(--text-secondary)',
@@ -161,5 +173,15 @@ const styles: Record<string, React.CSSProperties> = {
     border: '1px solid var(--border-color)',
     borderRadius: '6px',
     cursor: 'pointer',
+  },
+  removeButton: {
+    padding: '6px 12px',
+    fontSize: '12px',
+    color: 'var(--accent-red)',
+    backgroundColor: 'transparent',
+    border: '1px solid var(--accent-red)',
+    borderRadius: '6px',
+    cursor: 'pointer',
+    opacity: 0.7,
   },
 };

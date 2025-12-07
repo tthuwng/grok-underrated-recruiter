@@ -162,6 +162,14 @@ class AddSourceRequest(BaseModel):
     max_following: int = 100
 
 
+class SeedSubmitRequest(BaseModel):
+    """Request to submit a seed account for full graph expansion pipeline."""
+    handle: str
+    depth: int = 1
+    max_following: int = 500
+    max_candidates_to_eval: int = 50
+
+
 class FilterRequest(BaseModel):
     """Request to filter nodes using Grok."""
     query: str  # Natural language query for Grok to filter by

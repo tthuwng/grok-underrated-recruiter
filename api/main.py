@@ -76,6 +76,11 @@ from api.database import (
     unsave_candidate as db_unsave_candidate,
 )
 from api.database import (
+    delete_submission as db_delete_submission,
+    delete_failed_submissions as db_delete_failed_submissions,
+    get_all_submissions as db_get_all_submissions,
+)
+from api.database import (
     update_submission_approval as db_update_submission_approval,
 )
 from api.database import (
@@ -92,6 +97,8 @@ from api.database import (
     update_node_pagerank,
     update_node_grok_result,
     upsert_graph_node,
+    get_evaluated_candidates,
+    get_relevant_candidates,
 )
 from api.models import (
     AddSourceRequest,
@@ -113,6 +120,7 @@ from api.models import (
     ScoreBreakdown,
     SearchRequest,
     SearchResponse,
+    SeedSubmitRequest,
     StatsResponse,
     SubmissionStatus,
 )
@@ -593,39 +601,100 @@ def save_graph_to_pickle():
 
 
 def load_deep_evaluations() -> List[dict]:
-    """Load all deep evaluation results from cache."""
+    """Load all deep evaluation results from files, fallback to database."""
     evaluations = []
+    seen_handles = set()
 
-    if not ENRICHED_DIR.exists():
-        return evaluations
+    # Try loading from files first (for local development)
+    if ENRICHED_DIR.exists():
+        # Load individual deep_*.json files
+        for path in ENRICHED_DIR.glob("deep_*.json"):
+            try:
+                with open(path) as f:
+                    data = json.load(f)
+                    handle = data.get("handle", "").lower()
+                    if handle and handle not in seen_handles:
+                        evaluations.append(data)
+                        seen_handles.add(handle)
+            except (json.JSONDecodeError, KeyError):
+                continue
 
-    for path in ENRICHED_DIR.glob("deep_*.json"):
+        # Also load from candidates_deep_eval.json if it exists
+        bulk_eval_path = ENRICHED_DIR / "candidates_deep_eval.json"
+        if bulk_eval_path.exists():
+            try:
+                with open(bulk_eval_path) as f:
+                    bulk_data = json.load(f)
+                    if isinstance(bulk_data, list):
+                        for data in bulk_data:
+                            handle = data.get("handle", "").lower()
+                            if handle and handle not in seen_handles:
+                                evaluations.append(data)
+                                seen_handles.add(handle)
+            except (json.JSONDecodeError, KeyError):
+                pass
+
+    # If no file evaluations found, fallback to database
+    if not evaluations:
         try:
-            with open(path) as f:
-                data = json.load(f)
-                evaluations.append(data)
-        except (json.JSONDecodeError, KeyError):
-            continue
+            db_candidates = get_evaluated_candidates()
+            for c in db_candidates:
+                # Convert database format to evaluation format
+                # get_evaluated_candidates() now returns deep_eval_data fields
+                evaluations.append({
+                    "handle": c.get("handle", ""),
+                    "name": c.get("name", ""),
+                    "bio": c.get("bio", ""),
+                    "followers": c.get("followers_count", 0),
+                    "final_score": c.get("final_score", 0),
+                    "recommended_role": c.get("recommended_role") or c.get("grok_role") or "none",
+                    "summary": c.get("summary", ""),
+                    "strengths": c.get("strengths", []),
+                    "concerns": c.get("concerns", []),
+                    "pagerank_score": c.get("pagerank_score", 0),
+                    "underratedness_score": c.get("underratedness_score", 0),
+                    # Include detailed score breakdowns from deep eval
+                    "technical_depth": c.get("technical_depth"),
+                    "project_evidence": c.get("project_evidence"),
+                    "mission_alignment": c.get("mission_alignment"),
+                    "exceptional_ability": c.get("exceptional_ability"),
+                    "communication": c.get("communication"),
+                    "github_url": c.get("github_url"),
+                    "linkedin_url": c.get("linkedin_url"),
+                    "top_repos": c.get("top_repos"),
+                })
+        except Exception as e:
+            print(f"[eval] Error loading from database: {e}")
 
     return evaluations
 
 
 def load_graph_nodes() -> dict:
-    """Load node data from processed CSV."""
+    """Load node data from processed CSV, fallback to database."""
     import csv
 
     nodes = {}
     nodes_path = PROCESSED_DIR / "nodes.csv"
 
-    if not nodes_path.exists():
-        return nodes
+    # Try loading from CSV file first (for local development)
+    if nodes_path.exists():
+        with open(nodes_path, newline="", encoding="utf-8") as f:
+            reader = csv.DictReader(f)
+            for row in reader:
+                handle = row.get("handle", "")
+                if handle:
+                    nodes[handle.lower()] = row
 
-    with open(nodes_path, newline="", encoding="utf-8") as f:
-        reader = csv.DictReader(f)
-        for row in reader:
-            handle = row.get("handle", "")
-            if handle:
-                nodes[handle.lower()] = row
+    # If no nodes from file, fallback to database
+    if not nodes:
+        try:
+            db_nodes = get_all_graph_nodes(limit=50000)
+            for node in db_nodes:
+                handle = node.get("handle", "")
+                if handle:
+                    nodes[handle.lower()] = node
+        except Exception as e:
+            print(f"[nodes] Error loading from database: {e}")
 
     return nodes
 
@@ -716,32 +785,27 @@ def evaluation_to_list_item(
 
 def evaluation_to_detail(eval_data: dict, node_data: dict = None) -> CandidateDeepEval:
     """Convert evaluation dict to CandidateDeepEval."""
+    # Helper to safely get score breakdown (handles None values)
+    def get_breakdown(key: str) -> ScoreBreakdown:
+        data = eval_data.get(key)
+        if data and isinstance(data, dict):
+            return ScoreBreakdown(
+                score=data.get("score", 0),
+                evidence=data.get("evidence", ""),
+            )
+        return ScoreBreakdown(score=0, evidence="")
+
     return CandidateDeepEval(
         handle=eval_data.get("handle", ""),
         name=node_data.get("name", "") if node_data else "",
         bio=eval_data.get("bio", ""),
         followers_count=eval_data.get("followers", 0),
         final_score=eval_data.get("final_score", 0.0),
-        technical_depth=ScoreBreakdown(
-            score=eval_data.get("technical_depth", {}).get("score", 0),
-            evidence=eval_data.get("technical_depth", {}).get("evidence", ""),
-        ),
-        project_evidence=ScoreBreakdown(
-            score=eval_data.get("project_evidence", {}).get("score", 0),
-            evidence=eval_data.get("project_evidence", {}).get("evidence", ""),
-        ),
-        mission_alignment=ScoreBreakdown(
-            score=eval_data.get("mission_alignment", {}).get("score", 0),
-            evidence=eval_data.get("mission_alignment", {}).get("evidence", ""),
-        ),
-        exceptional_ability=ScoreBreakdown(
-            score=eval_data.get("exceptional_ability", {}).get("score", 0),
-            evidence=eval_data.get("exceptional_ability", {}).get("evidence", ""),
-        ),
-        communication=ScoreBreakdown(
-            score=eval_data.get("communication", {}).get("score", 0),
-            evidence=eval_data.get("communication", {}).get("evidence", ""),
-        ),
+        technical_depth=get_breakdown("technical_depth"),
+        project_evidence=get_breakdown("project_evidence"),
+        mission_alignment=get_breakdown("mission_alignment"),
+        exceptional_ability=get_breakdown("exceptional_ability"),
+        communication=get_breakdown("communication"),
         summary=eval_data.get("summary", ""),
         strengths=eval_data.get("strengths", []),
         concerns=eval_data.get("concerns", []),
@@ -1473,8 +1537,9 @@ async def get_graph_status():
 @app.get("/graph", response_model=GraphResponse)
 async def get_graph(
     min_pagerank: float = 0.0,
-    max_nodes: int = 500,
+    max_nodes: int = 5000,
     only_relevant: bool = False,
+    max_depth: int = 10,
 ):
     """Get the current graph data for visualization."""
     nodes_data = []
@@ -1495,6 +1560,11 @@ async def get_graph(
 
         pr_score = node.get("pagerank_score", 0)
         if pr_score < min_pagerank and not node.get("is_seed"):
+            continue
+
+        # Filter by depth
+        node_depth = node.get("depth", 0)
+        if node_depth > max_depth and not node.get("is_seed"):
             continue
 
         # Filter by Grok relevance if requested
@@ -1690,6 +1760,8 @@ async def import_graph(request: Request):
                 "grok_role": node.get("grok_role"),
                 "grok_evaluated": node.get("grok_evaluated", False),
                 "final_score": node.get("final_score"),
+                # Full deep eval data as JSON string
+                "deep_eval_data": node.get("deep_eval_data"),
             }
 
             if node_data["id"]:
@@ -2117,6 +2189,104 @@ async def reject_submission(submission_id: str, user: dict = Depends(require_adm
         "message": f"Submission {submission_id} rejected",
         "handle": submission["handle"],
     }
+
+
+@app.get("/admin/submissions")
+async def list_all_submissions(user: dict = Depends(require_admin)):
+    """List all submissions."""
+    submissions = db_get_all_submissions()
+    return {"submissions": submissions, "count": len(submissions)}
+
+
+@app.delete("/admin/submissions/failed")
+async def clear_failed_submissions(user: dict = Depends(require_admin)):
+    """Delete all failed submissions."""
+    count = db_delete_failed_submissions()
+    return {"message": f"Deleted {count} failed submissions", "deleted": count}
+
+
+@app.delete("/admin/submissions/{submission_id}")
+async def delete_submission(submission_id: str, user: dict = Depends(require_admin)):
+    """Delete a specific submission."""
+    deleted = db_delete_submission(submission_id)
+    if not deleted:
+        raise HTTPException(status_code=404, detail="Submission not found")
+    return {"message": f"Deleted submission {submission_id}"}
+
+
+@app.post("/admin/submit-seed", response_model=SubmissionStatus)
+async def submit_seed(
+    request: SeedSubmitRequest,
+    background_tasks: BackgroundTasks,
+    user: dict = Depends(require_admin),
+):
+    """
+    Submit a seed account for full graph expansion pipeline (admin only).
+
+    This triggers:
+    1. Fetch X profile for the seed
+    2. Build graph from seed's follows/retweets/replies
+    3. Fast screen all discovered candidates
+    4. Deep evaluation on top candidates
+    5. Compute PageRank and underratedness scores
+    6. Export results
+    """
+    handle = request.handle.lower().lstrip("@").strip()
+
+    if not handle:
+        raise HTTPException(status_code=400, detail="Handle is required")
+
+    # Check if already submitted
+    existing = db_get_submission_by_handle(handle)
+    if existing and existing["status"] in ("pending", "processing"):
+        raise HTTPException(
+            status_code=409,
+            detail=f"Seed @{handle} is already being processed (status: {existing['status']})"
+        )
+
+    # Create new submission with seed type
+    submission_id = str(uuid.uuid4())[:8]
+    db_create_submission(
+        submission_id=submission_id,
+        handle=handle,
+        submitted_by=user.get("handle", "admin"),
+    )
+
+    print(f"[submit-seed] Created seed submission {submission_id} for @{handle}")
+
+    # Queue the job via arq if Redis is available
+    if arq_pool:
+        try:
+            await arq_pool.enqueue_job(
+                "process_seed_submission",
+                submission_id,
+                handle,
+                request.depth,
+                request.max_following,
+                request.max_candidates_to_eval,
+            )
+            print(f"[submit-seed] Queued job via arq: {submission_id}")
+        except Exception as e:
+            print(f"[submit-seed] arq enqueue failed: {e}")
+            raise HTTPException(
+                status_code=500,
+                detail=f"Failed to queue seed processing job: {e}"
+            )
+    else:
+        raise HTTPException(
+            status_code=503,
+            detail="Redis worker not available. Please try again later."
+        )
+
+    return SubmissionStatus(
+        submission_id=submission_id,
+        handle=handle,
+        status="pending",
+        stage="queued",
+        approval_status="approved",  # Admin submissions are auto-approved
+        submitted_at=datetime.utcnow().isoformat(),
+        queue_position=1,
+    )
 
 
 # --- Authentication Endpoints ---

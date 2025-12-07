@@ -6,6 +6,7 @@ import type { SubmissionStatus } from '../api/client';
 import {
   getStoredSubmissions,
   addStoredSubmission,
+  removeStoredSubmission,
 } from '../lib/auth';
 
 interface MySubmissionsViewProps {
@@ -75,6 +76,11 @@ export function MySubmissionsView({ onBack }: MySubmissionsViewProps) {
     }
   };
 
+  const handleRemove = (submissionId: string) => {
+    removeStoredSubmission(submissionId);
+    setSubmissions((prev) => prev.filter((s) => s.submission_id !== submissionId));
+  };
+
   return (
     <div style={styles.container}>
       <div style={styles.header}>
@@ -108,6 +114,7 @@ export function MySubmissionsView({ onBack }: MySubmissionsViewProps) {
                   key={submission.submission_id}
                   submission={submission}
                   onRefresh={() => handleRefresh(submission.submission_id)}
+                  onRemove={() => handleRemove(submission.submission_id)}
                 />
               ))}
             </div>
