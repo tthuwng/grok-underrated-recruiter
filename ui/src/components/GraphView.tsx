@@ -65,7 +65,8 @@ export function GraphView() {
   const [maxNodes, setMaxNodes] = useState(10000);
   const [maxDepth, setMaxDepth] = useState(10);
   const [onlyRelevant, setOnlyRelevant] = useState(false);
-  const [hoveredNode, setHoveredNode] = useState<GraphNode | null>(null);
+  // Use ref for hover to avoid React re-renders - we manually refresh the canvas instead
+  const hoveredNodeRef = useRef<GraphNode | null>(null);
 
   const fetchGraph = useCallback(async () => {
     try {
@@ -266,29 +267,40 @@ export function GraphView() {
     return baseSize * scaleFactor;
   };
 
-  // The active node is either selected or hovered (selected takes priority)
-  const activeNode = selectedNode || hoveredNode;
+  // Get the active node (selected takes priority over hovered)
+  // Uses ref for hover to avoid React re-renders
+  const getActiveNode = useCallback(() => {
+    return selectedNode || hoveredNodeRef.current;
+  }, [selectedNode]);
 
-  // Get connected node IDs for highlighting edges - used in nodeCanvasObject callback below
-  const connectedNodeIds = React.useMemo(() => {
-    if (!activeNode || !graphData) return new Set<string>();
-    const ids = new Set<string>();
+  // Build edge lookup map for efficient connection checking
+  const edgeLookup = React.useMemo(() => {
+    if (!graphData) return new Map<string, Set<string>>();
+    const lookup = new Map<string, Set<string>>();
     graphData.edges.forEach(edge => {
-      if (edge.source === activeNode.id || edge.target === activeNode.id) {
-        ids.add(edge.source);
-        ids.add(edge.target);
-      }
+      if (!lookup.has(edge.source)) lookup.set(edge.source, new Set());
+      if (!lookup.has(edge.target)) lookup.set(edge.target, new Set());
+      lookup.get(edge.source)!.add(edge.target);
+      lookup.get(edge.target)!.add(edge.source);
     });
-    return ids;
-  }, [activeNode, graphData]);
+    return lookup;
+  }, [graphData]);
 
-  // Check if an edge is connected to the active (selected or hovered) node
-  const isEdgeConnected = (source: string, target: string) => {
-    if (!activeNode) return false;
-    return source === activeNode.id || target === activeNode.id;
-  };
+  // Get connected node IDs for a given node - called during render
+  const getConnectedNodeIds = useCallback((nodeId: string | undefined): Set<string> => {
+    if (!nodeId || !edgeLookup.has(nodeId)) return new Set();
+    const connected = new Set<string>([nodeId]);
+    edgeLookup.get(nodeId)?.forEach(id => connected.add(id));
+    return connected;
+  }, [edgeLookup]);
 
-  // Custom node rendering with labels
+  // Check if an edge is connected to a specific node
+  const isEdgeConnectedTo = useCallback((source: string, target: string, nodeId: string | undefined) => {
+    if (!nodeId) return false;
+    return source === nodeId || target === nodeId;
+  }, []);
+
+  // Custom node rendering with labels - reads hover state from ref to avoid re-renders
   const nodeCanvasObject = React.useCallback((
     node: GraphNode & { x?: number; y?: number },
     ctx: CanvasRenderingContext2D,
@@ -299,8 +311,12 @@ export function GraphView() {
     const x = node.x || 0;
     const y = node.y || 0;
 
+    // Get active node directly from ref/state (no re-render needed)
+    const activeNode = getActiveNode();
+    const connectedNodeIds = activeNode ? getConnectedNodeIds(activeNode.id) : null;
+
     // Check if this node is connected to the active (selected/hovered) node
-    const isConnected = activeNode && connectedNodeIds.has(node.id);
+    const isConnected = connectedNodeIds?.has(node.id) ?? false;
     const isActive = activeNode?.id === node.id;
 
     // Dim nodes that are not connected when a node is active
@@ -345,7 +361,7 @@ export function GraphView() {
       ctx.fillStyle = dimNode ? "rgba(255, 255, 255, 0.3)" : "#ffffff";
       ctx.fillText(label, x, y + size + 2);
     }
-  }, [activeNode, connectedNodeIds, graphData]);
+  }, [getActiveNode, getConnectedNodeIds, graphData]);
 
   return (
     <div style={styles.container}>
@@ -552,8 +568,11 @@ export function GraphView() {
               const sourceId = typeof link.source === 'object' ? (link.source as GraphNode).id : link.source;
               const targetId = typeof link.target === 'object' ? (link.target as GraphNode).id : link.target;
 
+              // Get active node from ref/state
+              const activeNode = getActiveNode();
+
               // Highlight edges connected to active (selected/hovered) node
-              if (activeNode && isEdgeConnected(sourceId as string, targetId as string)) {
+              if (activeNode && isEdgeConnectedTo(sourceId as string, targetId as string, activeNode.id)) {
                 return "rgba(96, 165, 250, 0.9)"; // accent-blue with high opacity
               }
 
@@ -569,8 +588,11 @@ export function GraphView() {
               const sourceId = typeof link.source === 'object' ? (link.source as GraphNode).id : link.source;
               const targetId = typeof link.target === 'object' ? (link.target as GraphNode).id : link.target;
 
+              // Get active node from ref/state
+              const activeNode = getActiveNode();
+
               // Make edges connected to active node thicker
-              if (activeNode && isEdgeConnected(sourceId as string, targetId as string)) {
+              if (activeNode && isEdgeConnectedTo(sourceId as string, targetId as string, activeNode.id)) {
                 return 2.5;
               }
 
@@ -579,7 +601,14 @@ export function GraphView() {
             }}
             backgroundColor="#09090b"
             onNodeClick={(node) => setSelectedNode(node as GraphNode)}
-            onNodeHover={(node) => setHoveredNode(node as GraphNode | null)}
+            onNodeHover={(node) => {
+              // Update ref without triggering React re-render
+              hoveredNodeRef.current = node as GraphNode | null;
+              // Manually refresh the canvas to update highlighting
+              if (graphRef.current) {
+                graphRef.current.refresh();
+              }
+            }}
             onBackgroundClick={() => setSelectedNode(null)}
             d3AlphaDecay={0.02}
             d3VelocityDecay={0.3}

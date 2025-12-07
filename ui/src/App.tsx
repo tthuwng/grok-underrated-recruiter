@@ -125,7 +125,7 @@ function App() {
     setIsLoading(true);
     setError(null);
     try {
-      const data = await fetchCandidates({ limit: 30, sort_by: 'final_score' });
+      const data = await fetchCandidates({ limit: 1000, sort_by: 'final_score' });
       setCandidates(data);
     } catch (e) {
       setError('Failed to load candidates. Make sure the API server is running.');
