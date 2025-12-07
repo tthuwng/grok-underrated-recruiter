@@ -1,11 +1,10 @@
-# Ignore Python files - this is a frontend-only deployment
+# Ignore Python/backend files - this is a frontend-only deployment
 uv.lock
 pyproject.toml
 requirements.txt
-*.py
-api/
-src/
-data/
+/api/
+/src/
+/data/
 Dockerfile
 fly.toml
 seeds.yaml
