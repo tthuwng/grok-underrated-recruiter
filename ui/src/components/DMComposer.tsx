@@ -82,10 +82,22 @@ export function DMComposer({ candidate, onClose }: DMComposerProps) {
     setShowConfirmation(true);
   };
 
-  const handleConfirmSend = () => {
-    // Open X DM compose with pre-filled message
-    const dmUrl = `https://x.com/messages/compose?recipient_id=&text=${encodeURIComponent(generatedMessage)}`;
-    window.open(dmUrl, '_blank');
+  const handleConfirmSend = async () => {
+    // Copy message to clipboard first
+    try {
+      await navigator.clipboard.writeText(generatedMessage);
+    } catch {
+      // Fallback
+      const textarea = document.createElement('textarea');
+      textarea.value = generatedMessage;
+      document.body.appendChild(textarea);
+      textarea.select();
+      document.execCommand('copy');
+      document.body.removeChild(textarea);
+    }
+
+    // Open user's profile - they can click Message button there
+    window.open(`https://x.com/${candidate.handle}`, '_blank');
     setShowConfirmation(false);
   };
 
@@ -151,7 +163,7 @@ export function DMComposer({ candidate, onClose }: DMComposerProps) {
                 <div style={styles.confirmationBox}>
                   <h3 style={styles.confirmTitle}>Ready to send?</h3>
                   <p style={styles.confirmText}>
-                    This will open X with your message ready to send to @{candidate.handle}
+                    Message will be copied to clipboard. Click the Message button on @{candidate.handle}'s profile to paste & send.
                   </p>
                   <div style={styles.confirmPreview}>
                     <pre style={styles.previewText}>{generatedMessage}</pre>
@@ -164,7 +176,7 @@ export function DMComposer({ candidate, onClose }: DMComposerProps) {
                       Cancel
                     </button>
                     <button style={styles.confirmSendButton} onClick={handleConfirmSend}>
-                      Open X & Send
+                      Copy & Open Profile
                     </button>
                   </div>
                 </div>

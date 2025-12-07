@@ -80,7 +80,7 @@ export async function fetchCandidate(handle: string): Promise<{ candidate: Candi
   return res.json();
 }
 
-export async function searchCandidates(query: string, limit = 30): Promise<SearchResponse> {
+export async function searchCandidates(query: string, limit = 100): Promise<SearchResponse> {
   const res = await fetch(`${API_BASE}/search`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },

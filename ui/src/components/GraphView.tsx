@@ -65,7 +65,8 @@ export function GraphView() {
   const [maxNodes, setMaxNodes] = useState(10000);
   const [maxDepth, setMaxDepth] = useState(10);
   const [onlyRelevant, setOnlyRelevant] = useState(false);
-  // Use ref for hover to avoid React re-renders - we manually refresh the canvas instead
+
+  // Ref to track hovered node without triggering re-renders
   const hoveredNodeRef = useRef<GraphNode | null>(null);
 
   const fetchGraph = useCallback(async () => {
@@ -267,37 +268,40 @@ export function GraphView() {
     return baseSize * scaleFactor;
   };
 
-  // Get the active node (selected takes priority over hovered)
-  // Uses ref for hover to avoid React re-renders
+  // Build neighbor lookup for efficient highlighting (following react-force-graph example)
+  const nodeNeighbors = React.useMemo(() => {
+    if (!graphData) return new Map<string, Set<string>>();
+
+    const neighbors = new Map<string, Set<string>>();
+
+    graphData.edges.forEach((edge) => {
+      if (!neighbors.has(edge.source)) neighbors.set(edge.source, new Set());
+      if (!neighbors.has(edge.target)) neighbors.set(edge.target, new Set());
+      neighbors.get(edge.source)!.add(edge.target);
+      neighbors.get(edge.target)!.add(edge.source);
+    });
+
+    return neighbors;
+  }, [graphData]);
+
+  // Helper function to get active node (selected or hovered)
   const getActiveNode = useCallback(() => {
     return selectedNode || hoveredNodeRef.current;
   }, [selectedNode]);
 
-  // Build edge lookup map for efficient connection checking
-  const edgeLookup = React.useMemo(() => {
-    if (!graphData) return new Map<string, Set<string>>();
-    const lookup = new Map<string, Set<string>>();
-    graphData.edges.forEach(edge => {
-      if (!lookup.has(edge.source)) lookup.set(edge.source, new Set());
-      if (!lookup.has(edge.target)) lookup.set(edge.target, new Set());
-      lookup.get(edge.source)!.add(edge.target);
-      lookup.get(edge.target)!.add(edge.source);
+  // Helper function to get connected node IDs
+  const getConnectedNodeIds = useCallback((nodeId: string) => {
+    const connected = new Set<string>();
+    connected.add(nodeId);
+    nodeNeighbors.get(nodeId)?.forEach(neighborId => {
+      connected.add(neighborId);
     });
-    return lookup;
-  }, [graphData]);
-
-  // Get connected node IDs for a given node - called during render
-  const getConnectedNodeIds = useCallback((nodeId: string | undefined): Set<string> => {
-    if (!nodeId || !edgeLookup.has(nodeId)) return new Set();
-    const connected = new Set<string>([nodeId]);
-    edgeLookup.get(nodeId)?.forEach(id => connected.add(id));
     return connected;
-  }, [edgeLookup]);
+  }, [nodeNeighbors]);
 
-  // Check if an edge is connected to a specific node
-  const isEdgeConnectedTo = useCallback((source: string, target: string, nodeId: string | undefined) => {
-    if (!nodeId) return false;
-    return source === nodeId || target === nodeId;
+  // Helper function to check if edge is connected to a node
+  const isEdgeConnectedTo = useCallback((sourceId: string, targetId: string, nodeId: string) => {
+    return sourceId === nodeId || targetId === nodeId;
   }, []);
 
   // Custom node rendering with labels - reads hover state from ref to avoid re-renders
@@ -600,14 +604,11 @@ export function GraphView() {
               return nodeCount > 5000 ? 0.3 : nodeCount > 1000 ? 0.4 : 0.6;
             }}
             backgroundColor="#09090b"
+            autoPauseRedraw={false}
             onNodeClick={(node) => setSelectedNode(node as GraphNode)}
             onNodeHover={(node) => {
-              // Update ref without triggering React re-render
+              // Update ref - autoPauseRedraw={false} ensures continuous redraws
               hoveredNodeRef.current = node as GraphNode | null;
-              // Manually refresh the canvas to update highlighting
-              if (graphRef.current) {
-                graphRef.current.refresh();
-              }
             }}
             onBackgroundClick={() => setSelectedNode(null)}
             d3AlphaDecay={0.02}
