@@ -1,0 +1,11 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "installCommand": "cd ui && pnpm install",
+  "buildCommand": "cd ui && pnpm build",
+  "outputDirectory": "ui/dist",
+  "framework": "vite",
+  "rewrites": [
+    { "source": "/api/(.*)", "destination": "https://grok-recruiter-api.fly.dev/$1" },
+    { "source": "/(.*)", "destination": "/index.html" }
+  ]
+}
