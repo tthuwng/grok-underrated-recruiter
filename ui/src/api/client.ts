@@ -170,13 +170,26 @@ export interface SavedCandidatesResponse {
   total: number;
 }
 
+// Helper to get auth headers
+function getAuthHeaders(): Record<string, string> {
+  const token = localStorage.getItem('grok_recruiter_token');
+  if (token) {
+    return { 'Authorization': `Bearer ${token}` };
+  }
+  return {};
+}
+
 export async function saveCandidate(handle: string): Promise<void> {
   const res = await fetch(`${API_BASE}/saved`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: {
+      'Content-Type': 'application/json',
+      ...getAuthHeaders(),
+    },
     body: JSON.stringify({ handle }),
   });
   if (!res.ok) {
+    if (res.status === 401) throw new Error('Please log in to save candidates');
     if (res.status === 409) throw new Error('Already saved');
     throw new Error('Failed to save candidate');
   }
@@ -185,24 +198,34 @@ export async function saveCandidate(handle: string): Promise<void> {
 export async function unsaveCandidate(handle: string): Promise<void> {
   const res = await fetch(`${API_BASE}/saved/${handle}`, {
     method: 'DELETE',
+    headers: getAuthHeaders(),
   });
-  if (!res.ok) throw new Error('Failed to unsave candidate');
+  if (!res.ok) {
+    if (res.status === 401) throw new Error('Please log in to unsave candidates');
+    throw new Error('Failed to unsave candidate');
+  }
 }
 
 export async function fetchSavedCandidates(): Promise<SavedCandidatesResponse> {
-  const res = await fetch(`${API_BASE}/saved`);
+  const res = await fetch(`${API_BASE}/saved`, {
+    headers: getAuthHeaders(),
+  });
   if (!res.ok) throw new Error('Failed to fetch saved candidates');
   return res.json();
 }
 
 export async function fetchSavedHandles(): Promise<{ handles: string[] }> {
-  const res = await fetch(`${API_BASE}/saved/handles`);
+  const res = await fetch(`${API_BASE}/saved/handles`, {
+    headers: getAuthHeaders(),
+  });
   if (!res.ok) throw new Error('Failed to fetch saved handles');
   return res.json();
 }
 
 export async function fetchSavedCount(): Promise<{ count: number }> {
-  const res = await fetch(`${API_BASE}/saved/count`);
+  const res = await fetch(`${API_BASE}/saved/count`, {
+    headers: getAuthHeaders(),
+  });
   if (!res.ok) throw new Error('Failed to fetch saved count');
   return res.json();
 }
