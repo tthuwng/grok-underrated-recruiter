@@ -265,8 +265,27 @@ export function GraphView() {
     return baseSize * scaleFactor;
   };
 
+  // Get connected node IDs for highlighting edges - used in nodeCanvasObject callback below
+  const connectedNodeIds = React.useMemo(() => {
+    if (!selectedNode || !graphData) return new Set<string>();
+    const ids = new Set<string>();
+    graphData.edges.forEach(edge => {
+      if (edge.source === selectedNode.id || edge.target === selectedNode.id) {
+        ids.add(edge.source);
+        ids.add(edge.target);
+      }
+    });
+    return ids;
+  }, [selectedNode, graphData]);
+
+  // Check if an edge is connected to the selected node
+  const isEdgeConnected = (source: string, target: string) => {
+    if (!selectedNode) return false;
+    return source === selectedNode.id || target === selectedNode.id;
+  };
+
   // Custom node rendering with labels
-  const nodeCanvasObject = (
+  const nodeCanvasObject = React.useCallback((
     node: GraphNode & { x?: number; y?: number },
     ctx: CanvasRenderingContext2D,
     globalScale: number
@@ -276,27 +295,53 @@ export function GraphView() {
     const x = node.x || 0;
     const y = node.y || 0;
 
+    // Check if this node is connected to the selected node
+    const isConnected = selectedNode && connectedNodeIds.has(node.id);
+    const isSelected = selectedNode?.id === node.id;
+
+    // Dim nodes that are not connected when a node is selected
+    const dimNode = selectedNode && !isConnected && !isSelected;
+
+    // Draw highlight ring for selected or connected nodes
+    if (isSelected) {
+      ctx.beginPath();
+      ctx.arc(x, y, size + 4, 0, 2 * Math.PI, false);
+      ctx.fillStyle = "rgba(96, 165, 250, 0.3)";
+      ctx.fill();
+      ctx.strokeStyle = "#60a5fa";
+      ctx.lineWidth = 2;
+      ctx.stroke();
+    } else if (isConnected) {
+      ctx.beginPath();
+      ctx.arc(x, y, size + 2, 0, 2 * Math.PI, false);
+      ctx.strokeStyle = "rgba(96, 165, 250, 0.5)";
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+    }
+
     // Draw node circle
     ctx.beginPath();
     ctx.arc(x, y, size, 0, 2 * Math.PI, false);
-    ctx.fillStyle = color;
+    ctx.fillStyle = dimNode ? `${color}40` : color; // Add transparency if dimmed
     ctx.fill();
 
-    // Draw white text label for seeds and high PageRank nodes
+    // Draw white text label for seeds and high PageRank nodes, or connected/selected nodes
     const showLabel =
       node.is_seed ||
       node.pagerank_score > 0.001 ||
-      node.grok_relevant === true;
+      node.grok_relevant === true ||
+      isSelected ||
+      isConnected;
     if (showLabel) {
       const label = `@${node.handle}`;
       const fontSize = Math.max(12 / globalScale, 4);
       ctx.font = `${fontSize}px -apple-system, BlinkMacSystemFont, sans-serif`;
       ctx.textAlign = "center";
       ctx.textBaseline = "top";
-      ctx.fillStyle = "#ffffff";
+      ctx.fillStyle = dimNode ? "rgba(255, 255, 255, 0.3)" : "#ffffff";
       ctx.fillText(label, x, y + size + 2);
     }
-  };
+  }, [selectedNode, connectedNodeIds, graphData]);
 
   return (
     <div style={styles.container}>
@@ -333,13 +378,13 @@ export function GraphView() {
           <div style={styles.statsGrid}>
             <div style={styles.statCard}>
               <div style={styles.statValue}>
-                {graphData?.stats.total_nodes.toLocaleString() || 0}
+                {graphData?.nodes.length.toLocaleString() || 0}
               </div>
-              <div style={styles.statLabel}>Nodes</div>
+              <div style={styles.statLabel}>Displayed</div>
             </div>
             <div style={styles.statCard}>
               <div style={styles.statValue}>
-                {graphData?.stats.total_edges.toLocaleString() || 0}
+                {graphData?.edges.length.toLocaleString() || 0}
               </div>
               <div style={styles.statLabel}>Edges</div>
             </div>
@@ -349,9 +394,9 @@ export function GraphView() {
             </div>
             <div style={styles.statCard}>
               <div style={styles.statValue}>
-                {graphData?.stats.filtered_count || 0}
+                {graphData?.stats.total_nodes.toLocaleString() || 0}
               </div>
-              <div style={styles.statLabel}>Filtered</div>
+              <div style={styles.statLabel}>Total</div>
             </div>
           </div>
         </div>
@@ -498,13 +543,33 @@ export function GraphView() {
               );
               ctx.fill();
             }}
-            linkColor={() => {
+            linkColor={(link) => {
+              // Get source and target IDs (can be objects or strings depending on simulation state)
+              const sourceId = typeof link.source === 'object' ? (link.source as GraphNode).id : link.source;
+              const targetId = typeof link.target === 'object' ? (link.target as GraphNode).id : link.target;
+
+              // Highlight edges connected to selected node
+              if (selectedNode && isEdgeConnected(sourceId as string, targetId as string)) {
+                return "rgba(96, 165, 250, 0.8)"; // accent-blue with high opacity
+              }
+
               const nodeCount = graphData?.nodes.length || 200;
-              const alpha =
-                nodeCount > 1000 ? 0.08 : nodeCount > 500 ? 0.12 : 0.15;
+              // Dim other edges when a node is selected
+              const alpha = selectedNode
+                ? 0.03
+                : nodeCount > 1000 ? 0.08 : nodeCount > 500 ? 0.12 : 0.15;
               return `rgba(113, 113, 122, ${alpha})`;
             }}
-            linkWidth={() => {
+            linkWidth={(link) => {
+              // Get source and target IDs
+              const sourceId = typeof link.source === 'object' ? (link.source as GraphNode).id : link.source;
+              const targetId = typeof link.target === 'object' ? (link.target as GraphNode).id : link.target;
+
+              // Make edges connected to selected node thicker
+              if (selectedNode && isEdgeConnected(sourceId as string, targetId as string)) {
+                return 2;
+              }
+
               const nodeCount = graphData?.nodes.length || 200;
               return nodeCount > 1000 ? 0.3 : nodeCount > 500 ? 0.4 : 0.5;
             }}
