@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Routes, Route, useLocation, useNavigate, Link } from 'react-router-dom';
 import { SearchBar } from './components/SearchBar';
 import { CandidateCard } from './components/CandidateCard';
 import { ThinkingTrace } from './components/ThinkingTrace';
@@ -22,9 +23,10 @@ import {
 import type { Candidate, Stats } from './api/client';
 import { getStoredAuth, isAdmin, type User } from './lib/auth';
 
-type ViewType = 'search' | 'saved' | 'graph' | 'submit' | 'admin';
-
 function App() {
+  const location = useLocation();
+  const navigate = useNavigate();
+
   const [candidates, setCandidates] = useState<Candidate[]>([]);
   const [stats, setStats] = useState<Stats | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -32,17 +34,18 @@ function App() {
   const [error, setError] = useState<string | null>(null);
   const [thinking, setThinking] = useState<string | undefined>();
   const [searchCriteria, setSearchCriteria] = useState<string | undefined>();
-  const [showAbout, setShowAbout] = useState(false);
 
   // Auth state
   const [user, setUser] = useState<User | null>(null);
   const [isAuthCallback, setIsAuthCallback] = useState(false);
 
-  // New state for saved candidates and DM
-  const [currentView, setCurrentView] = useState<ViewType>('search');
+  // State for saved candidates and DM
   const [savedHandles, setSavedHandles] = useState<Set<string>>(new Set());
   const [dmCandidate, setDmCandidate] = useState<Candidate | null>(null);
   const [selectedHandle, setSelectedHandle] = useState<string | null>(null);
+
+  // Determine current view from route
+  const currentPath = location.pathname;
 
   // Check for auth callback on mount
   useEffect(() => {
@@ -187,7 +190,7 @@ function App() {
 
   const handleLogout = () => {
     setUser(null);
-    setCurrentView('search');
+    navigate('/');
   };
 
   // Show auth callback page when processing OAuth redirect
@@ -209,154 +212,184 @@ function App() {
             </div>
           </div>
           <div style={styles.headerButtons}>
-            <button
+            <Link
+              to="/"
               style={{
                 ...styles.tabButton,
-                ...(currentView === 'search' ? styles.tabButtonActive : {}),
+                ...(currentPath === '/' ? styles.tabButtonActive : {}),
+                textDecoration: 'none',
               }}
-              onClick={() => setCurrentView('search')}
             >
               Search
-            </button>
-            <button
+            </Link>
+            <Link
+              to="/graph"
               style={{
                 ...styles.tabButton,
-                ...(currentView === 'graph' ? styles.tabButtonActive : {}),
+                ...(currentPath === '/graph' ? styles.tabButtonActive : {}),
+                textDecoration: 'none',
               }}
-              onClick={() => setCurrentView('graph')}
             >
               Graph
-            </button>
+            </Link>
             {user && (
-              <button
+              <Link
+                to="/saved"
                 style={{
                   ...styles.tabButton,
-                  ...(currentView === 'saved' ? styles.tabButtonActive : {}),
+                  ...(currentPath === '/saved' ? styles.tabButtonActive : {}),
+                  textDecoration: 'none',
                 }}
-                onClick={() => setCurrentView('saved')}
               >
                 Saved {savedHandles.size > 0 && `(${savedHandles.size})`}
-              </button>
+              </Link>
             )}
             {user && (
-              <button
+              <Link
+                to="/submit"
                 style={{
                   ...styles.tabButton,
-                  ...(currentView === 'submit' ? styles.tabButtonActive : {}),
+                  ...(currentPath === '/submit' ? styles.tabButtonActive : {}),
+                  textDecoration: 'none',
                 }}
-                onClick={() => setCurrentView('submit')}
               >
                 Submit
-              </button>
+              </Link>
             )}
             {user && isAdmin(user) && (
-              <button
+              <Link
+                to="/admin"
                 style={{
                   ...styles.tabButton,
                   ...styles.adminTab,
-                  ...(currentView === 'admin' ? styles.tabButtonActive : {}),
+                  ...(currentPath === '/admin' ? styles.tabButtonActive : {}),
+                  textDecoration: 'none',
                 }}
-                onClick={() => setCurrentView('admin')}
               >
                 Admin
-              </button>
+              </Link>
             )}
-            <button
-              style={styles.aboutButton}
-              onClick={() => setShowAbout(true)}
+            <Link
+              to="/about"
+              style={{
+                ...styles.aboutButton,
+                textDecoration: 'none',
+              }}
             >
               How it works
-            </button>
+            </Link>
             <Login user={user} onLogout={handleLogout} />
           </div>
         </div>
       </header>
 
-      {showAbout && <AboutPage onClose={() => setShowAbout(false)} />}
-
-      {currentView === 'saved' && user ? (
-        <SavedCandidatesView
-          onBack={() => setCurrentView('search')}
-          onComposeDM={(candidate) => setDmCandidate(candidate)}
-          savedHandles={savedHandles}
-          onToggleSave={handleToggleSave}
-        />
-      ) : currentView === 'graph' ? (
-        <GraphView />
-      ) : currentView === 'submit' && user ? (
-        <MySubmissionsView
-          onBack={() => setCurrentView('search')}
-        />
-      ) : currentView === 'admin' && user && isAdmin(user) ? (
-        <AdminPanel
-          user={user}
-          onBack={() => setCurrentView('search')}
-        />
-      ) : (
-        <main style={styles.main}>
-          <SearchBar onSearch={handleSearch} isLoading={isLoading} />
-
-          {searchQuery && (
-            <div style={styles.searchInfo}>
-              Showing results for: <strong>{searchQuery}</strong>
-              <button
-                onClick={() => {
-                  setSearchQuery('');
-                  setThinking(undefined);
-                  setSearchCriteria(undefined);
-                  loadCandidates();
-                }}
-                style={styles.clearButton}
-              >
-                Clear
-              </button>
-            </div>
-          )}
-
-          {stats && (
-            <div style={styles.stats}>
-              <span>{stats.total_nodes.toLocaleString()} accounts discovered</span>
-              <span>·</span>
-              <span>{stats.fast_screened.toLocaleString()} fast screened</span>
-              <span>·</span>
-              <span>{stats.deep_evaluated.toLocaleString()} deep evaluated</span>
-            </div>
-          )}
-
-          {error && (
-            <div style={styles.error}>{error}</div>
-          )}
-
-          {thinking && (
-            <ThinkingTrace thinking={thinking} criteria={searchCriteria} isStreaming={isLoading} />
-          )}
-
-          {isLoading && !thinking ? (
-            <div style={styles.loading}>
-              {searchQuery ? 'Starting search...' : 'Loading candidates...'}
-            </div>
-          ) : candidates.length > 0 ? (
-            <div style={styles.results}>
-              <div style={styles.resultsHeader}>
-                Found {candidates.length} candidates
+      <Routes>
+        <Route path="/about" element={<AboutPage onClose={() => navigate('/')} />} />
+        <Route
+          path="/saved"
+          element={
+            user ? (
+              <SavedCandidatesView
+                onBack={() => navigate('/')}
+                onComposeDM={(candidate) => setDmCandidate(candidate)}
+                savedHandles={savedHandles}
+                onToggleSave={handleToggleSave}
+              />
+            ) : (
+              <div style={styles.main}>
+                <div style={styles.empty}>Please log in to view saved candidates.</div>
               </div>
-              {candidates.map((candidate) => (
-                <CandidateCard
-                  key={candidate.handle}
-                  candidate={candidate}
-                  onClick={() => setSelectedHandle(candidate.handle)}
-                  isSaved={savedHandles.has(candidate.handle.toLowerCase())}
-                  onToggleSave={user ? () => handleToggleSave(candidate.handle) : undefined}
-                />
-              ))}
-            </div>
-          ) : (
-            <div style={styles.empty}>
-              No candidates found. Try a different search query.
-            </div>
-          )}
-        </main>
-      )}
+            )
+          }
+        />
+        <Route path="/graph" element={<GraphView />} />
+        <Route
+          path="/submit"
+          element={
+            user ? (
+              <MySubmissionsView onBack={() => navigate('/')} />
+            ) : (
+              <div style={styles.main}>
+                <div style={styles.empty}>Please log in to submit handles.</div>
+              </div>
+            )
+          }
+        />
+        <Route
+          path="/admin"
+          element={
+            user && isAdmin(user) ? (
+              <AdminPanel user={user} onBack={() => navigate('/')} />
+            ) : (
+              <div style={styles.main}>
+                <div style={styles.empty}>Admin access required.</div>
+              </div>
+            )
+          }
+        />
+        <Route
+          path="/"
+          element={
+            <main style={styles.main}>
+              <SearchBar onSearch={handleSearch} isLoading={isLoading} />
+
+              {searchQuery && (
+                <div style={styles.searchInfo}>
+                  Showing results for: <strong>{searchQuery}</strong>
+                  <button
+                    onClick={() => {
+                      setSearchQuery('');
+                      setThinking(undefined);
+                      setSearchCriteria(undefined);
+                      loadCandidates();
+                    }}
+                    style={styles.clearButton}
+                  >
+                    Clear
+                  </button>
+                </div>
+              )}
+
+              {stats && (
+                <div style={styles.stats}>
+                  <span>{stats.total_nodes.toLocaleString()} accounts discovered</span>
+                  <span>·</span>
+                  <span>{stats.fast_screened.toLocaleString()} fast screened</span>
+                  <span>·</span>
+                  <span>{stats.deep_evaluated.toLocaleString()} deep evaluated</span>
+                </div>
+              )}
+
+              {error && <div style={styles.error}>{error}</div>}
+
+              {thinking && (
+                <ThinkingTrace thinking={thinking} criteria={searchCriteria} isStreaming={isLoading} />
+              )}
+
+              {isLoading && !thinking ? (
+                <div style={styles.loading}>
+                  {searchQuery ? 'Starting search...' : 'Loading candidates...'}
+                </div>
+              ) : candidates.length > 0 ? (
+                <div style={styles.results}>
+                  <div style={styles.resultsHeader}>Found {candidates.length} candidates</div>
+                  {candidates.map((candidate) => (
+                    <CandidateCard
+                      key={candidate.handle}
+                      candidate={candidate}
+                      onClick={() => setSelectedHandle(candidate.handle)}
+                      isSaved={savedHandles.has(candidate.handle.toLowerCase())}
+                      onToggleSave={user ? () => handleToggleSave(candidate.handle) : undefined}
+                    />
+                  ))}
+                </div>
+              ) : (
+                <div style={styles.empty}>No candidates found. Try a different search query.</div>
+              )}
+            </main>
+          }
+        />
+      </Routes>
 
       {dmCandidate && (
         <DMComposer

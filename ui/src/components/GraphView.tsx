@@ -405,7 +405,7 @@ export function GraphView() {
               const alpha = nodeCount > 1000 ? 0.08 : nodeCount > 500 ? 0.12 : 0.15;
               return `rgba(113, 113, 122, ${alpha})`;
             }}
-            linkWidth={(link) => {
+            linkWidth={() => {
               const nodeCount = graphData?.nodes.length || 200;
               return nodeCount > 1000 ? 0.3 : nodeCount > 500 ? 0.4 : 0.5;
             }}
