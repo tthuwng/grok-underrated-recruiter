@@ -150,3 +150,59 @@ class DMGenerateResponse(BaseModel):
     message: str
     x_intent_url: str
     character_count: int
+
+
+# --- Graph Visualization Models ---
+
+
+class AddSourceRequest(BaseModel):
+    """Request to add a source account to the graph."""
+    handle: str
+    depth: int = 1
+    max_following: int = 100
+
+
+class FilterRequest(BaseModel):
+    """Request to filter nodes using Grok."""
+    query: str  # Natural language query for Grok to filter by
+
+
+class GraphNode(BaseModel):
+    """Node in the social graph."""
+    id: str
+    handle: str
+    name: str
+    bio: str
+    followers_count: int
+    following_count: int
+    is_seed: bool
+    is_candidate: bool
+    pagerank_score: float
+    underratedness_score: float
+    grok_relevant: Optional[bool] = None
+    grok_role: Optional[str] = None
+    depth: int = 0
+
+
+class GraphEdge(BaseModel):
+    """Edge in the social graph."""
+    source: str
+    target: str
+    weight: float
+    interaction_type: str
+
+
+class GraphResponse(BaseModel):
+    """Graph data for visualization."""
+    nodes: List[GraphNode]
+    edges: List[GraphEdge]
+    stats: dict
+
+
+class GraphStatusResponse(BaseModel):
+    """Graph loading status."""
+    loading: bool
+    node_count: int
+    edge_count: int
+    seed_count: int
+    last_error: Optional[str]

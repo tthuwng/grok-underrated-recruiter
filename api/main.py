@@ -9,16 +9,19 @@ Endpoints:
 """
 
 import json
+import math
 import os
+import pickle
 import sqlite3
 import sys
 from pathlib import Path
-from typing import AsyncGenerator, List, Optional
+from typing import Any, AsyncGenerator, Dict, List, Optional
 from urllib.parse import quote
 
+import networkx as nx
 import requests
 from dotenv import load_dotenv
-from fastapi import FastAPI, HTTPException, Query
+from fastapi import BackgroundTasks, FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse
 
@@ -26,11 +29,17 @@ from fastapi.responses import StreamingResponse
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from api.models import (
+    AddSourceRequest,
     CandidateDeepEval,
     CandidateDetailResponse,
     CandidateListItem,
     DMGenerateRequest,
     DMGenerateResponse,
+    FilterRequest,
+    GraphEdge,
+    GraphNode,
+    GraphResponse,
+    GraphStatusResponse,
     SaveCandidateRequest,
     SavedCandidateResponse,
     SavedCandidatesListResponse,
@@ -39,6 +48,8 @@ from api.models import (
     SearchResponse,
     StatsResponse,
 )
+from src.grok_client import GrokClient
+from src.x_client import XClient
 from api.database import (
     init_db,
     save_candidate as db_save_candidate,
@@ -61,8 +72,9 @@ app = FastAPI(
 
 @app.on_event("startup")
 async def startup_event():
-    """Initialize database on startup."""
+    """Initialize database and load graph on startup."""
     init_db()
+    load_graph_from_pickle()
 
 
 # Enable CORS for frontend
@@ -81,6 +93,256 @@ app.add_middleware(
 DATA_DIR = Path(__file__).parent.parent / "data"
 ENRICHED_DIR = DATA_DIR / "enriched"
 PROCESSED_DIR = DATA_DIR / "processed"
+PROJECT_ROOT = Path(__file__).parent.parent
+GRAPH_PICKLE_PATH = PROJECT_ROOT / "graph_export" / "graph.pickle"
+
+# --- Graph State Management ---
+
+graph_state: Dict[str, Any] = {
+    "graph": nx.DiGraph(),
+    "nodes": {},  # node_id -> node_data
+    "pagerank": {},  # node_id -> score
+    "filter_results": {},  # node_id -> FastScreenResult
+    "seeds": set(),  # seed node IDs
+    "loading": False,
+    "last_error": None,
+}
+
+# Lazy-initialized clients
+_x_client = None
+_grok_client = None
+
+
+def get_x_client() -> XClient:
+    """Get or create X API client."""
+    global _x_client
+    if _x_client is None:
+        cache_dir = PROJECT_ROOT / "data" / "raw"
+        _x_client = XClient(cache_dir=str(cache_dir))
+    return _x_client
+
+
+def get_grok_client() -> GrokClient:
+    """Get or create Grok API client."""
+    global _grok_client
+    if _grok_client is None:
+        cache_dir = PROJECT_ROOT / "data" / "evaluations"
+        _grok_client = GrokClient(cache_dir=str(cache_dir))
+    return _grok_client
+
+
+def compute_pagerank_scores():
+    """Compute PageRank scores with seed personalization."""
+    G = graph_state["graph"]
+    seeds = graph_state["seeds"]
+
+    if G.number_of_nodes() == 0:
+        return
+
+    # Build personalization vector
+    personalization = None
+    if seeds:
+        valid_seeds = seeds & set(G.nodes())
+        if valid_seeds:
+            personalization = {uid: 1.0 / len(valid_seeds) for uid in valid_seeds}
+
+    # Compute PageRank
+    try:
+        pr = nx.pagerank(G, alpha=0.85, personalization=personalization, weight="weight")
+        graph_state["pagerank"] = pr
+
+        # Update underratedness scores
+        for node_id, score in pr.items():
+            if node_id in graph_state["nodes"]:
+                node = graph_state["nodes"][node_id]
+                followers = node.get("followers_count", 1)
+                node["pagerank_score"] = score
+                node["underratedness_score"] = score / math.log(1 + max(followers, 1))
+    except Exception as e:
+        print(f"PageRank error: {e}")
+
+
+def add_user_to_graph(user: Dict[str, Any], is_seed: bool = False, depth: int = 0):
+    """Add a user node to the graph."""
+    uid = user.get("id", "")
+    if not uid:
+        return None
+
+    G = graph_state["graph"]
+    G.add_node(uid)
+
+    metrics = user.get("public_metrics", {})
+
+    node_data = {
+        "id": uid,
+        "handle": user.get("username", f"id_{uid}"),
+        "name": user.get("name", ""),
+        "bio": user.get("description", "")[:500],
+        "followers_count": metrics.get("followers_count", 0),
+        "following_count": metrics.get("following_count", 0),
+        "tweet_count": metrics.get("tweet_count", 0),
+        "is_seed": is_seed,
+        "is_candidate": not is_seed and 50 <= metrics.get("followers_count", 0) <= 50000,
+        "pagerank_score": 0.0,
+        "underratedness_score": 0.0,
+        "depth": depth,
+    }
+
+    # Merge with existing data if present
+    if uid in graph_state["nodes"]:
+        existing = graph_state["nodes"][uid]
+        existing.update(node_data)
+        existing["is_seed"] = existing.get("is_seed", False) or is_seed
+    else:
+        graph_state["nodes"][uid] = node_data
+
+    if is_seed:
+        graph_state["seeds"].add(uid)
+
+    return node_data
+
+
+def add_edge_to_graph(src_id: str, dst_id: str, interaction_type: str = "follow", weight: float = 5.0):
+    """Add an edge to the graph."""
+    G = graph_state["graph"]
+    G.add_edge(src_id, dst_id, weight=weight, interaction_type=interaction_type)
+
+
+async def expand_from_source(handle: str, depth: int, max_following: int):
+    """Expand the graph from a source account."""
+    try:
+        graph_state["loading"] = True
+        graph_state["last_error"] = None
+
+        # Clean up handle
+        handle = handle.strip().lstrip('@').strip()
+        print(f"[expand] Looking up @{handle}")
+
+        client = get_x_client()
+
+        # Get the source user
+        try:
+            user = client.get_user_by_username(handle)
+        except Exception as e:
+            graph_state["last_error"] = f"X API error for @{handle}: {str(e)}"
+            graph_state["loading"] = False
+            return
+
+        if not user:
+            graph_state["last_error"] = f"Could not find user @{handle}"
+            graph_state["loading"] = False
+            return
+
+        print(f"[expand] Found user: @{user.get('username')} (ID: {user.get('id')})")
+
+        # Add as seed node
+        add_user_to_graph(user, is_seed=True, depth=0)
+        root_id = user["id"]
+
+        # Expand following at each depth level
+        current_frontier = [root_id]
+
+        for current_depth in range(1, depth + 1):
+            next_frontier = []
+
+            for user_id in current_frontier:
+                following = client.get_user_following(user_id, max_results=max_following)
+
+                for fol_user in following:
+                    fol_id = fol_user.get("id")
+                    if not fol_id:
+                        continue
+
+                    add_user_to_graph(fol_user, is_seed=False, depth=current_depth)
+                    add_edge_to_graph(user_id, fol_id, "follow", 5.0)
+
+                    if current_depth < depth and fol_id not in next_frontier:
+                        next_frontier.append(fol_id)
+
+            current_frontier = next_frontier[:20]  # Limit frontier expansion
+
+        # Recompute PageRank
+        compute_pagerank_scores()
+
+        graph_state["loading"] = False
+
+    except Exception as e:
+        graph_state["last_error"] = str(e)
+        graph_state["loading"] = False
+        raise
+
+
+def load_graph_from_pickle():
+    """Load graph from existing pickle file into state."""
+    if not GRAPH_PICKLE_PATH.exists():
+        print(f"[startup] No existing graph at {GRAPH_PICKLE_PATH}")
+        return False
+
+    try:
+        print(f"[startup] Loading graph from {GRAPH_PICKLE_PATH}")
+        with open(GRAPH_PICKLE_PATH, "rb") as f:
+            G = pickle.load(f)
+
+        graph_state["graph"] = G
+        graph_state["seeds"] = set()
+        graph_state["nodes"] = {}
+
+        # Extract node data
+        for node_id, attrs in G.nodes(data=True):
+            node_data = {
+                "id": node_id,
+                "handle": attrs.get("handle", f"id_{node_id}"),
+                "name": attrs.get("name", ""),
+                "bio": attrs.get("bio", ""),
+                "followers_count": attrs.get("followers_count", 0),
+                "following_count": attrs.get("following_count", 0),
+                "is_seed": attrs.get("is_root", False),
+                "is_candidate": attrs.get("is_candidate", False),
+                "pagerank_score": 0.0,
+                "underratedness_score": 0.0,
+                "depth": 0,
+            }
+            graph_state["nodes"][node_id] = node_data
+
+            if attrs.get("is_root"):
+                graph_state["seeds"].add(node_id)
+
+        # Compute PageRank
+        compute_pagerank_scores()
+
+        print(f"[startup] Loaded {len(graph_state['nodes'])} nodes, {G.number_of_edges()} edges, {len(graph_state['seeds'])} seeds")
+        return True
+    except Exception as e:
+        print(f"[startup] Error loading graph: {e}")
+        return False
+
+
+def save_graph_to_pickle():
+    """Save current graph state to pickle file."""
+    try:
+        G = graph_state["graph"]
+
+        # Update node attributes in the graph
+        for node_id, node_data in graph_state["nodes"].items():
+            if node_id in G:
+                G.nodes[node_id].update({
+                    "handle": node_data.get("handle", ""),
+                    "name": node_data.get("name", ""),
+                    "bio": node_data.get("bio", ""),
+                    "followers_count": node_data.get("followers_count", 0),
+                    "following_count": node_data.get("following_count", 0),
+                    "is_root": node_data.get("is_seed", False),
+                    "is_candidate": node_data.get("is_candidate", False),
+                })
+
+        GRAPH_PICKLE_PATH.parent.mkdir(parents=True, exist_ok=True)
+        with open(GRAPH_PICKLE_PATH, "wb") as f:
+            pickle.dump(G, f)
+        print(f"[save] Saved graph to {GRAPH_PICKLE_PATH}")
+        return True
+    except Exception as e:
+        print(f"[save] Error saving graph: {e}")
+        return False
 
 
 def load_deep_evaluations() -> List[dict]:
@@ -912,6 +1174,217 @@ async def generate_dm(request: DMGenerateRequest):
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+
+# --- Graph Visualization Endpoints ---
+
+
+@app.get("/status", response_model=GraphStatusResponse)
+async def get_graph_status():
+    """Get current graph loading status."""
+    return GraphStatusResponse(
+        loading=graph_state["loading"],
+        node_count=len(graph_state["nodes"]),
+        edge_count=graph_state["graph"].number_of_edges(),
+        seed_count=len(graph_state["seeds"]),
+        last_error=graph_state["last_error"],
+    )
+
+
+@app.get("/graph", response_model=GraphResponse)
+async def get_graph(
+    min_pagerank: float = 0.0,
+    max_nodes: int = 500,
+    only_relevant: bool = False,
+):
+    """Get the current graph data for visualization."""
+    nodes_data = []
+    edges_data = []
+
+    # Get nodes sorted by PageRank
+    sorted_nodes = sorted(
+        graph_state["nodes"].values(),
+        key=lambda n: n.get("pagerank_score", 0),
+        reverse=True,
+    )
+
+    # Filter and limit
+    node_ids = set()
+    for node in sorted_nodes:
+        if len(node_ids) >= max_nodes:
+            break
+
+        pr_score = node.get("pagerank_score", 0)
+        if pr_score < min_pagerank and not node.get("is_seed"):
+            continue
+
+        # Filter by Grok relevance if requested
+        if only_relevant:
+            filter_result = graph_state["filter_results"].get(node["id"])
+            if filter_result and not filter_result.pass_filter:
+                continue
+
+        node_ids.add(node["id"])
+
+        # Get Grok filter info if available
+        filter_result = graph_state["filter_results"].get(node["id"])
+
+        nodes_data.append(GraphNode(
+            id=node["id"],
+            handle=node.get("handle", ""),
+            name=node.get("name", ""),
+            bio=node.get("bio", ""),
+            followers_count=node.get("followers_count", 0),
+            following_count=node.get("following_count", 0),
+            is_seed=node.get("is_seed", False),
+            is_candidate=node.get("is_candidate", False),
+            pagerank_score=node.get("pagerank_score", 0),
+            underratedness_score=node.get("underratedness_score", 0),
+            grok_relevant=filter_result.pass_filter if filter_result else None,
+            grok_role=filter_result.potential_role if filter_result else None,
+            depth=node.get("depth", 0),
+        ))
+
+    # Get edges between visible nodes
+    G = graph_state["graph"]
+    for src, dst, data in G.edges(data=True):
+        if src in node_ids and dst in node_ids:
+            edges_data.append(GraphEdge(
+                source=src,
+                target=dst,
+                weight=data.get("weight", 1.0),
+                interaction_type=data.get("interaction_type", "follow"),
+            ))
+
+    # Compute stats
+    stats = {
+        "total_nodes": len(graph_state["nodes"]),
+        "total_edges": G.number_of_edges(),
+        "displayed_nodes": len(nodes_data),
+        "displayed_edges": len(edges_data),
+        "seeds": len(graph_state["seeds"]),
+        "filtered_count": sum(
+            1 for r in graph_state["filter_results"].values() if r.pass_filter
+        ),
+    }
+
+    return GraphResponse(nodes=nodes_data, edges=edges_data, stats=stats)
+
+
+@app.post("/source/add")
+async def add_source(request: AddSourceRequest, background_tasks: BackgroundTasks):
+    """Add a new source account and expand the graph."""
+    if graph_state["loading"]:
+        raise HTTPException(status_code=409, detail="Graph is currently loading")
+
+    # Run expansion in background
+    background_tasks.add_task(
+        expand_from_source,
+        request.handle,
+        request.depth,
+        request.max_following,
+    )
+
+    return {"message": f"Started expanding from @{request.handle}", "depth": request.depth}
+
+
+@app.post("/filter")
+async def filter_nodes(request: FilterRequest, background_tasks: BackgroundTasks):
+    """Filter nodes using Grok fast screening."""
+    if graph_state["loading"]:
+        raise HTTPException(status_code=409, detail="Graph is currently loading")
+
+    async def run_grok_filter(query: str):
+        try:
+            graph_state["loading"] = True
+            client = get_grok_client()
+
+            # Filter candidates
+            candidates = [
+                n for n in graph_state["nodes"].values()
+                if n.get("is_candidate") and n["id"] not in graph_state["filter_results"]
+            ]
+
+            for i, node in enumerate(candidates[:200]):  # Limit to 200 for speed
+                result = client.fast_screen(
+                    handle=node["handle"],
+                    bio=node.get("bio", ""),
+                    pinned_tweet=None,
+                    location=None,
+                )
+                graph_state["filter_results"][node["id"]] = result
+
+                if (i + 1) % 20 == 0:
+                    print(f"Filtered {i + 1}/{len(candidates[:200])} nodes")
+
+            graph_state["loading"] = False
+        except Exception as e:
+            graph_state["last_error"] = str(e)
+            graph_state["loading"] = False
+
+    background_tasks.add_task(run_grok_filter, request.query)
+
+    return {"message": "Started Grok filtering"}
+
+
+@app.delete("/graph")
+async def clear_graph():
+    """Clear the entire graph."""
+    graph_state["graph"] = nx.DiGraph()
+    graph_state["nodes"] = {}
+    graph_state["pagerank"] = {}
+    graph_state["filter_results"] = {}
+    graph_state["seeds"] = set()
+    graph_state["loading"] = False
+    graph_state["last_error"] = None
+
+    return {"message": "Graph cleared"}
+
+
+@app.post("/load")
+async def load_existing_graph():
+    """Load graph from existing pickle file."""
+    if load_graph_from_pickle():
+        return {
+            "message": "Graph loaded",
+            "nodes": len(graph_state["nodes"]),
+            "edges": graph_state["graph"].number_of_edges(),
+            "seeds": len(graph_state["seeds"]),
+        }
+    raise HTTPException(status_code=404, detail="No existing graph found")
+
+
+@app.post("/save")
+async def save_graph():
+    """Save current graph to pickle file."""
+    if save_graph_to_pickle():
+        return {"message": "Graph saved", "path": str(GRAPH_PICKLE_PATH)}
+    raise HTTPException(status_code=500, detail="Failed to save graph")
+
+
+@app.get("/node/{node_id}")
+async def get_node_details(node_id: str):
+    """Get detailed information about a specific node."""
+    if node_id not in graph_state["nodes"]:
+        raise HTTPException(status_code=404, detail="Node not found")
+
+    node = graph_state["nodes"][node_id]
+    filter_result = graph_state["filter_results"].get(node_id)
+
+    # Get connections
+    G = graph_state["graph"]
+    incoming = list(G.predecessors(node_id)) if node_id in G else []
+    outgoing = list(G.successors(node_id)) if node_id in G else []
+
+    return {
+        **node,
+        "grok_relevant": filter_result.pass_filter if filter_result else None,
+        "grok_role": filter_result.potential_role if filter_result else None,
+        "grok_reason": filter_result.reason if filter_result else None,
+        "incoming_connections": len(incoming),
+        "outgoing_connections": len(outgoing),
+        "x_url": f"https://x.com/{node['handle']}",
+    }
 
 
 if __name__ == "__main__":

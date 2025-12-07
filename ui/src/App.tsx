@@ -5,6 +5,7 @@ import { ThinkingTrace } from './components/ThinkingTrace';
 import { AboutPage } from './components/AboutPage';
 import { SavedCandidatesView } from './components/SavedCandidatesView';
 import { DMComposer } from './components/DMComposer';
+import { GraphView } from './components/GraphView';
 import {
   fetchCandidates,
   searchCandidatesStream,
@@ -26,7 +27,7 @@ function App() {
   const [showAbout, setShowAbout] = useState(false);
 
   // New state for saved candidates and DM
-  const [currentView, setCurrentView] = useState<'search' | 'saved'>('search');
+  const [currentView, setCurrentView] = useState<'search' | 'saved' | 'graph'>('search');
   const [savedHandles, setSavedHandles] = useState<Set<string>>(new Set());
   const [dmCandidate, setDmCandidate] = useState<Candidate | null>(null);
 
@@ -152,10 +153,28 @@ function App() {
           <div style={styles.headerButtons}>
             <button
               style={{
-                ...styles.savedButton,
-                ...(currentView === 'saved' ? styles.savedButtonActive : {}),
+                ...styles.tabButton,
+                ...(currentView === 'search' ? styles.tabButtonActive : {}),
               }}
-              onClick={() => setCurrentView(currentView === 'saved' ? 'search' : 'saved')}
+              onClick={() => setCurrentView('search')}
+            >
+              Search
+            </button>
+            <button
+              style={{
+                ...styles.tabButton,
+                ...(currentView === 'graph' ? styles.tabButtonActive : {}),
+              }}
+              onClick={() => setCurrentView('graph')}
+            >
+              Graph
+            </button>
+            <button
+              style={{
+                ...styles.tabButton,
+                ...(currentView === 'saved' ? styles.tabButtonActive : {}),
+              }}
+              onClick={() => setCurrentView('saved')}
             >
               Saved {savedHandles.size > 0 && `(${savedHandles.size})`}
             </button>
@@ -178,6 +197,8 @@ function App() {
           savedHandles={savedHandles}
           onToggleSave={handleToggleSave}
         />
+      ) : currentView === 'graph' ? (
+        <GraphView />
       ) : (
         <main style={styles.main}>
           <SearchBar onSearch={handleSearch} isLoading={isLoading} />
@@ -282,6 +303,22 @@ const styles: Record<string, React.CSSProperties> = {
     display: 'flex',
     gap: '12px',
     alignItems: 'center',
+  },
+  tabButton: {
+    padding: '8px 16px',
+    fontSize: '13px',
+    fontWeight: 500,
+    color: 'var(--text-secondary)',
+    backgroundColor: 'transparent',
+    border: '1px solid var(--border-color)',
+    borderRadius: '8px',
+    cursor: 'pointer',
+    transition: 'all 0.2s ease',
+  },
+  tabButtonActive: {
+    backgroundColor: 'var(--accent-primary)',
+    color: '#000',
+    borderColor: 'var(--accent-primary)',
   },
   savedButton: {
     padding: '8px 16px',

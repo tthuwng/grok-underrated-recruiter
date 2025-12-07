@@ -25,15 +25,29 @@ class XClient:
         """
         Initialize the X API client.
 
+        Supports two auth modes:
+        1. Bearer Token (X_BEARER_TOKEN) - simpler, read-only access
+        2. OAuth1 (X_API_KEY, X_API_KEY_SECRET, X_ACCESS_TOKEN, X_ACCESS_TOKEN_SECRET)
+
         Args:
             cache_dir: Optional directory to cache API responses
         """
-        self.auth = OAuth1(
-            os.environ["X_API_KEY"],
-            os.environ["X_API_KEY_SECRET"],
-            os.environ["X_ACCESS_TOKEN"],
-            os.environ["X_ACCESS_TOKEN_SECRET"],
-        )
+        # Try Bearer Token first (simpler)
+        self.bearer_token = os.environ.get("X_BEARER_TOKEN")
+        self.auth = None
+
+        if self.bearer_token:
+            print("[XClient] Using Bearer Token authentication")
+        else:
+            # Fall back to OAuth1
+            print("[XClient] Using OAuth1 authentication")
+            self.auth = OAuth1(
+                os.environ["X_API_KEY"],
+                os.environ["X_API_KEY_SECRET"],
+                os.environ["X_ACCESS_TOKEN"],
+                os.environ["X_ACCESS_TOKEN_SECRET"],
+            )
+
         self.cache_dir = Path(cache_dir) if cache_dir else None
         if self.cache_dir:
             self.cache_dir.mkdir(parents=True, exist_ok=True)
@@ -90,9 +104,17 @@ class XClient:
 
         url = f"{BASE_URL}{path}"
 
+        # Set up auth headers
+        headers = {}
+        auth = None
+        if self.bearer_token:
+            headers["Authorization"] = f"Bearer {self.bearer_token}"
+        else:
+            auth = self.auth
+
         for attempt in range(max_retries):
             try:
-                r = requests.get(url, auth=self.auth, params=params, timeout=30)
+                r = requests.get(url, auth=auth, headers=headers, params=params, timeout=30)
 
                 if r.status_code == 429:
                     # Rate limited - wait and retry
