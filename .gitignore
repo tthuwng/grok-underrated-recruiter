@@ -13,9 +13,13 @@ env/
 .venv/
 ENV/
 
+.vercel/
+
 # Data (can be large, regenerated from API)
 data/raw/
 data/processed/
+
+__MACOSX/
 
 # IDE
 .idea/
