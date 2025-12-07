@@ -182,6 +182,8 @@ class GraphNode(BaseModel):
     grok_relevant: Optional[bool] = None
     grok_role: Optional[str] = None
     depth: int = 0
+    discovered_via: Optional[str] = None
+    submission_pending: Optional[bool] = None
 
 
 class GraphEdge(BaseModel):
@@ -206,3 +208,38 @@ class GraphStatusResponse(BaseModel):
     edge_count: int
     seed_count: int
     last_error: Optional[str]
+
+
+# --- Handle Submission Models ---
+
+
+class HandleSubmitRequest(BaseModel):
+    """Request to submit a handle for evaluation."""
+    handle: str
+
+
+class SubmissionStatus(BaseModel):
+    """Status of a handle submission."""
+    submission_id: str
+    handle: str
+    status: str  # pending, processing, completed, filtered_out, failed
+    stage: str  # pending, fetching, fast_screen, deep_eval, done
+    approval_status: str  # pending, approved, rejected
+    submitted_at: str
+    started_at: Optional[str] = None
+    completed_at: Optional[str] = None
+    submitted_by: Optional[str] = None
+    approved_by: Optional[str] = None
+    approved_at: Optional[str] = None
+    fast_screen_result: Optional[dict] = None
+    deep_eval_result: Optional[dict] = None
+    error: Optional[str] = None
+    position_in_queue: Optional[int] = None
+
+
+class PendingApproval(BaseModel):
+    """Pending submission awaiting approval."""
+    submission_id: str
+    handle: str
+    submitted_by: Optional[str] = None
+    submitted_at: str

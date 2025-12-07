@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import ForceGraph2D from 'react-force-graph-2d';
 
-const API_BASE = 'http://localhost:8000';
+const API_BASE = import.meta.env.VITE_API_URL || '/api';
 
 interface GraphNode {
   id: string;
@@ -17,6 +17,8 @@ interface GraphNode {
   grok_relevant: boolean | null;
   grok_role: string | null;
   depth: number;
+  discovered_via?: string;
+  submission_pending?: boolean;
   x?: number;
   y?: number;
 }
@@ -193,6 +195,10 @@ export function GraphView() {
 
   const getNodeColor = (node: GraphNode) => {
     if (node.is_seed) return '#f87171'; // accent-red
+    // Pending submission (yellow/amber)
+    if (node.discovered_via === 'user_submission' && node.grok_relevant === null) {
+      return '#fbbf24'; // amber-400
+    }
     if (node.grok_relevant === true) return '#34d399'; // accent-green
     if (node.grok_relevant === false) return '#3f3f46';
     if (node.is_candidate) return '#60a5fa'; // accent-blue
@@ -406,6 +412,10 @@ export function GraphView() {
               Seeds
             </div>
             <div style={styles.legendItem}>
+              <span style={{ ...styles.legendDot, background: '#fbbf24' }} />
+              Pending evaluation
+            </div>
+            <div style={styles.legendItem}>
               <span style={{ ...styles.legendDot, background: '#34d399' }} />
               Grok relevant
             </div>
@@ -478,6 +488,10 @@ export function GraphView() {
               <span>Seeds</span>
             </div>
             <div style={styles.floatingLegendItem}>
+              <span style={{ ...styles.floatingLegendDot, background: '#fbbf24' }} />
+              <span>Pending</span>
+            </div>
+            <div style={styles.floatingLegendItem}>
               <span style={{ ...styles.floatingLegendDot, background: '#34d399' }} />
               <span>Grok Relevant</span>
             </div>
@@ -512,6 +526,11 @@ export function GraphView() {
             <div style={styles.nodeTags}>
               {selectedNode.is_seed && (
                 <span style={{ ...styles.nodeTag, ...styles.tagSeed }}>Seed</span>
+              )}
+              {selectedNode.discovered_via === 'user_submission' && selectedNode.grok_relevant === null && (
+                <span style={{ ...styles.nodeTag, ...styles.tagPending }}>
+                  Pending
+                </span>
               )}
               {selectedNode.grok_relevant === true && (
                 <span style={{ ...styles.nodeTag, ...styles.tagRelevant }}>
@@ -817,6 +836,10 @@ const styles: Record<string, React.CSSProperties> = {
   tagSeed: {
     background: 'rgba(248, 113, 113, 0.2)',
     color: '#f87171',
+  },
+  tagPending: {
+    background: 'rgba(251, 191, 36, 0.2)',
+    color: '#fbbf24',
   },
   tagRelevant: {
     background: 'rgba(52, 211, 153, 0.2)',

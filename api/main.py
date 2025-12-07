@@ -14,6 +14,7 @@ import os
 import pickle
 import sqlite3
 import sys
+import uuid
 from pathlib import Path
 from typing import Any, AsyncGenerator, Dict, List, Optional
 from urllib.parse import quote
@@ -40,6 +41,8 @@ from api.models import (
     GraphNode,
     GraphResponse,
     GraphStatusResponse,
+    HandleSubmitRequest,
+    PendingApproval,
     SaveCandidateRequest,
     SavedCandidateResponse,
     SavedCandidatesListResponse,
@@ -47,6 +50,7 @@ from api.models import (
     SearchRequest,
     SearchResponse,
     StatsResponse,
+    SubmissionStatus,
 )
 from src.grok_client import GrokClient
 from src.x_client import XClient
@@ -59,6 +63,14 @@ from api.database import (
     is_candidate_saved,
     get_saved_count,
     save_dm_history,
+    # Submission functions
+    create_submission as db_create_submission,
+    get_submission as db_get_submission,
+    get_submission_by_handle as db_get_submission_by_handle,
+    update_submission_status as db_update_submission_status,
+    update_submission_approval as db_update_submission_approval,
+    get_pending_approvals as db_get_pending_approvals,
+    get_submission_queue_position,
 )
 
 load_dotenv()
@@ -83,7 +95,9 @@ app.add_middleware(
     allow_origins=[
         "http://localhost:3000",
         "http://localhost:5173",
-    ],  # React dev servers
+        "https://grok-underrated-recruiter.vercel.app",
+        "https://grok-recruiter-api.fly.dev",
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -1243,6 +1257,8 @@ async def get_graph(
             grok_relevant=filter_result.pass_filter if filter_result else None,
             grok_role=filter_result.potential_role if filter_result else None,
             depth=node.get("depth", 0),
+            discovered_via=node.get("discovered_via"),
+            submission_pending=node.get("submission_pending"),
         ))
 
     # Get edges between visible nodes
@@ -1385,6 +1401,337 @@ async def get_node_details(node_id: str):
         "outgoing_connections": len(outgoing),
         "x_url": f"https://x.com/{node['handle']}",
     }
+
+
+# --- Handle Submission Endpoints ---
+
+
+def generate_submission_id() -> str:
+    """Generate a unique submission ID."""
+    return str(uuid.uuid4())[:8]
+
+
+async def add_submission_to_graph(handle: str) -> Optional[dict]:
+    """Add a submitted handle to the graph before evaluation."""
+    handle = handle.strip().lstrip('@').lower()
+
+    try:
+        client = get_x_client()
+
+        # Fetch user profile from X API
+        user = client.get_user_by_username(handle)
+        if not user:
+            graph_state["last_error"] = f"User @{handle} not found"
+            return None
+
+        uid = user.get("id")
+        if not uid:
+            return None
+
+        metrics = user.get("public_metrics", {})
+
+        # Add to graph with "pending evaluation" metadata
+        node_data = {
+            "id": uid,
+            "handle": user.get("username", handle),
+            "name": user.get("name", ""),
+            "bio": user.get("description", "")[:500],
+            "followers_count": metrics.get("followers_count", 0),
+            "following_count": metrics.get("following_count", 0),
+            "tweet_count": metrics.get("tweet_count", 0),
+            "is_seed": False,
+            "is_candidate": True,
+            "discovered_via": "user_submission",
+            "grok_relevant": None,  # Pending evaluation
+            "grok_role": None,
+            "pagerank_score": 0.0,
+            "underratedness_score": 0.0,
+            "depth": 0,
+            "submission_pending": True,
+        }
+
+        # Add to graph state
+        graph_state["nodes"][uid] = node_data
+        graph_state["graph"].add_node(uid, **node_data)
+
+        # Recompute PageRank with new node
+        compute_pagerank_scores()
+
+        print(f"[submit] Added @{handle} to graph (ID: {uid})")
+        return node_data
+
+    except Exception as e:
+        graph_state["last_error"] = f"Error adding @{handle}: {str(e)}"
+        print(f"[submit] Error adding @{handle}: {e}")
+        return None
+
+
+async def process_submission(submission_id: str, handle: str):
+    """Process submission through evaluation pipeline."""
+    handle = handle.lower().lstrip("@")
+
+    try:
+        # Stage 1: Fast Screen
+        db_update_submission_status(submission_id, "processing", "fast_screen")
+
+        grok = get_grok_client()
+
+        # Find node in graph by handle
+        node = None
+        node_id = None
+        for nid, ndata in graph_state["nodes"].items():
+            if ndata.get("handle", "").lower() == handle:
+                node = ndata
+                node_id = nid
+                break
+
+        if not node:
+            db_update_submission_status(
+                submission_id, "failed", "error",
+                error_message=f"Node for @{handle} not found in graph"
+            )
+            return
+
+        # Run fast screen
+        fast_result = grok.fast_screen(
+            handle=handle,
+            bio=node.get("bio", ""),
+            pinned_tweet=None,
+            location=None,
+        )
+
+        # Update graph node with fast screen result
+        node["grok_relevant"] = fast_result.pass_filter
+        node["grok_role"] = fast_result.potential_role
+        node["submission_pending"] = False
+        graph_state["filter_results"][node_id] = fast_result
+
+        # Save fast screen result to database
+        fast_result_json = json.dumps({
+            "pass_filter": fast_result.pass_filter,
+            "potential_role": fast_result.potential_role,
+            "reason": fast_result.reason,
+            "confidence": getattr(fast_result, 'confidence', None),
+        })
+
+        if not fast_result.pass_filter:
+            db_update_submission_status(
+                submission_id, "filtered_out", "done",
+                fast_screen_result=fast_result_json
+            )
+            print(f"[submit] @{handle} filtered out: {fast_result.reason}")
+            return
+
+        db_update_submission_status(
+            submission_id, "processing", "fast_screen",
+            fast_screen_result=fast_result_json
+        )
+
+        # Stage 2: Deep Evaluation
+        db_update_submission_status(submission_id, "processing", "deep_eval")
+
+        # Get user's recent tweets for deep eval
+        try:
+            client = get_x_client()
+            tweets = client.get_user_tweets(node_id, max_results=20)
+        except Exception:
+            tweets = []
+
+        # Run deep evaluation
+        deep_result = grok.deep_evaluate(
+            handle=handle,
+            bio=node.get("bio", ""),
+            tweets=tweets,
+            github_url=None,
+        )
+
+        # Update graph node with deep eval scores
+        if deep_result:
+            node["final_score"] = deep_result.get("final_score", 0)
+            node["grok_evaluated"] = True
+
+            # Save to enriched directory
+            enriched_path = ENRICHED_DIR / f"deep_{handle}.json"
+            enriched_path.parent.mkdir(parents=True, exist_ok=True)
+            with open(enriched_path, "w") as f:
+                json.dump(deep_result, f, indent=2)
+
+            # Refresh evaluation cache
+            global _evaluation_cache
+            _evaluation_cache = None
+
+        # Save deep eval result to database
+        deep_eval_json = json.dumps(deep_result) if deep_result else None
+
+        db_update_submission_status(
+            submission_id, "completed", "done",
+            deep_eval_result=deep_eval_json
+        )
+
+        # Recompute PageRank after evaluation
+        compute_pagerank_scores()
+
+        print(f"[submit] @{handle} evaluation complete: score={deep_result.get('final_score', 'N/A')}")
+
+    except Exception as e:
+        print(f"[submit] Error processing @{handle}: {e}")
+        db_update_submission_status(
+            submission_id, "failed", "error",
+            error_message=str(e)
+        )
+
+
+@app.post("/submit", response_model=SubmissionStatus)
+async def submit_handle(
+    request: HandleSubmitRequest,
+    background_tasks: BackgroundTasks,
+):
+    """
+    Submit a handle for evaluation.
+    The handle will be added to the graph immediately and processed in the background.
+    """
+    handle = request.handle.lower().lstrip("@").strip()
+
+    if not handle:
+        raise HTTPException(status_code=400, detail="Handle is required")
+
+    # Check if already submitted
+    existing = db_get_submission_by_handle(handle)
+    if existing:
+        # Return existing submission status
+        position = get_submission_queue_position(existing["id"])
+        return SubmissionStatus(
+            submission_id=existing["id"],
+            handle=existing["handle"],
+            status=existing["status"],
+            stage=existing["stage"],
+            approval_status=existing["approval_status"],
+            submitted_at=existing["submitted_at"],
+            started_at=existing.get("started_at"),
+            completed_at=existing.get("completed_at"),
+            fast_screen_result=json.loads(existing["fast_screen_result"]) if existing.get("fast_screen_result") else None,
+            deep_eval_result=json.loads(existing["deep_eval_result"]) if existing.get("deep_eval_result") else None,
+            error=existing.get("error_message"),
+            position_in_queue=position if existing["status"] == "pending" else None,
+        )
+
+    # Create submission record
+    submission_id = generate_submission_id()
+    submission = db_create_submission(submission_id, handle)
+
+    # Immediately add to graph as pending node
+    node = await add_submission_to_graph(handle)
+    if not node:
+        # Still create submission but note the error
+        db_update_submission_status(
+            submission_id, "failed", "fetching",
+            error_message=graph_state.get("last_error", "Failed to fetch user profile")
+        )
+        raise HTTPException(
+            status_code=404,
+            detail=f"Could not find user @{handle} on X"
+        )
+
+    # Auto-approve and start processing (no approval queue for now)
+    db_update_submission_approval(submission_id, "approved")
+
+    # Queue background evaluation
+    background_tasks.add_task(process_submission, submission_id, handle)
+
+    return SubmissionStatus(
+        submission_id=submission_id,
+        handle=handle,
+        status="pending",
+        stage="fetching",
+        approval_status="approved",
+        submitted_at=submission["submitted_at"],
+    )
+
+
+@app.get("/submit/{submission_id}", response_model=SubmissionStatus)
+async def get_submission_status(submission_id: str):
+    """Get status of a submission."""
+    submission = db_get_submission(submission_id)
+    if not submission:
+        raise HTTPException(status_code=404, detail="Submission not found")
+
+    position = get_submission_queue_position(submission_id)
+
+    return SubmissionStatus(
+        submission_id=submission["id"],
+        handle=submission["handle"],
+        status=submission["status"],
+        stage=submission["stage"],
+        approval_status=submission["approval_status"],
+        submitted_at=submission["submitted_at"],
+        started_at=submission.get("started_at"),
+        completed_at=submission.get("completed_at"),
+        fast_screen_result=json.loads(submission["fast_screen_result"]) if submission.get("fast_screen_result") else None,
+        deep_eval_result=json.loads(submission["deep_eval_result"]) if submission.get("deep_eval_result") else None,
+        error=submission.get("error_message"),
+        position_in_queue=position if submission["status"] == "pending" else None,
+    )
+
+
+@app.get("/admin/pending", response_model=List[PendingApproval])
+async def get_pending_submissions():
+    """Get list of submissions pending approval (admin only)."""
+    pending = db_get_pending_approvals()
+    return [
+        PendingApproval(
+            submission_id=p["id"],
+            handle=p["handle"],
+            submitted_by=p.get("submitted_by"),
+            submitted_at=p["submitted_at"],
+        )
+        for p in pending
+    ]
+
+
+@app.post("/admin/approve/{submission_id}")
+async def approve_submission(
+    submission_id: str,
+    background_tasks: BackgroundTasks,
+):
+    """Approve a pending submission and start processing."""
+    submission = db_get_submission(submission_id)
+    if not submission:
+        raise HTTPException(status_code=404, detail="Submission not found")
+
+    if submission["approval_status"] != "pending":
+        raise HTTPException(status_code=400, detail="Submission already processed")
+
+    # Update approval status
+    db_update_submission_approval(submission_id, "approved")
+
+    # Add to graph if not already there
+    handle = submission["handle"]
+    node_exists = any(
+        n.get("handle", "").lower() == handle
+        for n in graph_state["nodes"].values()
+    )
+    if not node_exists:
+        await add_submission_to_graph(handle)
+
+    # Queue background evaluation
+    background_tasks.add_task(process_submission, submission_id, handle)
+
+    return {"message": f"Submission {submission_id} approved", "handle": handle}
+
+
+@app.post("/admin/reject/{submission_id}")
+async def reject_submission(submission_id: str):
+    """Reject a pending submission."""
+    submission = db_get_submission(submission_id)
+    if not submission:
+        raise HTTPException(status_code=404, detail="Submission not found")
+
+    if submission["approval_status"] != "pending":
+        raise HTTPException(status_code=400, detail="Submission already processed")
+
+    db_update_submission_approval(submission_id, "rejected")
+
+    return {"message": f"Submission {submission_id} rejected", "handle": submission["handle"]}
 
 
 if __name__ == "__main__":
