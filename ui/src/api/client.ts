@@ -1,6 +1,6 @@
 // API client for Grok Underrated Recruiter
 
-const API_BASE = '/api';
+const API_BASE = import.meta.env.VITE_API_URL || '/api';
 
 export interface ScoreBreakdown {
   score: number;
@@ -291,5 +291,92 @@ export async function generateDMStream(
         // Skip invalid JSON
       }
     }
+  }
+}
+
+// --- Handle Submission API ---
+
+export interface SubmissionStatus {
+  submission_id: string;
+  handle: string;
+  status: string;
+  stage: string;
+  approval_status: string;
+  submitted_at: string;
+  started_at?: string;
+  completed_at?: string;
+  submitted_by?: string;
+  approved_by?: string;
+  approved_at?: string;
+  fast_screen_result?: object;
+  deep_eval_result?: object;
+  error?: string;
+  position_in_queue?: number;
+}
+
+export interface PendingApproval {
+  submission_id: string;
+  handle: string;
+  submitted_by?: string;
+  submitted_at: string;
+}
+
+export async function submitHandle(handle: string, token?: string): Promise<SubmissionStatus> {
+  const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+  if (token) {
+    headers['Authorization'] = `Bearer ${token}`;
+  }
+
+  const res = await fetch(`${API_BASE}/submit`, {
+    method: 'POST',
+    headers,
+    body: JSON.stringify({ handle }),
+  });
+
+  if (!res.ok) {
+    const error = await res.json().catch(() => ({ detail: 'Submission failed' }));
+    throw new Error(error.detail || 'Submission failed');
+  }
+  return res.json();
+}
+
+export async function getSubmissionStatus(submissionId: string): Promise<SubmissionStatus> {
+  const res = await fetch(`${API_BASE}/submit/${submissionId}`);
+  if (!res.ok) {
+    throw new Error('Failed to get submission status');
+  }
+  return res.json();
+}
+
+export async function getPendingApprovals(token: string): Promise<PendingApproval[]> {
+  const res = await fetch(`${API_BASE}/admin/pending`, {
+    headers: { 'Authorization': `Bearer ${token}` },
+  });
+  if (!res.ok) {
+    if (res.status === 403) throw new Error('Not authorized');
+    throw new Error('Failed to get pending approvals');
+  }
+  return res.json();
+}
+
+export async function approveSubmission(submissionId: string, token: string): Promise<void> {
+  const res = await fetch(`${API_BASE}/admin/approve/${submissionId}`, {
+    method: 'POST',
+    headers: { 'Authorization': `Bearer ${token}` },
+  });
+  if (!res.ok) {
+    if (res.status === 403) throw new Error('Not authorized');
+    throw new Error('Failed to approve submission');
+  }
+}
+
+export async function rejectSubmission(submissionId: string, token: string): Promise<void> {
+  const res = await fetch(`${API_BASE}/admin/reject/${submissionId}`, {
+    method: 'POST',
+    headers: { 'Authorization': `Bearer ${token}` },
+  });
+  if (!res.ok) {
+    if (res.status === 403) throw new Error('Not authorized');
+    throw new Error('Failed to reject submission');
   }
 }
