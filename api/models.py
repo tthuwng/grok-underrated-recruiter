@@ -58,7 +58,7 @@ class CandidateDeepEval(BaseModel):
 
 
 class CandidateListItem(BaseModel):
-    """Candidate item for list view (minimal)."""
+    """Candidate item for list view with score breakdown."""
     handle: str
     name: str
     bio: str
@@ -71,6 +71,13 @@ class CandidateListItem(BaseModel):
     underratedness_score: float
     github_url: Optional[str] = None
     linkedin_url: Optional[str] = None
+
+    # Score breakdown with evidence (for detailed view)
+    technical_depth: Optional[ScoreBreakdown] = None
+    project_evidence: Optional[ScoreBreakdown] = None
+    mission_alignment: Optional[ScoreBreakdown] = None
+    exceptional_ability: Optional[ScoreBreakdown] = None
+    communication: Optional[ScoreBreakdown] = None
 
 
 class SearchRequest(BaseModel):
@@ -86,6 +93,8 @@ class SearchResponse(BaseModel):
     query: str
     total_results: int
     candidates: List[CandidateListItem]
+    thinking: Optional[str] = None  # Grok's reasoning trace
+    search_criteria: Optional[str] = None  # Extracted search criteria
 
 
 class CandidateDetailResponse(BaseModel):
@@ -101,3 +110,43 @@ class StatsResponse(BaseModel):
     fast_screened: int
     deep_evaluated: int
     seed_accounts: int
+
+
+# --- Saved Candidates Models ---
+
+
+class SaveCandidateRequest(BaseModel):
+    """Request to save a candidate."""
+    handle: str
+    notes: Optional[str] = None
+
+
+class SavedCandidateResponse(BaseModel):
+    """Response for saved candidate."""
+    handle: str
+    saved_at: str
+    notes: Optional[str] = None
+
+
+class SavedCandidatesListResponse(BaseModel):
+    """List of saved candidates with full details."""
+    saved: List[CandidateListItem]
+    total: int
+
+
+# --- DM Generation Models ---
+
+
+class DMGenerateRequest(BaseModel):
+    """Request to generate personalized DM."""
+    handle: str
+    custom_context: Optional[str] = None  # Optional: Job description, team info
+    tone: str = "professional"  # professional, casual, enthusiastic
+
+
+class DMGenerateResponse(BaseModel):
+    """Generated DM response."""
+    handle: str
+    message: str
+    x_intent_url: str
+    character_count: int

@@ -319,34 +319,67 @@ After gathering information, respond with JSON only:
         response_text = ""
         citations = []
         chunk_count = 0
-        last_tool_call_time = None
+        import queue
+        import threading
         import time
 
         start_time = time.time()
+        STREAM_TIMEOUT = 180  # 3 minutes total timeout for response
+
+        # Use a queue to collect chunks from a background thread
+        chunk_queue = queue.Queue()
+        stream_error_holder = [None]  # Mutable holder for exception
+
+        def stream_worker():
+            """Run stream in background thread."""
+            try:
+                for response, chunk in chat.stream():
+                    chunk_queue.put(("chunk", response, chunk))
+                chunk_queue.put(("done", None, None))
+            except Exception as e:
+                stream_error_holder[0] = e
+                chunk_queue.put(("error", None, None))
 
         try:
             if verbose:
-                print("    [debug] Starting stream...")
+                print("    [debug] Starting stream (3 min timeout)...")
 
-            # Use iterator with timeout detection
-            stream_iterator = chat.stream()
-            last_chunk_time = time.time()
-            CHUNK_TIMEOUT = 120  # 2 minutes max between chunks
+            # Start streaming in background thread
+            stream_thread = threading.Thread(target=stream_worker, daemon=True)
+            stream_thread.start()
+
+            response = None
+            last_activity = time.time()
+            CHUNK_TIMEOUT = 90  # 90 seconds max between chunks
 
             while True:
                 try:
-                    # Check if we've been waiting too long
-                    if time.time() - last_chunk_time > CHUNK_TIMEOUT:
-                        raise TimeoutError(f"No response for {CHUNK_TIMEOUT}s - likely rate limited")
+                    # Wait for next chunk with timeout
+                    status, resp, chunk = chunk_queue.get(timeout=10)  # Check every 10s
 
-                    response, chunk = next(stream_iterator)
-                    last_chunk_time = time.time()
+                    if status == "done":
+                        if verbose:
+                            print(
+                                f"    [debug] Stream complete. {chunk_count} chunks, {time.time() - start_time:.1f}s total"
+                            )
+                        break
+
+                    if status == "error":
+                        raise stream_error_holder[0] or Exception(
+                            "Unknown stream error"
+                        )
+
+                    # Process chunk
+                    response = resp
+                    last_activity = time.time()
                     chunk_count += 1
                     elapsed = time.time() - start_time
 
                     # Debug: show chunk info periodically
                     if verbose and chunk_count % 10 == 0:
-                        print(f"    [debug] Chunk {chunk_count}, elapsed: {elapsed:.1f}s")
+                        print(
+                            f"    [debug] Chunk {chunk_count}, elapsed: {elapsed:.1f}s"
+                        )
 
                     # Collect tool calls for verbose output
                     if chunk.tool_calls:
@@ -364,13 +397,23 @@ After gathering information, respond with JSON only:
                                 f"    [debug] Response length: {len(response_text)} chars"
                             )
 
-                except StopIteration:
-                    break
+                except queue.Empty:
+                    # No chunk received in 10s, check timeouts
+                    elapsed = time.time() - start_time
+                    since_last = time.time() - last_activity
 
-            if verbose:
-                print(
-                    f"    [debug] Stream complete. {chunk_count} chunks, {time.time() - start_time:.1f}s total"
-                )
+                    if elapsed > STREAM_TIMEOUT:
+                        raise TimeoutError(f"Stream timeout after {elapsed:.0f}s total")
+
+                    if since_last > CHUNK_TIMEOUT:
+                        raise TimeoutError(
+                            f"No chunks for {since_last:.0f}s - likely rate limited"
+                        )
+
+                    if verbose:
+                        print(
+                            f"    [waiting] {elapsed:.0f}s elapsed, last chunk {since_last:.0f}s ago..."
+                        )
 
         except TimeoutError as timeout_error:
             if verbose:
@@ -429,7 +472,7 @@ After gathering information, respond with JSON only:
         candidates: List[Dict[str, Any]],
         max_candidates: int = 200,
         verbose: bool = True,
-        delay_between: int = 30,  # Seconds between candidates to avoid rate limits
+        delay_between: int = 10,  # Seconds between candidates to avoid rate limits
         max_retries: int = 3,
     ) -> List[DeepEvaluation]:
         """

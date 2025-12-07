@@ -1,9 +1,13 @@
 import React from 'react';
 import type { Candidate } from '../api/client';
+import { HeartButton } from './HeartButton';
+import { ScoreBreakdown } from './ScoreBreakdown';
 
 interface CandidateCardProps {
   candidate: Candidate;
   onClick?: () => void;
+  isSaved?: boolean;
+  onToggleSave?: () => void;
 }
 
 function ScoreDot({ score, maxScore = 10 }: { score: number; maxScore?: number }) {
@@ -26,9 +30,9 @@ function ScoreDot({ score, maxScore = 10 }: { score: number; maxScore?: number }
   );
 }
 
-export function CandidateCard({ candidate, onClick }: CandidateCardProps) {
+export function CandidateCard({ candidate, onClick, isSaved = false, onToggleSave }: CandidateCardProps) {
   const roleColors: Record<string, string> = {
-    research: 'var(--accent-purple)',
+    research: '#8b5cf6',           // Purple for research
     engineering: 'var(--accent-blue)',
     infrastructure: 'var(--accent-orange)',
     none: 'var(--text-muted)',
@@ -37,6 +41,13 @@ export function CandidateCard({ candidate, onClick }: CandidateCardProps) {
   return (
     <div style={styles.card} onClick={onClick}>
       <div style={styles.header}>
+        {onToggleSave && (
+          <HeartButton
+            isSaved={isSaved}
+            onToggle={onToggleSave}
+            size="medium"
+          />
+        )}
         <div style={styles.avatar}>
           {candidate.handle.charAt(0).toUpperCase()}
         </div>
@@ -105,6 +116,14 @@ export function CandidateCard({ candidate, onClick }: CandidateCardProps) {
       )}
 
       <div style={styles.summary}>{candidate.summary}</div>
+
+      <ScoreBreakdown
+        technicalDepth={candidate.technical_depth}
+        projectEvidence={candidate.project_evidence}
+        missionAlignment={candidate.mission_alignment}
+        exceptionalAbility={candidate.exceptional_ability}
+        communication={candidate.communication}
+      />
     </div>
   );
 }
@@ -113,29 +132,29 @@ const styles: Record<string, React.CSSProperties> = {
   card: {
     backgroundColor: 'var(--bg-secondary)',
     border: '1px solid var(--border-color)',
-    borderRadius: '12px',
+    borderRadius: '16px',
     padding: '20px',
-    marginBottom: '16px',
+    marginBottom: '12px',
     cursor: 'pointer',
-    transition: 'border-color 0.2s',
+    transition: 'border-color 0.2s, background-color 0.2s',
   },
   header: {
     display: 'flex',
     alignItems: 'flex-start',
-    gap: '12px',
+    gap: '14px',
     marginBottom: '12px',
   },
   avatar: {
-    width: '48px',
-    height: '48px',
-    borderRadius: '50%',
-    backgroundColor: 'var(--bg-tertiary)',
+    width: '44px',
+    height: '44px',
+    borderRadius: '12px',
+    background: 'var(--accent-primary)',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    fontSize: '20px',
+    fontSize: '18px',
     fontWeight: 600,
-    color: 'var(--text-secondary)',
+    color: '#000',
   },
   info: {
     flex: 1,
@@ -154,13 +173,15 @@ const styles: Record<string, React.CSSProperties> = {
   },
   scoreValue: {
     display: 'block',
-    fontSize: '24px',
+    fontSize: '22px',
     fontWeight: 700,
-    color: 'var(--accent-green)',
+    color: 'var(--accent-primary)',
   },
   scoreLabel: {
-    fontSize: '12px',
+    fontSize: '11px',
     color: 'var(--text-muted)',
+    textTransform: 'uppercase' as const,
+    letterSpacing: '0.05em',
   },
   bio: {
     fontSize: '14px',
@@ -175,26 +196,29 @@ const styles: Record<string, React.CSSProperties> = {
     flexWrap: 'wrap' as const,
   },
   role: {
-    padding: '4px 8px',
-    borderRadius: '4px',
-    fontSize: '12px',
-    fontWeight: 500,
+    padding: '4px 10px',
+    borderRadius: '6px',
+    fontSize: '11px',
+    fontWeight: 600,
     color: 'white',
-    textTransform: 'capitalize' as const,
+    textTransform: 'uppercase' as const,
+    letterSpacing: '0.03em',
   },
   link: {
-    padding: '4px 8px',
-    borderRadius: '4px',
-    fontSize: '12px',
+    padding: '4px 10px',
+    borderRadius: '6px',
+    fontSize: '11px',
     color: 'var(--accent-blue)',
     textDecoration: 'none',
     backgroundColor: 'var(--bg-tertiary)',
+    fontWeight: 500,
   },
   reasoning: {
     backgroundColor: 'var(--bg-tertiary)',
-    borderRadius: '8px',
-    padding: '12px',
+    borderRadius: '10px',
+    padding: '14px',
     marginBottom: '12px',
+    borderLeft: '2px solid var(--text-muted)',
   },
   reasoningLabel: {
     fontSize: '12px',

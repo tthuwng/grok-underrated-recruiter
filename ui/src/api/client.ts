@@ -1,4 +1,4 @@
-// API client for Grok Recruiter
+// API client for Grok Underrated Recruiter
 
 const API_BASE = '/api';
 
@@ -20,6 +20,12 @@ export interface Candidate {
   underratedness_score: number;
   github_url?: string;
   linkedin_url?: string;
+  // Score breakdown with evidence
+  technical_depth?: ScoreBreakdown;
+  project_evidence?: ScoreBreakdown;
+  mission_alignment?: ScoreBreakdown;
+  exceptional_ability?: ScoreBreakdown;
+  communication?: ScoreBreakdown;
 }
 
 export interface CandidateDetail extends Candidate {
@@ -37,6 +43,8 @@ export interface SearchResponse {
   query: string;
   total_results: number;
   candidates: Candidate[];
+  thinking?: string;
+  search_criteria?: string;
 }
 
 export interface Stats {
@@ -82,8 +90,183 @@ export async function searchCandidates(query: string, limit = 30): Promise<Searc
   return res.json();
 }
 
+export interface StreamCallbacks {
+  onThinking: (chunk: string) => void;
+  onCandidates: (candidates: Candidate[], criteria: string, total: number) => void;
+  onError: (error: string) => void;
+  onDone: () => void;
+}
+
+export async function searchCandidatesStream(
+  query: string,
+  limit: number,
+  callbacks: StreamCallbacks
+): Promise<void> {
+  const res = await fetch(`${API_BASE}/search/stream`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ query, limit }),
+  });
+
+  if (!res.ok) {
+    callbacks.onError('Search failed');
+    return;
+  }
+
+  const reader = res.body?.getReader();
+  if (!reader) {
+    callbacks.onError('No response body');
+    return;
+  }
+
+  const decoder = new TextDecoder();
+  let buffer = '';
+
+  while (true) {
+    const { done, value } = await reader.read();
+    if (done) break;
+
+    buffer += decoder.decode(value, { stream: true });
+    const lines = buffer.split('\n');
+    buffer = lines.pop() || '';
+
+    for (const line of lines) {
+      if (!line.startsWith('data: ')) continue;
+      const data = line.slice(6);
+
+      if (data === '[DONE]') {
+        callbacks.onDone();
+        return;
+      }
+
+      try {
+        const parsed = JSON.parse(data);
+        if (parsed.type === 'thinking') {
+          callbacks.onThinking(parsed.content);
+        } else if (parsed.type === 'candidates') {
+          callbacks.onCandidates(parsed.candidates, parsed.criteria, parsed.total);
+        } else if (parsed.type === 'error') {
+          callbacks.onError(parsed.message);
+        }
+      } catch (e) {
+        // Skip invalid JSON
+      }
+    }
+  }
+
+  callbacks.onDone();
+}
+
 export async function fetchStats(): Promise<Stats> {
   const res = await fetch(`${API_BASE}/stats`);
   if (!res.ok) throw new Error('Failed to fetch stats');
   return res.json();
+}
+
+// --- Saved Candidates API ---
+
+export interface SavedCandidatesResponse {
+  saved: Candidate[];
+  total: number;
+}
+
+export async function saveCandidate(handle: string): Promise<void> {
+  const res = await fetch(`${API_BASE}/saved`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ handle }),
+  });
+  if (!res.ok) {
+    if (res.status === 409) throw new Error('Already saved');
+    throw new Error('Failed to save candidate');
+  }
+}
+
+export async function unsaveCandidate(handle: string): Promise<void> {
+  const res = await fetch(`${API_BASE}/saved/${handle}`, {
+    method: 'DELETE',
+  });
+  if (!res.ok) throw new Error('Failed to unsave candidate');
+}
+
+export async function fetchSavedCandidates(): Promise<SavedCandidatesResponse> {
+  const res = await fetch(`${API_BASE}/saved`);
+  if (!res.ok) throw new Error('Failed to fetch saved candidates');
+  return res.json();
+}
+
+export async function fetchSavedHandles(): Promise<{ handles: string[] }> {
+  const res = await fetch(`${API_BASE}/saved/handles`);
+  if (!res.ok) throw new Error('Failed to fetch saved handles');
+  return res.json();
+}
+
+export async function fetchSavedCount(): Promise<{ count: number }> {
+  const res = await fetch(`${API_BASE}/saved/count`);
+  if (!res.ok) throw new Error('Failed to fetch saved count');
+  return res.json();
+}
+
+// --- DM Generation API ---
+
+export interface DMStreamCallbacks {
+  onContent: (content: string) => void;
+  onDone: (message: string, xIntentUrl: string, charCount: number) => void;
+  onError: (error: string) => void;
+}
+
+export async function generateDMStream(
+  handle: string,
+  customContext: string,
+  tone: string,
+  callbacks: DMStreamCallbacks
+): Promise<void> {
+  const res = await fetch(`${API_BASE}/dm/generate/stream`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ handle, custom_context: customContext, tone }),
+  });
+
+  if (!res.ok) {
+    callbacks.onError('DM generation failed');
+    return;
+  }
+
+  const reader = res.body?.getReader();
+  if (!reader) {
+    callbacks.onError('No response body');
+    return;
+  }
+
+  const decoder = new TextDecoder();
+  let buffer = '';
+
+  while (true) {
+    const { done, value } = await reader.read();
+    if (done) break;
+
+    buffer += decoder.decode(value, { stream: true });
+    const lines = buffer.split('\n');
+    buffer = lines.pop() || '';
+
+    for (const line of lines) {
+      if (!line.startsWith('data: ')) continue;
+      const data = line.slice(6);
+
+      if (data === '[DONE]') return;
+
+      try {
+        const parsed = JSON.parse(data);
+        if (parsed.type === 'content') {
+          callbacks.onContent(parsed.content);
+        } else if (parsed.type === 'done') {
+          callbacks.onDone(parsed.message, parsed.x_intent_url, parsed.character_count);
+        } else if (parsed.type === 'error') {
+          callbacks.onError(parsed.message);
+        }
+      } catch {
+        // Skip invalid JSON
+      }
+    }
+  }
 }
