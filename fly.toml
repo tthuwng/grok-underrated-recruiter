@@ -8,19 +8,18 @@ primary_region = 'sjc'
 
 [build]
 
-# Single process deployment (worker disabled until Redis is configured)
-# To enable worker: uncomment worker process and add REDIS_URL secret
-[processes]
-  app = "uvicorn api.main:app --host 0.0.0.0 --port 8080"
-  # worker = "arq api.worker.WorkerSettings"  # Requires Redis
-
+# Single process with both API and worker (share same filesystem/volume)
 [http_service]
   internal_port = 8080
   force_https = true
   auto_stop_machines = 'stop'
   auto_start_machines = true
   min_machines_running = 1
-  processes = ['app']
+
+# Mount persistent volume for SQLite database
+[mounts]
+  source = "data"
+  destination = "/app/data"
 
 [[vm]]
   memory = '1gb'

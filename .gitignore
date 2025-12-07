@@ -31,3 +31,6 @@ Thumbs.db
 *.log
 
 node_modules/
+
+# Build output
+ui/dist/

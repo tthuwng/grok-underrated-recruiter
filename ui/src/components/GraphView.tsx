@@ -52,13 +52,9 @@ export function GraphView() {
   const [error, setError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState<GraphNode[]>([]);
-  const [maxNodes, setMaxNodes] = useState(200);
+  const [maxNodes, setMaxNodes] = useState(500);
   const [onlyRelevant, setOnlyRelevant] = useState(false);
 
-  // Add source state
-  const [sourceHandle, setSourceHandle] = useState('');
-  const [sourceDepth, setSourceDepth] = useState(2);
-  const [sourceMaxFollowing, setSourceMaxFollowing] = useState(100);
 
   const fetchGraph = useCallback(async () => {
     try {
@@ -81,15 +77,20 @@ export function GraphView() {
     fetchGraph();
   }, [fetchGraph]);
 
-  // Configure d3 forces for better spacing
+  // Configure d3 forces for better spacing - scales with node count
   useEffect(() => {
     if (graphRef.current && graphData) {
       const fg = graphRef.current;
-      // Increase repulsion between nodes for more spacing
-      fg.d3Force('charge')?.strength(-400).distanceMax(800);
-      // Increase link distance
-      fg.d3Force('link')?.distance(120).strength(0.2);
-      // Add collision detection with larger radius
+      const nodeCount = graphData.nodes.length;
+
+      // Scale forces based on node count for better visualization
+      // More nodes = weaker charge to prevent overcrowding, shorter links
+      const chargeStrength = nodeCount > 1000 ? -150 : nodeCount > 500 ? -250 : -400;
+      const linkDistance = nodeCount > 1000 ? 60 : nodeCount > 500 ? 80 : 120;
+      const linkStrength = nodeCount > 1000 ? 0.1 : 0.2;
+
+      fg.d3Force('charge')?.strength(chargeStrength).distanceMax(500);
+      fg.d3Force('link')?.distance(linkDistance).strength(linkStrength);
       fg.d3Force('collide', null);
     }
   }, [graphData]);
@@ -109,63 +110,24 @@ export function GraphView() {
     setSearchResults(matches);
   };
 
-  const focusOnNode = (node: GraphNode) => {
-    setSelectedNode(node);
+  const focusOnNode = (nodeFromSearch: GraphNode) => {
     setSearchResults([]);
     setSearchQuery('');
-    if (graphRef.current) {
-      graphRef.current.centerAt(node.x, node.y, 1000);
-      graphRef.current.zoom(3, 1000);
+
+    // Find the actual node in graphData (which has x/y coordinates from simulation)
+    if (graphData && graphRef.current) {
+      const actualNode = graphData.nodes.find(n => n.id === nodeFromSearch.id);
+      if (actualNode) {
+        setSelectedNode(actualNode);
+        graphRef.current.centerAt(actualNode.x, actualNode.y, 1000);
+        graphRef.current.zoom(3, 1000);
+      } else {
+        // Node not in current view, just select it
+        setSelectedNode(nodeFromSearch);
+      }
     }
   };
 
-  const addSource = async () => {
-    if (!sourceHandle.trim()) return;
-    try {
-      setIsLoading(true);
-      setError(null);
-      const response = await fetch(`${API_BASE}/source/add`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          handle: sourceHandle.trim(),
-          depth: sourceDepth,
-          max_following: sourceMaxFollowing,
-        }),
-      });
-      if (!response.ok) {
-        const text = await response.text();
-        throw new Error(text);
-      }
-      setSourceHandle('');
-      // Poll for completion
-      pollStatus();
-    } catch (e) {
-      setError(e instanceof Error ? e.message : 'Failed to add source');
-      setIsLoading(false);
-    }
-  };
-
-  const pollStatus = async () => {
-    const poll = async () => {
-      try {
-        const response = await fetch(`${API_BASE}/status`);
-        const status = await response.json();
-        if (status.loading) {
-          setTimeout(poll, 1000);
-        } else {
-          if (status.last_error) {
-            setError(status.last_error);
-          }
-          fetchGraph();
-        }
-      } catch {
-        setError('Connection error');
-        setIsLoading(false);
-      }
-    };
-    poll();
-  };
 
   const runGrokFilter = async () => {
     try {
@@ -175,7 +137,25 @@ export function GraphView() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ query: '' }),
       });
-      pollStatus();
+      // Poll for completion
+      const poll = async () => {
+        try {
+          const response = await fetch(`${API_BASE}/status`);
+          const status = await response.json();
+          if (status.loading) {
+            setTimeout(poll, 1000);
+          } else {
+            if (status.last_error) {
+              setError(status.last_error);
+            }
+            fetchGraph();
+          }
+        } catch {
+          setError('Connection error');
+          setIsLoading(false);
+        }
+      };
+      poll();
     } catch (e) {
       setError('Failed to run filter');
       setIsLoading(false);
@@ -206,9 +186,14 @@ export function GraphView() {
   };
 
   const getNodeSize = (node: GraphNode) => {
-    if (node.is_seed) return 12;
+    // Scale node sizes based on total node count for better dense graph visualization
+    const nodeCount = graphData?.nodes.length || 200;
+    const scaleFactor = nodeCount > 1000 ? 0.5 : nodeCount > 500 ? 0.7 : 1.0;
+
+    if (node.is_seed) return 12 * scaleFactor;
     const pr = node.pagerank_score || 0;
-    return Math.max(4, Math.min(16, 4 + pr * 5000));
+    const baseSize = Math.max(3, Math.min(14, 3 + pr * 4000));
+    return baseSize * scaleFactor;
   };
 
   // Custom node rendering with labels
@@ -270,56 +255,6 @@ export function GraphView() {
           )}
         </div>
 
-        {/* Add Source */}
-        <div style={styles.section}>
-          <div style={styles.sectionTitle}>Add Source Account</div>
-          <input
-            type="text"
-            value={sourceHandle}
-            onChange={(e) => setSourceHandle(e.target.value)}
-            placeholder="e.g., elonmusk"
-            style={styles.input}
-            onKeyDown={(e) => e.key === 'Enter' && addSource()}
-          />
-          <div style={styles.row}>
-            <div style={styles.field}>
-              <label style={styles.label}>Depth</label>
-              <select
-                value={sourceDepth}
-                onChange={(e) => setSourceDepth(Number(e.target.value))}
-                style={styles.select}
-              >
-                <option value={1}>1 hop</option>
-                <option value={2}>2 hops</option>
-                <option value={3}>3 hops</option>
-              </select>
-            </div>
-            <div style={styles.field}>
-              <label style={styles.label}>Max Following</label>
-              <select
-                value={sourceMaxFollowing}
-                onChange={(e) => setSourceMaxFollowing(Number(e.target.value))}
-                style={styles.select}
-              >
-                <option value={50}>50</option>
-                <option value={100}>100</option>
-                <option value={200}>200</option>
-              </select>
-            </div>
-          </div>
-          <button
-            onClick={addSource}
-            disabled={isLoading || !sourceHandle.trim()}
-            style={{
-              ...styles.button,
-              ...styles.buttonPrimary,
-              ...(isLoading || !sourceHandle.trim() ? styles.buttonDisabled : {}),
-            }}
-          >
-            Add to Graph
-          </button>
-        </div>
-
         {/* Stats */}
         <div style={styles.section}>
           <div style={styles.sectionTitle}>Statistics</div>
@@ -356,9 +291,9 @@ export function GraphView() {
             <label style={styles.label}>Max Nodes: {maxNodes}</label>
             <input
               type="range"
-              min={50}
-              max={1000}
-              step={50}
+              min={100}
+              max={5000}
+              step={100}
               value={maxNodes}
               onChange={(e) => setMaxNodes(Number(e.target.value))}
               style={styles.range}
@@ -465,16 +400,23 @@ export function GraphView() {
               ctx.arc((node as GraphNode & { x: number }).x || 0, (node as GraphNode & { y: number }).y || 0, size + 2, 0, 2 * Math.PI);
               ctx.fill();
             }}
-            linkColor={() => 'rgba(113, 113, 122, 0.15)'}
-            linkWidth={0.5}
+            linkColor={() => {
+              const nodeCount = graphData?.nodes.length || 200;
+              const alpha = nodeCount > 1000 ? 0.08 : nodeCount > 500 ? 0.12 : 0.15;
+              return `rgba(113, 113, 122, ${alpha})`;
+            }}
+            linkWidth={(link) => {
+              const nodeCount = graphData?.nodes.length || 200;
+              return nodeCount > 1000 ? 0.3 : nodeCount > 500 ? 0.4 : 0.5;
+            }}
             backgroundColor="#09090b"
             onNodeClick={(node) => setSelectedNode(node as GraphNode)}
             onBackgroundClick={() => setSelectedNode(null)}
-            d3AlphaDecay={0.01}
-            d3VelocityDecay={0.2}
-            cooldownTicks={200}
+            d3AlphaDecay={0.02}
+            d3VelocityDecay={0.3}
+            cooldownTicks={300}
             d3AlphaMin={0.001}
-            warmupTicks={50}
+            warmupTicks={100}
             onEngineStop={() => graphRef.current?.zoomToFit(400, 50)}
           />
         )}

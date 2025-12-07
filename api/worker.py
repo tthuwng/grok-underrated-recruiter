@@ -26,6 +26,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 from api.database import (
     get_submission,
     increment_submission_attempts,
+    init_db,
     update_submission_status,
     update_submission_stage,
 )
@@ -296,6 +297,9 @@ async def startup(ctx: dict):
     print("[worker] Starting up...")
     print(f"[worker] Data dir: {DATA_DIR}")
     print(f"[worker] Enriched dir: {ENRICHED_DIR}")
+    # Initialize database (ensures tables exist)
+    init_db()
+    print("[worker] Database initialized")
 
 
 async def shutdown(ctx: dict):

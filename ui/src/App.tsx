@@ -62,8 +62,16 @@ function App() {
   useEffect(() => {
     loadCandidates();
     loadStats();
-    loadSavedHandles();
   }, []);
+
+  // Load saved handles when user logs in
+  useEffect(() => {
+    if (user) {
+      loadSavedHandles();
+    } else {
+      setSavedHandles(new Set());
+    }
+  }, [user]);
 
   const loadSavedHandles = async () => {
     try {
@@ -219,15 +227,17 @@ function App() {
             >
               Graph
             </button>
-            <button
-              style={{
-                ...styles.tabButton,
-                ...(currentView === 'saved' ? styles.tabButtonActive : {}),
-              }}
-              onClick={() => setCurrentView('saved')}
-            >
-              Saved {savedHandles.size > 0 && `(${savedHandles.size})`}
-            </button>
+            {user && (
+              <button
+                style={{
+                  ...styles.tabButton,
+                  ...(currentView === 'saved' ? styles.tabButtonActive : {}),
+                }}
+                onClick={() => setCurrentView('saved')}
+              >
+                Saved {savedHandles.size > 0 && `(${savedHandles.size})`}
+              </button>
+            )}
             {user && (
               <button
                 style={{
@@ -264,7 +274,7 @@ function App() {
 
       {showAbout && <AboutPage onClose={() => setShowAbout(false)} />}
 
-      {currentView === 'saved' ? (
+      {currentView === 'saved' && user ? (
         <SavedCandidatesView
           onBack={() => setCurrentView('search')}
           onComposeDM={(candidate) => setDmCandidate(candidate)}
@@ -336,7 +346,7 @@ function App() {
                   candidate={candidate}
                   onClick={() => setSelectedHandle(candidate.handle)}
                   isSaved={savedHandles.has(candidate.handle.toLowerCase())}
-                  onToggleSave={() => handleToggleSave(candidate.handle)}
+                  onToggleSave={user ? () => handleToggleSave(candidate.handle) : undefined}
                 />
               ))}
             </div>
@@ -360,7 +370,7 @@ function App() {
           handle={selectedHandle}
           onClose={() => setSelectedHandle(null)}
           isSaved={savedHandles.has(selectedHandle.toLowerCase())}
-          onToggleSave={() => handleToggleSave(selectedHandle)}
+          onToggleSave={user ? () => handleToggleSave(selectedHandle) : undefined}
         />
       )}
 

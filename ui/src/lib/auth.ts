@@ -173,7 +173,7 @@ export function getAuthHeader(): Record<string, string> {
 /**
  * Admin handles - users who can approve/reject submissions
  */
-const ADMIN_HANDLES = ['huwng_tran'];
+const ADMIN_HANDLES = ['huwng_tran', 'ellenjxu_'];
 
 /**
  * Check if a user is an admin

@@ -26,6 +26,8 @@ from urllib.parse import quote
 import httpx
 import networkx as nx
 import requests
+from arq import create_pool
+from arq.connections import RedisSettings
 from dotenv import load_dotenv
 from fastapi import (
     BackgroundTasks,
@@ -55,6 +57,7 @@ from api.database import (
     get_submission_queue_position,
     init_db,
     is_candidate_saved,
+    migrate_db,
     save_dm_history,
 )
 from api.database import (
@@ -77,6 +80,18 @@ from api.database import (
 )
 from api.database import (
     update_submission_status as db_update_submission_status,
+)
+from api.database import (
+    # Graph functions
+    add_graph_edge,
+    get_all_graph_edges,
+    get_all_graph_nodes,
+    get_graph_node_by_handle,
+    get_graph_stats,
+    get_seed_nodes,
+    update_node_pagerank,
+    update_node_grok_result,
+    upsert_graph_node,
 )
 from api.models import (
     AddSourceRequest,
@@ -113,11 +128,61 @@ app = FastAPI(
 )
 
 
+# Global Redis pool for arq job queue
+arq_pool = None
+
+
+def get_redis_settings() -> RedisSettings:
+    """Parse REDIS_URL into arq RedisSettings."""
+    redis_url = os.environ.get("REDIS_URL", "")
+    if not redis_url:
+        return None
+
+    # Parse rediss:// (TLS) or redis:// URL
+    if redis_url.startswith("rediss://"):
+        redis_url = redis_url[9:]
+        ssl = True
+    elif redis_url.startswith("redis://"):
+        redis_url = redis_url[8:]
+        ssl = False
+    else:
+        return None
+
+    # Parse auth@host:port
+    if "@" in redis_url:
+        auth, host_port = redis_url.rsplit("@", 1)
+        password = auth.split(":")[-1] if ":" in auth else auth
+    else:
+        host_port = redis_url
+        password = None
+
+    if ":" in host_port:
+        host, port = host_port.split(":")
+    else:
+        host, port = host_port, "6379"
+
+    return RedisSettings(host=host, port=int(port), password=password, ssl=ssl)
+
+
 @app.on_event("startup")
 async def startup_event():
-    """Initialize database and load graph on startup."""
+    """Initialize database, Redis pool, and load graph on startup."""
+    global arq_pool
     init_db()
+    migrate_db()  # Run database migrations
     load_graph_from_pickle()
+
+    # Initialize arq Redis pool if REDIS_URL is configured
+    redis_settings = get_redis_settings()
+    if redis_settings:
+        try:
+            arq_pool = await create_pool(redis_settings)
+            print("[startup] arq Redis pool initialized")
+        except Exception as e:
+            print(f"[startup] Failed to connect to Redis: {e}")
+            arq_pool = None
+    else:
+        print("[startup] No REDIS_URL configured, using BackgroundTasks fallback")
 
 
 # Enable CORS for frontend
@@ -140,12 +205,59 @@ JWT_SECRET = os.getenv("JWT_SECRET", secrets.token_urlsafe(32))
 JWT_ALGORITHM = "HS256"
 JWT_EXPIRE_HOURS = 24 * 7  # 1 week
 
-# In-memory storage for OAuth state (use Redis in production)
+# In-memory fallback for OAuth state (Redis preferred)
 oauth_states: Dict[str, dict] = {}
+
+# Redis client for shared OAuth state storage
+import redis as redis_lib
+
+_redis_client = None
+
+
+def get_redis_client():
+    """Get or create Redis client for OAuth state storage."""
+    global _redis_client
+    if _redis_client is not None:
+        return _redis_client
+
+    redis_url = os.environ.get("REDIS_URL", "")
+    if not redis_url:
+        return None
+
+    try:
+        _redis_client = redis_lib.from_url(redis_url, decode_responses=True)
+        _redis_client.ping()
+        return _redis_client
+    except Exception as e:
+        print(f"[auth] Redis connection failed: {e}")
+        return None
+
+
+def store_oauth_state(state: str, data: dict, ttl: int = 600):
+    """Store OAuth state in Redis (or fallback to memory)."""
+    redis = get_redis_client()
+    if redis:
+        redis.setex(f"oauth:{state}", ttl, json.dumps(data))
+    else:
+        oauth_states[state] = data
+
+
+def get_oauth_state(state: str) -> Optional[dict]:
+    """Get OAuth state from Redis (or fallback to memory)."""
+    redis = get_redis_client()
+    if redis:
+        data = redis.get(f"oauth:{state}")
+        if data:
+            redis.delete(f"oauth:{state}")  # One-time use
+            return json.loads(data)
+        return None
+    else:
+        return oauth_states.pop(state, None)
+
 
 # Admin handles that can approve/reject submissions
 ADMIN_HANDLES = [
-    h.strip().lower() for h in os.getenv("ADMIN_HANDLES", "huwng_tran").split(",")
+    h.strip().lower() for h in os.getenv("ADMIN_HANDLES", "huwng_tran,ellenjxu_").split(",")
 ]
 
 
@@ -259,19 +371,25 @@ def compute_pagerank_scores():
         )
         graph_state["pagerank"] = pr
 
-        # Update underratedness scores
+        # Update underratedness scores and persist to database
         for node_id, score in pr.items():
             if node_id in graph_state["nodes"]:
                 node = graph_state["nodes"][node_id]
                 followers = node.get("followers_count", 1)
                 node["pagerank_score"] = score
                 node["underratedness_score"] = score / math.log(1 + max(followers, 1))
+
+                # Persist PageRank score to database
+                try:
+                    update_node_pagerank(node_id, score)
+                except Exception:
+                    pass  # Non-critical, continue
     except Exception as e:
         print(f"PageRank error: {e}")
 
 
 def add_user_to_graph(user: Dict[str, Any], is_seed: bool = False, depth: int = 0):
-    """Add a user node to the graph."""
+    """Add a user node to the graph and persist to database."""
     uid = user.get("id", "")
     if not uid:
         return None
@@ -302,11 +420,18 @@ def add_user_to_graph(user: Dict[str, Any], is_seed: bool = False, depth: int = 
         existing = graph_state["nodes"][uid]
         existing.update(node_data)
         existing["is_seed"] = existing.get("is_seed", False) or is_seed
+        node_data = existing
     else:
         graph_state["nodes"][uid] = node_data
 
     if is_seed:
         graph_state["seeds"].add(uid)
+
+    # Persist to database
+    try:
+        upsert_graph_node(node_data)
+    except Exception as e:
+        print(f"[graph] Error persisting node {uid}: {e}")
 
     return node_data
 
@@ -314,9 +439,15 @@ def add_user_to_graph(user: Dict[str, Any], is_seed: bool = False, depth: int = 
 def add_edge_to_graph(
     src_id: str, dst_id: str, interaction_type: str = "follow", weight: float = 5.0
 ):
-    """Add an edge to the graph."""
+    """Add an edge to the graph and persist to database."""
     G = graph_state["graph"]
     G.add_edge(src_id, dst_id, weight=weight, interaction_type=interaction_type)
+
+    # Persist to database
+    try:
+        add_graph_edge(src_id, dst_id, weight=weight, interaction_type=interaction_type)
+    except Exception as e:
+        print(f"[graph] Error persisting edge {src_id} -> {dst_id}: {e}")
 
 
 async def expand_from_source(handle: str, depth: int, max_following: int):
@@ -386,49 +517,48 @@ async def expand_from_source(handle: str, depth: int, max_following: int):
 
 
 def load_graph_from_pickle():
-    """Load graph from existing pickle file into state."""
-    if not GRAPH_PICKLE_PATH.exists():
-        print(f"[startup] No existing graph at {GRAPH_PICKLE_PATH}")
-        return False
-
+    """Load graph from database into in-memory state."""
     try:
-        print(f"[startup] Loading graph from {GRAPH_PICKLE_PATH}")
-        with open(GRAPH_PICKLE_PATH, "rb") as f:
-            G = pickle.load(f)
+        print("[startup] Loading graph from database...")
 
-        graph_state["graph"] = G
+        # Load nodes from database
+        db_nodes = get_all_graph_nodes()
+        db_edges = get_all_graph_edges()
+
+        if not db_nodes:
+            print("[startup] No existing graph data in database")
+            return False
+
+        graph_state["graph"] = nx.DiGraph()
         graph_state["seeds"] = set()
         graph_state["nodes"] = {}
 
-        # Extract node data
-        for node_id, attrs in G.nodes(data=True):
-            node_data = {
-                "id": node_id,
-                "handle": attrs.get("handle", f"id_{node_id}"),
-                "name": attrs.get("name", ""),
-                "bio": attrs.get("bio", ""),
-                "followers_count": attrs.get("followers_count", 0),
-                "following_count": attrs.get("following_count", 0),
-                "is_seed": attrs.get("is_root", False),
-                "is_candidate": attrs.get("is_candidate", False),
-                "pagerank_score": 0.0,
-                "underratedness_score": 0.0,
-                "depth": 0,
-            }
-            graph_state["nodes"][node_id] = node_data
+        # Add nodes to graph and state
+        for node in db_nodes:
+            node_id = node["id"]
+            graph_state["nodes"][node_id] = node
+            graph_state["graph"].add_node(node_id, **node)
 
-            if attrs.get("is_root"):
+            if node.get("is_seed"):
                 graph_state["seeds"].add(node_id)
 
-        # Compute PageRank
-        compute_pagerank_scores()
+        # Add edges to graph
+        for edge in db_edges:
+            graph_state["graph"].add_edge(
+                edge["source"],
+                edge["target"],
+                weight=edge.get("weight", 1.0),
+                interaction_type=edge.get("interaction_type", "follow"),
+            )
 
         print(
-            f"[startup] Loaded {len(graph_state['nodes'])} nodes, {G.number_of_edges()} edges, {len(graph_state['seeds'])} seeds"
+            f"[startup] Loaded {len(graph_state['nodes'])} nodes, "
+            f"{graph_state['graph'].number_of_edges()} edges, "
+            f"{len(graph_state['seeds'])} seeds from database"
         )
         return True
     except Exception as e:
-        print(f"[startup] Error loading graph: {e}")
+        print(f"[startup] Error loading graph from database: {e}")
         return False
 
 
@@ -963,30 +1093,34 @@ async def search_candidates(request: SearchRequest):
 
 @app.get("/stats", response_model=StatsResponse)
 async def get_stats():
-    """Get pipeline statistics."""
-    evaluations = get_evaluations()
-    nodes = get_nodes()
+    """Get pipeline statistics from database with file/memory fallbacks."""
+    # Get stats from database
+    db_stats = get_graph_stats()
 
-    # Count fast screens
+    # Count file-based evaluations as fallback
     fast_screen_dir = DATA_DIR / "evaluations" / "fast_screen"
-    fast_screened = (
+    fast_screened_files = (
         len(list(fast_screen_dir.glob("*.json"))) if fast_screen_dir.exists() else 0
     )
 
-    # Count seeds (CSV loads booleans as strings)
-    seed_count = sum(
-        1 for n in nodes.values() if str(n.get("is_root", "")).lower() == "true"
+    # Count deep evals from enriched directory
+    enriched_dir = DATA_DIR / "enriched"
+    deep_eval_files = (
+        len([f for f in enriched_dir.glob("deep_*.json")]) if enriched_dir.exists() else 0
     )
 
+    # Fallback to in-memory graph if database is empty
+    total_nodes = db_stats.get("total_nodes", 0)
+    seed_count = db_stats.get("seeds", 0)
+    if total_nodes == 0 and graph_state["nodes"]:
+        total_nodes = len(graph_state["nodes"])
+        seed_count = sum(1 for n in graph_state["nodes"].values() if n.get("is_seed"))
+
     return StatsResponse(
-        total_nodes=len(nodes),
-        total_candidates=sum(
-            1
-            for n in nodes.values()
-            if str(n.get("is_candidate", "")).lower() == "true"
-        ),
-        fast_screened=fast_screened,
-        deep_evaluated=len(evaluations),
+        total_nodes=total_nodes,
+        total_candidates=db_stats.get("candidates", 0) or len([n for n in graph_state["nodes"].values() if n.get("is_candidate")]),
+        fast_screened=db_stats.get("filtered_count", 0) or fast_screened_files,
+        deep_evaluated=db_stats.get("evaluated_count", 0) or deep_eval_files,
         seed_accounts=seed_count,
     )
 
@@ -1007,9 +1141,10 @@ async def reload_data():
 
 
 @app.post("/saved", response_model=SavedCandidateResponse)
-async def save_candidate(request: SaveCandidateRequest):
-    """Save a candidate to the database."""
+async def save_candidate(request: SaveCandidateRequest, user: dict = Depends(require_auth)):
+    """Save a candidate to the database for the authenticated user."""
     handle = request.handle.lower().lstrip("@")
+    user_id = user.get("handle", "").lower()
 
     # Verify candidate exists
     evaluations = get_evaluations()
@@ -1018,30 +1153,32 @@ async def save_candidate(request: SaveCandidateRequest):
         raise HTTPException(status_code=404, detail=f"Candidate @{handle} not found")
 
     try:
-        result = db_save_candidate(handle, request.notes)
+        result = db_save_candidate(handle, user_id, request.notes)
         return SavedCandidateResponse(**result)
     except sqlite3.IntegrityError:
         raise HTTPException(status_code=409, detail="Candidate already saved")
 
 
 @app.delete("/saved/{handle}")
-async def unsave_candidate(handle: str):
-    """Remove a candidate from saved list."""
+async def unsave_candidate(handle: str, user: dict = Depends(require_auth)):
+    """Remove a candidate from the user's saved list."""
     handle = handle.lower().lstrip("@")
+    user_id = user.get("handle", "").lower()
 
-    if not db_unsave_candidate(handle):
+    if not db_unsave_candidate(handle, user_id):
         raise HTTPException(status_code=404, detail="Candidate not in saved list")
 
     return {"status": "ok", "handle": handle}
 
 
 @app.get("/saved", response_model=SavedCandidatesListResponse)
-async def list_saved_candidates():
-    """Get all saved candidates with their full evaluation data."""
+async def list_saved_candidates(user: dict = Depends(require_auth)):
+    """Get all saved candidates with their full evaluation data for the authenticated user."""
     evaluations = get_evaluations()
     nodes = get_nodes()
+    user_id = user.get("handle", "").lower()
 
-    saved_handles = set(db_get_saved_handles())
+    saved_handles = set(db_get_saved_handles(user_id))
 
     # Get full candidate data for saved handles
     results = []
@@ -1055,24 +1192,27 @@ async def list_saved_candidates():
 
 
 @app.get("/saved/handles")
-async def get_saved_handles():
-    """Get list of all saved candidate handles."""
-    handles = db_get_saved_handles()
+async def get_saved_handles(user: dict = Depends(require_auth)):
+    """Get list of all saved candidate handles for the authenticated user."""
+    user_id = user.get("handle", "").lower()
+    handles = db_get_saved_handles(user_id)
     return {"handles": handles}
 
 
 @app.get("/saved/count")
-async def saved_count():
-    """Get count of saved candidates."""
-    count = get_saved_count()
+async def saved_count(user: dict = Depends(require_auth)):
+    """Get count of saved candidates for the authenticated user."""
+    user_id = user.get("handle", "").lower()
+    count = get_saved_count(user_id)
     return {"count": count}
 
 
 @app.get("/saved/check/{handle}")
-async def check_if_saved(handle: str):
-    """Check if a specific candidate is saved."""
+async def check_if_saved(handle: str, user: dict = Depends(require_auth)):
+    """Check if a specific candidate is saved by the authenticated user."""
     handle = handle.lower().lstrip("@")
-    is_saved = is_candidate_saved(handle)
+    user_id = user.get("handle", "").lower()
+    is_saved = is_candidate_saved(handle, user_id)
     return {"is_saved": is_saved}
 
 
@@ -1512,6 +1652,89 @@ async def save_graph():
     raise HTTPException(status_code=500, detail="Failed to save graph")
 
 
+@app.post("/graph/import")
+async def import_graph(request: Request):
+    """Bulk import nodes and edges into the graph database."""
+    try:
+        data = await request.json()
+        nodes = data.get("nodes", [])
+        edges = data.get("edges", [])
+
+        nodes_added = 0
+        edges_added = 0
+
+        # Import nodes
+        for node in nodes:
+            # Handle is_seed - can come from is_seed or is_root
+            is_seed = node.get("is_seed")
+            if is_seed is None:
+                is_seed = str(node.get("is_root", "")).lower() == "true" or node.get("is_root") is True
+            elif isinstance(is_seed, str):
+                is_seed = is_seed.lower() == "true"
+
+            node_data = {
+                "id": str(node.get("user_id", node.get("id", ""))),
+                "handle": node.get("handle", ""),
+                "name": node.get("name", ""),
+                "bio": node.get("bio", "")[:500] if node.get("bio") else "",
+                "followers_count": int(node.get("followers_count", 0)),
+                "following_count": int(node.get("following_count", 0)),
+                "is_seed": is_seed,
+                "is_candidate": str(node.get("is_candidate", "")).lower() == "true" or node.get("is_candidate") is True,
+                "discovered_via": node.get("discovered_via", ""),
+                "depth": int(node.get("depth", 0)) if node.get("depth") else 0,
+                "pagerank_score": float(node.get("pagerank_score", 0)) if node.get("pagerank_score") else 0.0,
+                "underratedness_score": float(node.get("underratedness_score", 0)) if node.get("underratedness_score") else 0.0,
+                # Screening fields
+                "grok_relevant": node.get("grok_relevant"),
+                "grok_role": node.get("grok_role"),
+                "grok_evaluated": node.get("grok_evaluated", False),
+                "final_score": node.get("final_score"),
+            }
+
+            if node_data["id"]:
+                # Add to in-memory state
+                graph_state["nodes"][node_data["id"]] = node_data
+                graph_state["graph"].add_node(node_data["id"], **node_data)
+                if node_data["is_seed"]:
+                    graph_state["seeds"].add(node_data["id"])
+
+                # Persist to database
+                try:
+                    upsert_graph_node(node_data)
+                    nodes_added += 1
+                except Exception as e:
+                    print(f"[import] Error persisting node {node_data['id']}: {e}")
+
+        # Import edges
+        for edge in edges:
+            src = str(edge.get("src_user_id", edge.get("source", "")))
+            dst = str(edge.get("dst_user_id", edge.get("target", "")))
+            weight = float(edge.get("weight", 1.0)) if edge.get("weight") else 1.0
+            interaction_type = edge.get("interaction_type", "follow")
+
+            if src and dst:
+                # Add to in-memory state
+                graph_state["graph"].add_edge(src, dst, weight=weight, interaction_type=interaction_type)
+
+                # Persist to database
+                try:
+                    add_graph_edge(src, dst, weight=weight, interaction_type=interaction_type)
+                    edges_added += 1
+                except Exception as e:
+                    print(f"[import] Error persisting edge {src} -> {dst}: {e}")
+
+        return {
+            "message": "Import completed",
+            "nodes_added": nodes_added,
+            "edges_added": edges_added,
+            "total_nodes": len(graph_state["nodes"]),
+            "total_edges": graph_state["graph"].number_of_edges(),
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Import failed: {str(e)}")
+
+
 @app.get("/node/{node_id}")
 async def get_node_details(node_id: str):
     """Get detailed information about a specific node."""
@@ -1782,8 +2005,16 @@ async def submit_handle(
     # Auto-approve and start processing (no approval queue for now)
     db_update_submission_approval(submission_id, "approved")
 
-    # Queue background evaluation
-    background_tasks.add_task(process_submission, submission_id, handle)
+    # Queue background evaluation via arq (Redis) or fallback to BackgroundTasks
+    if arq_pool:
+        try:
+            await arq_pool.enqueue_job("process_submission", submission_id, handle)
+            print(f"[submit] Queued job via arq: {submission_id}")
+        except Exception as e:
+            print(f"[submit] arq enqueue failed, falling back to BackgroundTasks: {e}")
+            background_tasks.add_task(process_submission, submission_id, handle)
+    else:
+        background_tasks.add_task(process_submission, submission_id, handle)
 
     return SubmissionStatus(
         submission_id=submission_id,
@@ -1917,19 +2148,14 @@ async def x_login(request: Request):
     # Generate state for CSRF protection
     state = secrets.token_urlsafe(32)
 
-    # Store state and verifier (in production, use Redis with expiry)
-    oauth_states[state] = {
-        "code_verifier": code_verifier,
-        "created_at": datetime.utcnow().isoformat(),
-    }
-
-    # Clean up old states (simple cleanup)
-    if len(oauth_states) > 1000:
-        oldest_keys = sorted(
-            oauth_states.keys(), key=lambda k: oauth_states[k]["created_at"]
-        )[:500]
-        for k in oldest_keys:
-            del oauth_states[k]
+    # Store state and verifier in Redis (shared across machines)
+    store_oauth_state(
+        state,
+        {
+            "code_verifier": code_verifier,
+            "created_at": datetime.utcnow().isoformat(),
+        },
+    )
 
     # Build authorization URL
     auth_url = (
@@ -1956,11 +2182,11 @@ async def x_callback(code: str = None, state: str = None, error: str = None):
     if not code or not state:
         return RedirectResponse(url=f"{FRONTEND_URL}?error=missing_params")
 
-    # Verify state
-    if state not in oauth_states:
+    # Verify state from Redis (shared across machines)
+    state_data = get_oauth_state(state)
+    if not state_data:
         return RedirectResponse(url=f"{FRONTEND_URL}?error=invalid_state")
 
-    state_data = oauth_states.pop(state)
     code_verifier = state_data["code_verifier"]
 
     # Exchange code for tokens

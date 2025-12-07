@@ -50,6 +50,10 @@ COPY data/enriched/ ./data/enriched/
 # Copy built UI from builder stage
 COPY --from=ui-builder /ui/dist ./static
 
+# Copy startup script
+COPY start.sh ./
+RUN chmod +x start.sh
+
 # Create writable data directories for worker outputs
 RUN mkdir -p ./data/evaluations/fast_screen
 
@@ -64,5 +68,5 @@ EXPOSE 8080
 HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
     CMD python -c "import urllib.request; urllib.request.urlopen('http://localhost:8080/health')" || exit 1
 
-# Default command (can be overridden by fly.toml processes)
-CMD ["uvicorn", "api.main:app", "--host", "0.0.0.0", "--port", "8080"]
+# Default command - runs both API and worker
+CMD ["./start.sh"]
