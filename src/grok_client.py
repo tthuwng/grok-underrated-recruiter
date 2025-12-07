@@ -55,7 +55,9 @@ class GrokClient:
 
         self.base_url = "https://api.x.ai/v1"
         self.model = "grok-4-1-fast-reasoning"  # Full evaluation model (with reasoning)
-        self.fast_model = "grok-4-1-fast-non-reasoning"  # Fast screening model (no reasoning)
+        self.fast_model = (
+            "grok-4-1-fast-non-reasoning"  # Fast screening model (no reasoning)
+        )
 
         self.cache_dir = Path(cache_dir) if cache_dir else None
         if self.cache_dir:
@@ -90,7 +92,9 @@ class GrokClient:
         with open(cache_path, "w") as f:
             json.dump(asdict(evaluation), f, indent=2)
 
-    def _call_api(self, messages: List[Dict[str, str]], model: Optional[str] = None) -> str:
+    def _call_api(
+        self, messages: List[Dict[str, str]], model: Optional[str] = None
+    ) -> str:
         """Make API call to Grok."""
         headers = {
             "Authorization": f"Bearer {self.api_key}",
@@ -159,7 +163,9 @@ class GrokClient:
         )
 
         if not response:
-            return FastScreenResult(pass_filter=False, reason="api_error", potential_role="unlikely")
+            return FastScreenResult(
+                pass_filter=False, reason="api_error", potential_role="unlikely"
+            )
 
         # Parse response
         result = self._parse_fast_screen_response(response)
@@ -182,13 +188,24 @@ PASS if bio/content suggests:
 - Has built real projects or works at strong tech companies
 - PhD/research background in relevant fields (CS, ML, physics, math)
 
-REJECT if bio suggests:
-- Crypto/NFT/forex focus without technical depth
-- Marketing, growth hacking, content creation focus
-- No technical indicators at all
-- Currently works at xAI or X (Twitter) - they're not candidates
+REJECT (these are CRITICAL - never pass these):
+1. xAI/X EMPLOYEES: Anyone who works at, worked at, or is affiliated with xAI, X (Twitter), X Corp, or Grok. Look for:
+   - Bio mentions: "xAI", "x.ai", "@xAI", "at X", "X Corp", "Twitter", "Grok team", "working on Grok"
+   - Handle patterns suggesting xAI affiliation
+   - Any mention of being an xAI/X employee, engineer, researcher, or team member
 
-Be fast and decisive. When in doubt, PASS to let the full evaluator decide.
+2. ORGANIZATIONS/COMPANIES: Not individual people. Look for:
+   - Company accounts, brand accounts, product accounts
+   - Bio reads like a company description ("We are...", "Our mission...", official accounts)
+   - News outlets, research labs (as institutions, not individuals), DAOs, foundations
+   - Handles that are clearly brand names
+
+3. NON-TECHNICAL:
+   - Crypto/NFT/forex focus without technical depth
+   - Marketing, growth hacking, content creation focus
+   - No technical indicators at all
+
+Be fast and decisive. When in doubt about technical fit, PASS. But ALWAYS REJECT xAI/X employees and organizations.
 Respond with JSON only."""
 
     def _build_fast_screen_prompt(
@@ -209,7 +226,10 @@ Respond with JSON only."""
 
         return f"""{chr(10).join(parts)}
 
-Quick filter - is this person potentially an xAI engineering candidate?
+Quick filter:
+1. Is this an xAI/X employee? (REJECT if yes - reason: "xai_employee" or "x_employee")
+2. Is this an organization/company account? (REJECT if yes - reason: "organization")
+3. Is this person potentially an xAI engineering candidate? (PASS if technical)
 
 Respond with JSON only:
 {{"pass": true/false, "reason": "one line reason", "role": "research"|"engineering"|"infrastructure"|"unlikely"}}"""
@@ -232,7 +252,11 @@ Respond with JSON only:
             )
         except (json.JSONDecodeError, KeyError, TypeError):
             # Default to pass if parsing fails - let full evaluator decide
-            return FastScreenResult(pass_filter=True, reason="parse_error_default_pass", potential_role="engineering")
+            return FastScreenResult(
+                pass_filter=True,
+                reason="parse_error_default_pass",
+                potential_role="engineering",
+            )
 
     def evaluate_candidate(
         self,

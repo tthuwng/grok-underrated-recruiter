@@ -3,10 +3,10 @@ Graph Builder for Grok Recruiter
 Constructs a knowledge graph from X API data
 """
 
-from dataclasses import dataclass, field, asdict
-from typing import Dict, Any, List, Set, Optional
 import csv
+from dataclasses import asdict, dataclass
 from pathlib import Path
+from typing import Any, Dict, List, Set
 
 from .x_client import XClient
 
@@ -59,11 +59,11 @@ class GraphBuilder:
 
     # Edge weights by interaction type (following is strongest signal)
     WEIGHT_MAP = {
-        "follow": 5.0,    # Strongest - seed chose to follow
-        "retweet": 3.0,   # Strong - seed amplified their content
-        "reply": 2.5,     # Strong - seed engaged in conversation
-        "quote": 2.0,     # Moderate - seed commented on their content
-        "like": 1.0,      # Weak - passive engagement
+        "follow": 5.0,  # Strongest - seed chose to follow
+        "retweet": 3.0,  # Strong - seed amplified their content
+        "reply": 2.5,  # Strong - seed engaged in conversation
+        "quote": 2.0,  # Moderate - seed commented on their content
+        "like": 1.0,  # Weak - passive engagement
     }
 
     def __init__(
@@ -90,6 +90,9 @@ class GraphBuilder:
 
         # Track which users we need to hydrate
         self._pending_hydration: Set[str] = set()
+
+        # Track filtered employees (for reporting)
+        self.filtered_employees: List[str] = []  # List of handles filtered out
 
     def _add_or_update_node(
         self,
@@ -123,17 +126,29 @@ class GraphBuilder:
                 existing.discovered_via = discovered_via
             # Update metrics if we have them
             if metrics:
-                existing.followers_count = metrics.get("followers_count", existing.followers_count)
-                existing.following_count = metrics.get("following_count", existing.following_count)
+                existing.followers_count = metrics.get(
+                    "followers_count", existing.followers_count
+                )
+                existing.following_count = metrics.get(
+                    "following_count", existing.following_count
+                )
                 existing.tweet_count = metrics.get("tweet_count", existing.tweet_count)
             return existing
+
+        # Extract user data
+        handle = user.get("username", f"id_{uid}")
+        name = user.get("name", "")
+        bio = user.get("description", "")
+
+        # NOTE: xAI/X employee and organization filtering is done by fast LLM
+        # in grok_client.py fast_screen() - not programmatically here
 
         # Create new node
         node = Node(
             user_id=uid,
-            handle=user.get("username", f"id_{uid}"),
-            name=user.get("name", ""),
-            bio=user.get("description", ""),
+            handle=handle,
+            name=name,
+            bio=bio,
             followers_count=metrics.get("followers_count", 0),
             following_count=metrics.get("following_count", 0),
             tweet_count=metrics.get("tweet_count", 0),
@@ -145,8 +160,7 @@ class GraphBuilder:
         max_followers = self.settings.get("max_followers_candidate", 50000)
         min_followers = self.settings.get("min_followers_candidate", 50)
         node.is_candidate = (
-            not node.is_root
-            and min_followers <= node.followers_count <= max_followers
+            not node.is_root and min_followers <= node.followers_count <= max_followers
         )
 
         self.nodes[uid] = node
@@ -216,7 +230,9 @@ class GraphBuilder:
         if not self._pending_hydration:
             return
 
-        print(f"\n[hydrate] Fetching details for {len(self._pending_hydration)} users...")
+        print(
+            f"\n[hydrate] Fetching details for {len(self._pending_hydration)} users..."
+        )
 
         # Get user details in batches
         user_ids = list(self._pending_hydration)
@@ -264,12 +280,16 @@ class GraphBuilder:
 
             root_users[handle] = user
             self._add_or_update_node(user, is_root=True)
-            print(f"  [root] @{handle} (ID: {user['id']}, followers: {user.get('public_metrics', {}).get('followers_count', 0):,})")
+            print(
+                f"  [root] @{handle} (ID: {user['id']}, followers: {user.get('public_metrics', {}).get('followers_count', 0):,})"
+            )
 
         print(f"\n  Resolved {len(root_users)}/{len(self.root_handles)} root accounts")
 
         print("\n" + "=" * 60)
-        print("PHASE 2: Expanding from roots (priority: follow > retweet > reply > like)")
+        print(
+            "PHASE 2: Expanding from roots (priority: follow > retweet > reply > like)"
+        )
         print("=" * 60)
 
         for handle, root_user in root_users.items():
@@ -296,12 +316,16 @@ class GraphBuilder:
         print(f"  Total nodes: {len(self.nodes)}")
         print(f"  Total edges: {len(self.edges)}")
         print(f"  Root accounts: {sum(1 for n in self.nodes.values() if n.is_root)}")
-        print(f"  Candidate accounts: {sum(1 for n in self.nodes.values() if n.is_candidate)}")
+        print(
+            f"  Candidate accounts: {sum(1 for n in self.nodes.values() if n.is_candidate)}"
+        )
 
         # Edge type breakdown
         edge_counts: Dict[str, int] = {}
         for edge in self.edges:
-            edge_counts[edge.interaction_type] = edge_counts.get(edge.interaction_type, 0) + 1
+            edge_counts[edge.interaction_type] = (
+                edge_counts.get(edge.interaction_type, 0) + 1
+            )
         print(f"  Edge breakdown: {edge_counts}")
 
     def expand_depth_2(self, top_k: int = 50, max_following_per_node: int = 100):
@@ -329,12 +353,12 @@ class GraphBuilder:
 
         # Sort by in-degree
         top_candidates = sorted(
-            candidate_in_degree.items(),
-            key=lambda x: x[1],
-            reverse=True
+            candidate_in_degree.items(), key=lambda x: x[1], reverse=True
         )[:top_k]
 
-        print(f"  Expanding from top {len(top_candidates)} candidates (by seed follow count)")
+        print(
+            f"  Expanding from top {len(top_candidates)} candidates (by seed follow count)"
+        )
 
         depth2_discovered = 0
 
@@ -346,7 +370,9 @@ class GraphBuilder:
             print(f"\n  [depth2] @{node.handle} (followed by {in_degree} seeds)")
 
             # Get who this candidate follows
-            following = self.x.get_user_following(user_id, max_results=max_following_per_node)
+            following = self.x.get_user_following(
+                user_id, max_results=max_following_per_node
+            )
 
             for user in following:
                 fol_id = user.get("id")
@@ -362,7 +388,9 @@ class GraphBuilder:
                     continue
 
                 # Add new node
-                new_node = self._add_or_update_node(user, discovered_via="depth2_following")
+                new_node = self._add_or_update_node(
+                    user, discovered_via="depth2_following"
+                )
                 if new_node:
                     depth2_discovered += 1
 
@@ -387,10 +415,16 @@ class GraphBuilder:
         print(f"  Total nodes: {len(self.nodes)}")
         print(f"  Total edges: {len(self.edges)}")
 
-        depth1_candidates = sum(1 for n in self.nodes.values()
-                                if n.is_candidate and n.discovered_via != "depth2_following")
-        depth2_candidates = sum(1 for n in self.nodes.values()
-                                if n.is_candidate and n.discovered_via == "depth2_following")
+        depth1_candidates = sum(
+            1
+            for n in self.nodes.values()
+            if n.is_candidate and n.discovered_via != "depth2_following"
+        )
+        depth2_candidates = sum(
+            1
+            for n in self.nodes.values()
+            if n.is_candidate and n.discovered_via == "depth2_following"
+        )
         print(f"  Depth 1 candidates: {depth1_candidates}")
         print(f"  Depth 2 candidates: {depth2_candidates}")
 
@@ -471,7 +505,9 @@ class GraphBuilder:
 
             # Get users who retweeted (5 req/15min per user on Basic)
             max_retweeters = self.settings.get("max_retweeters_per_tweet", 100)
-            retweeters = self.x.get_retweeting_users(tweet_id, max_results=max_retweeters)
+            retweeters = self.x.get_retweeting_users(
+                tweet_id, max_results=max_retweeters
+            )
 
             for user in retweeters:
                 user_id = user.get("id")
