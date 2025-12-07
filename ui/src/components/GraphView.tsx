@@ -1,7 +1,7 @@
-import React, { useEffect, useRef, useState, useCallback } from 'react';
-import ForceGraph2D from 'react-force-graph-2d';
+import React, { useCallback, useEffect, useRef, useState } from "react";
+import ForceGraph2D from "react-force-graph-2d";
 
-const API_BASE = import.meta.env.VITE_API_URL || '/api';
+const API_BASE = import.meta.env.VITE_API_URL || "/api";
 
 interface GraphNode {
   id: string;
@@ -21,6 +21,14 @@ interface GraphNode {
   submission_pending?: boolean;
   x?: number;
   y?: number;
+}
+
+// Extended node details from /node/{id} endpoint
+interface NodeDetails extends GraphNode {
+  grok_reason: string | null;
+  incoming_connections: number;
+  outgoing_connections: number;
+  x_url: string;
 }
 
 interface GraphEdge {
@@ -48,13 +56,14 @@ export function GraphView() {
   const graphRef = useRef<any>();
   const [graphData, setGraphData] = useState<GraphData | null>(null);
   const [selectedNode, setSelectedNode] = useState<GraphNode | null>(null);
+  const [nodeDetails, setNodeDetails] = useState<NodeDetails | null>(null);
+  const [isLoadingDetails, setIsLoadingDetails] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState<GraphNode[]>([]);
   const [maxNodes, setMaxNodes] = useState(500);
   const [onlyRelevant, setOnlyRelevant] = useState(false);
-
 
   const fetchGraph = useCallback(async () => {
     try {
@@ -63,11 +72,11 @@ export function GraphView() {
       const response = await fetch(
         `${API_BASE}/graph?max_nodes=${maxNodes}&only_relevant=${onlyRelevant}`
       );
-      if (!response.ok) throw new Error('Failed to fetch graph');
+      if (!response.ok) throw new Error("Failed to fetch graph");
       const data: GraphData = await response.json();
       setGraphData(data);
     } catch (e) {
-      setError(e instanceof Error ? e.message : 'Failed to load graph');
+      setError(e instanceof Error ? e.message : "Failed to load graph");
     } finally {
       setIsLoading(false);
     }
@@ -77,6 +86,31 @@ export function GraphView() {
     fetchGraph();
   }, [fetchGraph]);
 
+  // Fetch detailed node info when a node is selected
+  const fetchNodeDetails = useCallback(async (nodeId: string) => {
+    try {
+      setIsLoadingDetails(true);
+      setNodeDetails(null);
+      const response = await fetch(`${API_BASE}/node/${nodeId}`);
+      if (!response.ok) throw new Error("Failed to fetch node details");
+      const data: NodeDetails = await response.json();
+      setNodeDetails(data);
+    } catch (e) {
+      console.error("Failed to fetch node details:", e);
+    } finally {
+      setIsLoadingDetails(false);
+    }
+  }, []);
+
+  // Fetch node details when selectedNode changes
+  useEffect(() => {
+    if (selectedNode) {
+      fetchNodeDetails(selectedNode.id);
+    } else {
+      setNodeDetails(null);
+    }
+  }, [selectedNode, fetchNodeDetails]);
+
   // Configure d3 forces for better spacing - scales with node count
   useEffect(() => {
     if (graphRef.current && graphData) {
@@ -85,13 +119,14 @@ export function GraphView() {
 
       // Scale forces based on node count for better visualization
       // More nodes = weaker charge to prevent overcrowding, shorter links
-      const chargeStrength = nodeCount > 1000 ? -150 : nodeCount > 500 ? -250 : -400;
+      const chargeStrength =
+        nodeCount > 1000 ? -150 : nodeCount > 500 ? -250 : -400;
       const linkDistance = nodeCount > 1000 ? 60 : nodeCount > 500 ? 80 : 120;
       const linkStrength = nodeCount > 1000 ? 0.1 : 0.2;
 
-      fg.d3Force('charge')?.strength(chargeStrength).distanceMax(500);
-      fg.d3Force('link')?.distance(linkDistance).strength(linkStrength);
-      fg.d3Force('collide', null);
+      fg.d3Force("charge")?.strength(chargeStrength).distanceMax(500);
+      fg.d3Force("link")?.distance(linkDistance).strength(linkStrength);
+      fg.d3Force("collide", null);
     }
   }, [graphData]);
 
@@ -101,41 +136,54 @@ export function GraphView() {
       setSearchResults([]);
       return;
     }
-    const q = query.toLowerCase().replace('@', '');
-    const matches = graphData.nodes.filter(
-      (n) =>
-        n.handle.toLowerCase().includes(q) ||
-        (n.name && n.name.toLowerCase().includes(q))
-    ).slice(0, 8);
+    const q = query.toLowerCase().replace("@", "");
+    const matches = graphData.nodes
+      .filter(
+        (n) =>
+          n.handle.toLowerCase().includes(q) ||
+          (n.name && n.name.toLowerCase().includes(q))
+      )
+      .slice(0, 8);
     setSearchResults(matches);
   };
 
   const focusOnNode = (nodeFromSearch: GraphNode) => {
     setSearchResults([]);
-    setSearchQuery('');
+    setSearchQuery("");
 
     // Find the actual node in graphData (which has x/y coordinates from simulation)
     if (graphData && graphRef.current) {
-      const actualNode = graphData.nodes.find(n => n.id === nodeFromSearch.id);
-      if (actualNode) {
+      const actualNode = graphData.nodes.find(
+        (n) => n.id === nodeFromSearch.id
+      );
+      if (
+        actualNode &&
+        actualNode.x !== undefined &&
+        actualNode.y !== undefined
+      ) {
         setSelectedNode(actualNode);
-        graphRef.current.centerAt(actualNode.x, actualNode.y, 1000);
-        graphRef.current.zoom(3, 1000);
+        // Use a two-step approach: first zoom, then center after zoom starts
+        // This prevents the animations from conflicting
+        const fg = graphRef.current;
+        fg.zoom(4, 400);
+        // After zoom animation starts, center on the node
+        setTimeout(() => {
+          fg.centerAt(actualNode.x, actualNode.y, 600);
+        }, 100);
       } else {
-        // Node not in current view, just select it
+        // Node not in current view or not positioned yet, just select it
         setSelectedNode(nodeFromSearch);
       }
     }
   };
 
-
   const runGrokFilter = async () => {
     try {
       setIsLoading(true);
       await fetch(`${API_BASE}/filter`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ query: '' }),
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ query: "" }),
       });
       // Poll for completion
       const poll = async () => {
@@ -151,38 +199,41 @@ export function GraphView() {
             fetchGraph();
           }
         } catch {
-          setError('Connection error');
+          setError("Connection error");
           setIsLoading(false);
         }
       };
       poll();
     } catch (e) {
-      setError('Failed to run filter');
+      setError("Failed to run filter");
       setIsLoading(false);
     }
   };
 
   const saveGraph = async () => {
     try {
-      const response = await fetch(`${API_BASE}/save`, { method: 'POST' });
-      if (!response.ok) throw new Error('Failed to save');
+      const response = await fetch(`${API_BASE}/save`, { method: "POST" });
+      if (!response.ok) throw new Error("Failed to save");
       // Show brief success
       setError(null);
     } catch (e) {
-      setError('Failed to save graph');
+      setError("Failed to save graph");
     }
   };
 
   const getNodeColor = (node: GraphNode) => {
-    if (node.is_seed) return '#f87171'; // accent-red
+    if (node.is_seed) return "#f87171"; // accent-red
     // Pending submission (yellow/amber)
-    if (node.discovered_via === 'user_submission' && node.grok_relevant === null) {
-      return '#fbbf24'; // amber-400
+    if (
+      node.discovered_via === "user_submission" &&
+      node.grok_relevant === null
+    ) {
+      return "#fbbf24"; // amber-400
     }
-    if (node.grok_relevant === true) return '#34d399'; // accent-green
-    if (node.grok_relevant === false) return '#3f3f46';
-    if (node.is_candidate) return '#60a5fa'; // accent-blue
-    return '#71717a'; // text-muted
+    if (node.grok_relevant === true) return "#34d399"; // accent-green
+    if (node.grok_relevant === false) return "#3f3f46";
+    if (node.is_candidate) return "#60a5fa"; // accent-blue
+    return "#71717a"; // text-muted
   };
 
   const getNodeSize = (node: GraphNode) => {
@@ -214,14 +265,17 @@ export function GraphView() {
     ctx.fill();
 
     // Draw white text label for seeds and high PageRank nodes
-    const showLabel = node.is_seed || node.pagerank_score > 0.001 || node.grok_relevant === true;
+    const showLabel =
+      node.is_seed ||
+      node.pagerank_score > 0.001 ||
+      node.grok_relevant === true;
     if (showLabel) {
       const label = `@${node.handle}`;
       const fontSize = Math.max(12 / globalScale, 4);
       ctx.font = `${fontSize}px -apple-system, BlinkMacSystemFont, sans-serif`;
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'top';
-      ctx.fillStyle = '#ffffff';
+      ctx.textAlign = "center";
+      ctx.textBaseline = "top";
+      ctx.fillStyle = "#ffffff";
       ctx.fillText(label, x, y + size + 2);
     }
   };
@@ -328,7 +382,7 @@ export function GraphView() {
               Refresh
             </button>
           </div>
-          <div style={{ ...styles.buttonGroup, marginTop: '8px' }}>
+          <div style={{ ...styles.buttonGroup, marginTop: "8px" }}>
             <button
               onClick={saveGraph}
               style={{ ...styles.button, ...styles.buttonSecondary }}
@@ -343,23 +397,23 @@ export function GraphView() {
           <div style={styles.sectionTitle}>Legend</div>
           <div style={styles.legend}>
             <div style={styles.legendItem}>
-              <span style={{ ...styles.legendDot, background: '#f87171' }} />
+              <span style={{ ...styles.legendDot, background: "#f87171" }} />
               Seeds
             </div>
             <div style={styles.legendItem}>
-              <span style={{ ...styles.legendDot, background: '#fbbf24' }} />
+              <span style={{ ...styles.legendDot, background: "#fbbf24" }} />
               Pending evaluation
             </div>
             <div style={styles.legendItem}>
-              <span style={{ ...styles.legendDot, background: '#34d399' }} />
+              <span style={{ ...styles.legendDot, background: "#34d399" }} />
               Grok relevant
             </div>
             <div style={styles.legendItem}>
-              <span style={{ ...styles.legendDot, background: '#60a5fa' }} />
+              <span style={{ ...styles.legendDot, background: "#60a5fa" }} />
               Candidates
             </div>
             <div style={styles.legendItem}>
-              <span style={{ ...styles.legendDot, background: '#71717a' }} />
+              <span style={{ ...styles.legendDot, background: "#71717a" }} />
               Other
             </div>
           </div>
@@ -389,20 +443,35 @@ export function GraphView() {
               })),
             }}
             nodeId="id"
-            nodeLabel={(node) => `@${(node as GraphNode).handle}\n${(node as GraphNode).name || ''}`}
+            nodeLabel={(node) =>
+              `@${(node as GraphNode).handle}\n${
+                (node as GraphNode).name || ""
+              }`
+            }
             nodeCanvasObject={(node, ctx, globalScale) =>
-              nodeCanvasObject(node as GraphNode & { x?: number; y?: number }, ctx, globalScale)
+              nodeCanvasObject(
+                node as GraphNode & { x?: number; y?: number },
+                ctx,
+                globalScale
+              )
             }
             nodePointerAreaPaint={(node, color, ctx) => {
               const size = getNodeSize(node as GraphNode);
               ctx.fillStyle = color;
               ctx.beginPath();
-              ctx.arc((node as GraphNode & { x: number }).x || 0, (node as GraphNode & { y: number }).y || 0, size + 2, 0, 2 * Math.PI);
+              ctx.arc(
+                (node as GraphNode & { x: number }).x || 0,
+                (node as GraphNode & { y: number }).y || 0,
+                size + 2,
+                0,
+                2 * Math.PI
+              );
               ctx.fill();
             }}
             linkColor={() => {
               const nodeCount = graphData?.nodes.length || 200;
-              const alpha = nodeCount > 1000 ? 0.08 : nodeCount > 500 ? 0.12 : 0.15;
+              const alpha =
+                nodeCount > 1000 ? 0.08 : nodeCount > 500 ? 0.12 : 0.15;
               return `rgba(113, 113, 122, ${alpha})`;
             }}
             linkWidth={() => {
@@ -426,23 +495,33 @@ export function GraphView() {
           <div style={styles.floatingLegendTitle}>Legend</div>
           <div style={styles.floatingLegendItems}>
             <div style={styles.floatingLegendItem}>
-              <span style={{ ...styles.floatingLegendDot, background: '#f87171' }} />
+              <span
+                style={{ ...styles.floatingLegendDot, background: "#f87171" }}
+              />
               <span>Seeds</span>
             </div>
             <div style={styles.floatingLegendItem}>
-              <span style={{ ...styles.floatingLegendDot, background: '#fbbf24' }} />
+              <span
+                style={{ ...styles.floatingLegendDot, background: "#fbbf24" }}
+              />
               <span>Pending</span>
             </div>
             <div style={styles.floatingLegendItem}>
-              <span style={{ ...styles.floatingLegendDot, background: '#34d399' }} />
+              <span
+                style={{ ...styles.floatingLegendDot, background: "#34d399" }}
+              />
               <span>Grok Relevant</span>
             </div>
             <div style={styles.floatingLegendItem}>
-              <span style={{ ...styles.floatingLegendDot, background: '#60a5fa' }} />
+              <span
+                style={{ ...styles.floatingLegendDot, background: "#60a5fa" }}
+              />
               <span>Candidates</span>
             </div>
             <div style={styles.floatingLegendItem}>
-              <span style={{ ...styles.floatingLegendDot, background: '#71717a' }} />
+              <span
+                style={{ ...styles.floatingLegendDot, background: "#71717a" }}
+              />
               <span>Other</span>
             </div>
           </div>
@@ -464,16 +543,19 @@ export function GraphView() {
                 &times;
               </button>
             </div>
-            <div style={styles.nodeBio}>{selectedNode.bio || 'No bio'}</div>
+            <div style={styles.nodeBio}>{selectedNode.bio || "No bio"}</div>
             <div style={styles.nodeTags}>
               {selectedNode.is_seed && (
-                <span style={{ ...styles.nodeTag, ...styles.tagSeed }}>Seed</span>
-              )}
-              {selectedNode.discovered_via === 'user_submission' && selectedNode.grok_relevant === null && (
-                <span style={{ ...styles.nodeTag, ...styles.tagPending }}>
-                  Pending
+                <span style={{ ...styles.nodeTag, ...styles.tagSeed }}>
+                  Seed
                 </span>
               )}
+              {selectedNode.discovered_via === "user_submission" &&
+                selectedNode.grok_relevant === null && (
+                  <span style={{ ...styles.nodeTag, ...styles.tagPending }}>
+                    Pending
+                  </span>
+                )}
               {selectedNode.grok_relevant === true && (
                 <span style={{ ...styles.nodeTag, ...styles.tagRelevant }}>
                   Relevant
@@ -486,6 +568,20 @@ export function GraphView() {
                 <span style={styles.nodeTag}>Candidate</span>
               )}
             </div>
+
+            {/* Grok Evaluation Reason */}
+            {nodeDetails?.grok_reason && (
+              <div style={styles.grokReasonSection}>
+                <div style={styles.grokReasonLabel}>Grok Analysis</div>
+                <div style={styles.grokReasonText}>
+                  {nodeDetails.grok_reason}
+                </div>
+              </div>
+            )}
+            {isLoadingDetails && !nodeDetails && (
+              <div style={styles.loadingDetails}>Loading details...</div>
+            )}
+
             <div style={styles.nodeStats}>
               <div style={styles.nodeStat}>
                 <div style={styles.nodeStatValue}>
@@ -499,6 +595,22 @@ export function GraphView() {
                 </div>
                 <div style={styles.nodeStatLabel}>PageRank</div>
               </div>
+              {nodeDetails && (
+                <>
+                  <div style={styles.nodeStat}>
+                    <div style={styles.nodeStatValue}>
+                      {nodeDetails.incoming_connections}
+                    </div>
+                    <div style={styles.nodeStatLabel}>In-Links</div>
+                  </div>
+                  <div style={styles.nodeStat}>
+                    <div style={styles.nodeStatValue}>
+                      {nodeDetails.outgoing_connections}
+                    </div>
+                    <div style={styles.nodeStatLabel}>Out-Links</div>
+                  </div>
+                </>
+              )}
             </div>
             <a
               href={`https://x.com/${selectedNode.handle}`}
@@ -517,352 +629,378 @@ export function GraphView() {
 
 const styles: Record<string, React.CSSProperties> = {
   container: {
-    display: 'flex',
-    height: 'calc(100vh - 140px)',
-    background: 'var(--bg-primary)',
+    display: "flex",
+    height: "calc(100vh - 140px)",
+    background: "var(--bg-primary)",
   },
   sidebar: {
-    width: '300px',
-    background: 'var(--bg-secondary)',
-    borderRight: '1px solid var(--border-color)',
-    overflowY: 'auto',
+    width: "300px",
+    background: "var(--bg-secondary)",
+    borderRight: "1px solid var(--border-color)",
+    overflowY: "auto",
     flexShrink: 0,
   },
   section: {
-    padding: '16px 20px',
-    borderBottom: '1px solid var(--border-color)',
+    padding: "16px 20px",
+    borderBottom: "1px solid var(--border-color)",
   },
   sectionTitle: {
-    fontSize: '11px',
+    fontSize: "11px",
     fontWeight: 600,
-    color: 'var(--text-muted)',
-    textTransform: 'uppercase',
-    letterSpacing: '0.05em',
-    marginBottom: '12px',
+    color: "var(--text-muted)",
+    textTransform: "uppercase",
+    letterSpacing: "0.05em",
+    marginBottom: "12px",
   },
   input: {
-    width: '100%',
-    padding: '10px 12px',
-    background: 'var(--bg-tertiary)',
-    border: '1px solid var(--border-color)',
-    borderRadius: '8px',
-    color: 'var(--text-primary)',
-    fontSize: '14px',
-    outline: 'none',
+    width: "100%",
+    padding: "10px 12px",
+    background: "var(--bg-tertiary)",
+    border: "1px solid var(--border-color)",
+    borderRadius: "8px",
+    color: "var(--text-primary)",
+    fontSize: "14px",
+    outline: "none",
   },
   row: {
-    display: 'flex',
-    gap: '10px',
-    marginTop: '10px',
+    display: "flex",
+    gap: "10px",
+    marginTop: "10px",
   },
   field: {
     flex: 1,
   },
   label: {
-    display: 'block',
-    fontSize: '12px',
-    color: 'var(--text-secondary)',
-    marginBottom: '6px',
+    display: "block",
+    fontSize: "12px",
+    color: "var(--text-secondary)",
+    marginBottom: "6px",
   },
   select: {
-    width: '100%',
-    padding: '8px 10px',
-    background: 'var(--bg-tertiary)',
-    border: '1px solid var(--border-color)',
-    borderRadius: '6px',
-    color: 'var(--text-primary)',
-    fontSize: '13px',
+    width: "100%",
+    padding: "8px 10px",
+    background: "var(--bg-tertiary)",
+    border: "1px solid var(--border-color)",
+    borderRadius: "6px",
+    color: "var(--text-primary)",
+    fontSize: "13px",
   },
   button: {
-    width: '100%',
-    padding: '10px 16px',
-    fontSize: '13px',
+    width: "100%",
+    padding: "10px 16px",
+    fontSize: "13px",
     fontWeight: 500,
-    border: 'none',
-    borderRadius: '8px',
-    cursor: 'pointer',
-    marginTop: '12px',
-    transition: 'all 0.2s',
+    border: "none",
+    borderRadius: "8px",
+    cursor: "pointer",
+    marginTop: "12px",
+    transition: "all 0.2s",
   },
   buttonPrimary: {
-    background: 'var(--accent-primary)',
-    color: '#000',
+    background: "var(--accent-primary)",
+    color: "#000",
   },
   buttonSecondary: {
-    background: 'var(--bg-tertiary)',
-    color: 'var(--text-secondary)',
-    border: '1px solid var(--border-color)',
+    background: "var(--bg-tertiary)",
+    color: "var(--text-secondary)",
+    border: "1px solid var(--border-color)",
   },
   buttonDisabled: {
-    background: 'var(--bg-tertiary)',
-    color: 'var(--text-muted)',
-    cursor: 'not-allowed',
+    background: "var(--bg-tertiary)",
+    color: "var(--text-muted)",
+    cursor: "not-allowed",
   },
   buttonGroup: {
-    display: 'flex',
-    gap: '8px',
+    display: "flex",
+    gap: "8px",
   },
   statsGrid: {
-    display: 'grid',
-    gridTemplateColumns: 'repeat(2, 1fr)',
-    gap: '10px',
+    display: "grid",
+    gridTemplateColumns: "repeat(2, 1fr)",
+    gap: "10px",
   },
   statCard: {
-    background: 'var(--bg-tertiary)',
-    borderRadius: '8px',
-    padding: '12px',
+    background: "var(--bg-tertiary)",
+    borderRadius: "8px",
+    padding: "12px",
   },
   statValue: {
-    fontSize: '20px',
+    fontSize: "20px",
     fontWeight: 600,
-    color: 'var(--text-primary)',
+    color: "var(--text-primary)",
   },
   statLabel: {
-    fontSize: '10px',
-    color: 'var(--text-muted)',
-    textTransform: 'uppercase',
-    marginTop: '2px',
+    fontSize: "10px",
+    color: "var(--text-muted)",
+    textTransform: "uppercase",
+    marginTop: "2px",
   },
   range: {
-    width: '100%',
-    accentColor: 'var(--accent-primary)',
+    width: "100%",
+    accentColor: "var(--accent-primary)",
   },
   checkbox: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: '8px',
-    fontSize: '13px',
-    color: 'var(--text-secondary)',
-    marginTop: '12px',
-    cursor: 'pointer',
+    display: "flex",
+    alignItems: "center",
+    gap: "8px",
+    fontSize: "13px",
+    color: "var(--text-secondary)",
+    marginTop: "12px",
+    cursor: "pointer",
   },
   legend: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '8px',
+    display: "flex",
+    flexDirection: "column",
+    gap: "8px",
   },
   legendItem: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: '8px',
-    fontSize: '12px',
-    color: 'var(--text-secondary)',
+    display: "flex",
+    alignItems: "center",
+    gap: "8px",
+    fontSize: "12px",
+    color: "var(--text-secondary)",
   },
   legendDot: {
-    width: '10px',
-    height: '10px',
-    borderRadius: '50%',
+    width: "10px",
+    height: "10px",
+    borderRadius: "50%",
   },
   legendNote: {
-    fontSize: '11px',
-    color: 'var(--text-muted)',
-    marginTop: '8px',
+    fontSize: "11px",
+    color: "var(--text-muted)",
+    marginTop: "8px",
   },
   graphArea: {
     flex: 1,
-    position: 'relative',
-    overflow: 'hidden',
+    position: "relative",
+    overflow: "hidden",
   },
   error: {
-    position: 'absolute',
-    top: '16px',
-    left: '16px',
-    right: '16px',
-    padding: '12px 16px',
-    background: 'rgba(248, 113, 113, 0.1)',
-    border: '1px solid var(--accent-red)',
-    borderRadius: '8px',
-    color: 'var(--accent-red)',
-    fontSize: '13px',
+    position: "absolute",
+    top: "16px",
+    left: "16px",
+    right: "16px",
+    padding: "12px 16px",
+    background: "rgba(248, 113, 113, 0.1)",
+    border: "1px solid var(--accent-red)",
+    borderRadius: "8px",
+    color: "var(--accent-red)",
+    fontSize: "13px",
     zIndex: 100,
   },
   loadingOverlay: {
-    position: 'absolute',
+    position: "absolute",
     inset: 0,
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
-    background: 'rgba(9, 9, 11, 0.8)',
-    color: 'var(--text-muted)',
-    fontSize: '14px',
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
+    background: "rgba(9, 9, 11, 0.8)",
+    color: "var(--text-muted)",
+    fontSize: "14px",
     zIndex: 100,
   },
   spinner: {
-    width: '32px',
-    height: '32px',
-    border: '3px solid var(--border-color)',
-    borderTopColor: 'var(--accent-primary)',
-    borderRadius: '50%',
-    animation: 'spin 1s linear infinite',
-    marginBottom: '12px',
+    width: "32px",
+    height: "32px",
+    border: "3px solid var(--border-color)",
+    borderTopColor: "var(--accent-primary)",
+    borderRadius: "50%",
+    animation: "spin 1s linear infinite",
+    marginBottom: "12px",
   },
   searchResults: {
-    marginTop: '8px',
-    maxHeight: '200px',
-    overflowY: 'auto',
+    marginTop: "8px",
+    maxHeight: "200px",
+    overflowY: "auto",
   },
   searchResult: {
-    padding: '8px 10px',
-    background: 'var(--bg-tertiary)',
-    borderRadius: '6px',
-    marginBottom: '6px',
-    cursor: 'pointer',
+    padding: "8px 10px",
+    background: "var(--bg-tertiary)",
+    borderRadius: "6px",
+    marginBottom: "6px",
+    cursor: "pointer",
   },
   searchResultHandle: {
-    fontSize: '13px',
+    fontSize: "13px",
     fontWeight: 500,
-    color: 'var(--accent-blue)',
+    color: "var(--accent-blue)",
   },
   searchResultName: {
-    fontSize: '11px',
-    color: 'var(--text-muted)',
+    fontSize: "11px",
+    color: "var(--text-muted)",
   },
   nodePanel: {
-    position: 'absolute',
-    top: '16px',
-    right: '16px',
-    width: '300px',
-    background: 'var(--bg-secondary)',
-    border: '1px solid var(--border-color)',
-    borderRadius: '12px',
-    padding: '16px',
+    position: "absolute",
+    top: "16px",
+    right: "16px",
+    width: "300px",
+    background: "var(--bg-secondary)",
+    border: "1px solid var(--border-color)",
+    borderRadius: "12px",
+    padding: "16px",
     zIndex: 100,
   },
   nodePanelHeader: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',
-    marginBottom: '12px',
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "flex-start",
+    marginBottom: "12px",
   },
   nodeHandle: {
-    fontSize: '15px',
+    fontSize: "15px",
     fontWeight: 600,
-    color: 'var(--accent-blue)',
+    color: "var(--accent-blue)",
   },
   nodeName: {
-    fontSize: '12px',
-    color: 'var(--text-muted)',
+    fontSize: "12px",
+    color: "var(--text-muted)",
   },
   closeButton: {
-    background: 'none',
-    border: 'none',
-    color: 'var(--text-muted)',
-    fontSize: '20px',
-    cursor: 'pointer',
+    background: "none",
+    border: "none",
+    color: "var(--text-muted)",
+    fontSize: "20px",
+    cursor: "pointer",
     padding: 0,
     lineHeight: 1,
   },
   nodeBio: {
-    fontSize: '13px',
-    color: 'var(--text-secondary)',
+    fontSize: "13px",
+    color: "var(--text-secondary)",
     lineHeight: 1.5,
-    marginBottom: '12px',
-    maxHeight: '80px',
-    overflow: 'hidden',
+    marginBottom: "12px",
+    maxHeight: "80px",
+    overflow: "hidden",
   },
   nodeTags: {
-    display: 'flex',
-    flexWrap: 'wrap',
-    gap: '6px',
-    marginBottom: '12px',
+    display: "flex",
+    flexWrap: "wrap",
+    gap: "6px",
+    marginBottom: "12px",
   },
   nodeTag: {
-    padding: '3px 8px',
-    background: 'var(--bg-tertiary)',
-    borderRadius: '4px',
-    fontSize: '10px',
-    color: 'var(--text-secondary)',
-    textTransform: 'uppercase',
+    padding: "3px 8px",
+    background: "var(--bg-tertiary)",
+    borderRadius: "4px",
+    fontSize: "10px",
+    color: "var(--text-secondary)",
+    textTransform: "uppercase",
   },
   tagSeed: {
-    background: 'rgba(248, 113, 113, 0.2)',
-    color: '#f87171',
+    background: "rgba(248, 113, 113, 0.2)",
+    color: "#f87171",
   },
   tagPending: {
-    background: 'rgba(251, 191, 36, 0.2)',
-    color: '#fbbf24',
+    background: "rgba(251, 191, 36, 0.2)",
+    color: "#fbbf24",
   },
   tagRelevant: {
-    background: 'rgba(52, 211, 153, 0.2)',
-    color: '#34d399',
+    background: "rgba(52, 211, 153, 0.2)",
+    color: "#34d399",
   },
   nodeStats: {
-    display: 'grid',
-    gridTemplateColumns: 'repeat(2, 1fr)',
-    gap: '8px',
-    marginBottom: '12px',
+    display: "grid",
+    gridTemplateColumns: "repeat(2, 1fr)",
+    gap: "8px",
+    marginBottom: "12px",
   },
   nodeStat: {
-    background: 'var(--bg-tertiary)',
-    borderRadius: '6px',
-    padding: '10px',
+    background: "var(--bg-tertiary)",
+    borderRadius: "6px",
+    padding: "10px",
   },
   nodeStatValue: {
-    fontSize: '16px',
+    fontSize: "16px",
     fontWeight: 600,
-    color: 'var(--text-primary)',
+    color: "var(--text-primary)",
   },
   nodeStatLabel: {
-    fontSize: '10px',
-    color: 'var(--text-muted)',
-    textTransform: 'uppercase',
+    fontSize: "10px",
+    color: "var(--text-muted)",
+    textTransform: "uppercase",
   },
   viewOnX: {
-    display: 'block',
-    width: '100%',
-    padding: '10px',
-    background: 'var(--accent-primary)',
-    color: '#000',
-    textAlign: 'center',
-    borderRadius: '8px',
-    fontSize: '13px',
+    display: "block",
+    width: "100%",
+    padding: "10px",
+    background: "var(--accent-primary)",
+    color: "#000",
+    textAlign: "center",
+    borderRadius: "8px",
+    fontSize: "13px",
     fontWeight: 500,
-    textDecoration: 'none',
+    textDecoration: "none",
+  },
+  grokReasonSection: {
+    marginBottom: "12px",
+    padding: "10px",
+    background: "var(--bg-tertiary)",
+    borderRadius: "8px",
+    borderLeft: "3px solid var(--accent-green)",
+  },
+  grokReasonLabel: {
+    fontSize: "10px",
+    fontWeight: 600,
+    color: "var(--accent-green)",
+    textTransform: "uppercase",
+    letterSpacing: "0.05em",
+    marginBottom: "6px",
+  },
+  grokReasonText: {
+    fontSize: "12px",
+    color: "var(--text-secondary)",
+    lineHeight: 1.5,
+  },
+  loadingDetails: {
+    fontSize: "12px",
+    color: "var(--text-muted)",
+    marginBottom: "12px",
+    fontStyle: "italic",
   },
   floatingLegend: {
-    position: 'absolute',
-    bottom: '20px',
-    left: '20px',
-    background: 'rgba(24, 24, 27, 0.9)',
-    backdropFilter: 'blur(8px)',
-    border: '1px solid rgba(63, 63, 70, 0.5)',
-    borderRadius: '12px',
-    padding: '16px',
+    position: "absolute",
+    bottom: "20px",
+    left: "20px",
+    background: "rgba(24, 24, 27, 0.9)",
+    backdropFilter: "blur(8px)",
+    border: "1px solid rgba(63, 63, 70, 0.5)",
+    borderRadius: "12px",
+    padding: "16px",
     zIndex: 50,
   },
   floatingLegendTitle: {
-    fontSize: '11px',
+    fontSize: "11px",
     fontWeight: 600,
-    color: '#a1a1aa',
-    textTransform: 'uppercase',
-    letterSpacing: '0.05em',
-    marginBottom: '12px',
+    color: "#a1a1aa",
+    textTransform: "uppercase",
+    letterSpacing: "0.05em",
+    marginBottom: "12px",
   },
   floatingLegendItems: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '8px',
+    display: "flex",
+    flexDirection: "column",
+    gap: "8px",
   },
   floatingLegendItem: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: '10px',
-    fontSize: '13px',
-    color: '#e4e4e7',
+    display: "flex",
+    alignItems: "center",
+    gap: "10px",
+    fontSize: "13px",
+    color: "#e4e4e7",
   },
   floatingLegendDot: {
-    width: '12px',
-    height: '12px',
-    borderRadius: '50%',
+    width: "12px",
+    height: "12px",
+    borderRadius: "50%",
     flexShrink: 0,
   },
   floatingLegendNote: {
-    fontSize: '11px',
-    color: '#71717a',
-    marginTop: '10px',
-    paddingTop: '10px',
-    borderTop: '1px solid rgba(63, 63, 70, 0.5)',
+    fontSize: "11px",
+    color: "#71717a",
+    marginTop: "10px",
+    paddingTop: "10px",
+    borderTop: "1px solid rgba(63, 63, 70, 0.5)",
   },
 };
 
