@@ -1,0 +1,112 @@
+{
+  "handle": "ckaplanis1",
+  "bio": "Research Scientist at DeepMind",
+  "followers": 498,
+  "technical_depth": {
+    "score": 10,
+    "evidence": "Published papers at ICML (e.g., Policy Consolidation for Continual Reinforcement Learning, Continual Reinforcement Learning with Multi-Timescale Replay), contributor to DeepMind's Genie 2 and Genie 3 world models, Google Scholar with papers cited up to 3191 (Gemini 1.5 co-authorship), research in computational neuroscience and ML."
+  },
+  "project_evidence": {
+    "score": 7,
+    "evidence": "GitHub repo multi_timescale_replay (24 stars, 5 forks) for PhD paper on continual RL, last updated 5 years ago; contributed to large-scale DeepMind projects like Genie 2/3 (foundation world models), but no recent or popular open-source projects (no 1k+ stars)."
+  },
+  "mission_alignment": {
+    "score": 10,
+    "evidence": "Research Scientist at DeepMind working on world models for embodied AGI (explicitly stated in Genie 2 post), engages with frontier AI demos (Genie 3 videos), PhD and papers on continual RL towards AGI challenges."
+  },
+  "exceptional_ability": {
+    "score": 9,
+    "evidence": "DeepMind RS solving hard problems in continual learning and scalable world models (Genie series), ICML publications, PhD from Imperial College London under top advisors (Murray Shanahan, Claudia Clopath)."
+  },
+  "communication": {
+    "score": 8,
+    "evidence": "Clear, enthusiastic posts on X about research (e.g., Genie 2 team joy and AGI progress), well-written colleague tribute; papers published in top venues indicate strong technical writing."
+  },
+  "final_score": 88.5,
+  "summary": "Christos Kaplanis is a strong research candidate with proven track record at DeepMind on frontier world models and continual RL publications. Limited recent public OSS and low social engagement, but exceptional research depth aligns well with xAI's mission.",
+  "strengths": [
+    "Deep expertise in RL and world models",
+    "Publications in top conferences, DeepMind experience"
+  ],
+  "concerns": [
+    "Inactive GitHub (old single repo)",
+    "Low X followers/activity, no standout OSS projects"
+  ],
+  "recommended_role": "research",
+  "github_url": "https://github.com/ChristosKap",
+  "linkedin_url": "https://uk.linkedin.com/in/christos-kaplanis-265463170",
+  "top_repos": [
+    "multi_timescale_replay"
+  ],
+  "citations": [
+    "https://x.com/i/status/1434052072442408961",
+    "https://www.linkedin.com/posts/axel-t%25C3%25A4ubert-96536873_genie3-startups-gcp-activity-7359112325854806016-GQ4t",
+    "https://www.adscientificindex.com/scientist/scientist-subject-leaders/christos-kaplanis/5662282",
+    "https://x.com/i/status/1952732150928724043",
+    "https://memari-workshop.github.io/papers/paper_25.pdf",
+    "https://x.com/i/status/1793897958074925216",
+    "https://t.co/Uw1L8zx8qH\"",
+    "https://x.com/i/status/1251208725081346050",
+    "https://neurotree.org/neurotree/tree.php?pid=807359&fontsize=2&pnodecount=4&cnodecount=2",
+    "https://x.com/i/status/1864317845347143952",
+    "https://x.com/i/status/1952741176693436639",
+    "https://github.com/ChristosKap",
+    "https://x.com/i/status/1393429313660272645",
+    "https://x.com/i/status/1251168981244940288",
+    "http://papers.neurips.cc/paper/8327-experience-replay-for-continual-learning.pdf",
+    "https://x.com/i/status/1793735108601524448",
+    "https://arxiv.org/html/2507.12508v2",
+    "https://x.com/i/status/1874933615122895306",
+    "https://www.linkedin.com/pub/dir/Christos/Kaplanis",
+    "https://scholar.google.com/citations?user=jaNr8IoAAAAJ&amp;hl=en",
+    "https://github.com/lucidrains/gamengen-pytorch",
+    "https://x.com/i/status/1953135776385872324",
+    "https://x.com/i/status/1513771848621772804",
+    "https://github.com/ContinualAI/continual-learning-papers",
+    "https://www.linkedin.com/posts/rockt_excited-to-reveal-genie-2-our-most-capable-activity-7270107122565087234-iWpH",
+    "https://www.linkedin.com/posts/jparkerholder_introducing-genie-2-our-most-capable-activity-7270195240634880001-BAzP",
+    "https://x.com/i/status/1896277072798179465",
+    "https://x.com/i/status/1393431601606955010",
+    "https://x.com/i/user/229443646",
+    "https://websets.exa.ai/websets/cm90hxter00e2hl0hy90fg1di",
+    "https://github.com/Nat-D/FeatureControlHRL",
+    "https://github.com/Allenpandas/2019-Reinforcement-Learning-Conferences-Papers",
+    "https://github.com/yarkable/Awesome-Computer-Vision-Paper-List/blob/main/ICML/icml2019.md",
+    "https://deepmind.google/blog/genie-3-a-new-frontier-for-world-models/",
+    "https://x.com/i/status/1433790811704119312",
+    "https://x.com/i/status/1513682773961285636",
+    "https://github.com/qychen2001/Awesome-Synthetic-Data",
+    "https://www.linkedin.com/pub/dir/%2B/Kaplanis",
+    "https://scholar.google.com/citations?user=jaNr8IoAAAAJ&hl=en",
+    "https://gist.github.com/rishi-a/a1f1827c32a41d24533036ae449881b2",
+    "https://x.com/i/status/1251185266565529601",
+    "https://similarpapers.com/search?q=Christos%2BKaplanis",
+    "https://github.com/yarkable/Awesome-Computer-Vision-Paper-List/blob/main/ICML/icml2020.md",
+    "https://uk.linkedin.com/in/christos-kaplanis-265463170",
+    "https://x.com/ckaplanis1",
+    "https://x.com/i/status/1952821756319940802",
+    "https://bonniesjli.github.io/",
+    "https://www.researchgate.net/profile/Christos-Kaplanis",
+    "https://www.linkedin.com/posts/sajeetnair_genie2-deepmind-mindblown-activity-7270284915093483520-KlbY",
+    "https://deepmind.google/blog/genie-2-a-large-scale-foundation-world-model/",
+    "https://github.com/raymondchua/simple_successor_features",
+    "https://x.com/i/status/1953160709099180354",
+    "https://x.com/i/status/1952738915527389380",
+    "https://github.com/ChristosKap/multi_timescale_replay",
+    "https://arxiv.org/abs/1802.07239",
+    "https://www.semanticscholar.org/author/Christos-Kaplanis/11596459",
+    "https://papers.nips.cc/paper_files/paper/2024/hash/597254dc45be8c166d3ccf0ba2d56325-Abstract-Conference.html",
+    "https://x.com/i/status/1874681290676740343",
+    "https://x.com/i/status/1953154961988305384",
+    "https://x.com/i/status/1952767070623437063",
+    "https://www.linkedin.com/posts/rachua_thrilled-to-share-my-first-research-paper-activity-7259295867323494401-c3VO",
+    "https://www.linkedin.com/posts/sahandsharifzadeh_synth2-boosting-visual-language-models-activity-7209225047725477889-gHHm",
+    "https://www.linkedin.com/pub/dir/Christos/%2B",
+    "https://www.techmeme.com/241204/p46",
+    "https://scispace.com/authors/christos-kaplanis-3n61bqh0a9",
+    "https://arxiv.org/abs/1902.00255",
+    "https://www.thenetwork.com/p/cc571c7d-ba10-42de-b903-6a520858622e",
+    "https://x.com/i/status/1864314826891079787"
+  ],
+  "raw_response": "{\n  \"technical_depth\": {\"score\": 10, \"evidence\": \"Published papers at ICML (e.g., Policy Consolidation for Continual Reinforcement Learning, Continual Reinforcement Learning with Multi-Timescale Replay), contributor to DeepMind's Genie 2 and Genie 3 world models, Google Scholar with papers cited up to 3191 (Gemini 1.5 co-authorship), research in computational neuroscience and ML.\"},\n  \"project_evidence\": {\"score\": 7, \"evidence\": \"GitHub repo multi_timescale_replay (24 stars, 5 forks) for PhD paper on continual RL, last updated 5 years ago; contributed to large-scale DeepMind projects like Genie 2/3 (foundation world models), but no recent or popular open-source projects (no 1k+ stars).\"},\n  \"mission_alignment\": {\"score\": 10, \"evidence\": \"Research Scientist at DeepMind working on world models for embodied AGI (explicitly stated in Genie 2 post), engages with frontier AI demos (Genie 3 videos), PhD and papers on continual RL towards AGI challenges.\"},\n  \"exceptional_ability\": {\"score\": 9, \"evidence\": \"DeepMind RS solving hard problems in continual learning and scalable world models (Genie series), ICML publications, PhD from Imperial College London under top advisors (Murray Shanahan, Claudia Clopath).\"},\n  \"communication\": {\"score\": 8, \"evidence\": \"Clear, enthusiastic posts on X about research (e.g., Genie 2 team joy and AGI progress), well-written colleague tribute; papers published in top venues indicate strong technical writing.\"},\n  \"summary\": \"Christos Kaplanis is a strong research candidate with proven track record at DeepMind on frontier world models and continual RL publications. Limited recent public OSS and low social engagement, but exceptional research depth aligns well with xAI's mission.\",\n  \"strengths\": [\"Deep expertise in RL and world models\", \"Publications in top conferences, DeepMind experience\"],\n  \"concerns\": [\"Inactive GitHub (old single repo)\", \"Low X followers/activity, no standout OSS projects\"],\n  \"recommended_role\": \"research\",\n  \"github_url\": \"https://github.com/ChristosKap\",\n  \"linkedin_url\": \"https://uk.linkedin.com/in/christos-kaplanis-265463170\",\n  \"top_repos\": [\"multi_timescale_replay\"]\n}"
+}

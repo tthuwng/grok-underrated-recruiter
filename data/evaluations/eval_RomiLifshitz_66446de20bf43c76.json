@@ -1,0 +1,19 @@
+{
+  "relevant": false,
+  "score": 0.25,
+  "reasoning": "Candidate demonstrates solid research in quantum information theory, including original work on non-local games for detecting entanglement in noisy quantum devices, with clear ownership via thesis and publications. However, no evidence of building or shipping software/products in xAI's core ML/AI stack (e.g., transformers, JAX, distributed training); focus is purely quantum computing, not aligned with scaling AI systems. Lacks mission obsession for classical AI/LLM advancements beyond casual mentions of ChatGPT.",
+  "detected_skills": [
+    "Quantum information theory",
+    "Non-local games",
+    "Quantum error correction",
+    "Entanglement detection"
+  ],
+  "red_flags": [],
+  "recommended_role": "none",
+  "standout_tweets": [
+    7,
+    14,
+    11
+  ],
+  "exceptional_work": "Developed benchmark for noise robustness in non-local games to detect entanglement on noisy quantum hardware, bridging theory and experiment."
+}

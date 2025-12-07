@@ -1,0 +1,21 @@
+{
+  "relevant": true,
+  "score": 0.9,
+  "reasoning": "Clear evidence of exceptional ability from working at top AI labs including xAI and Google, plus founding Mathematics Inc. with a breakthrough in autoformalization using 22k lines of LLM-generated Lean code on RL infrastructure. Demonstrates technical depth in transformers, generalization via RL/GD, formal verification, and strong mission alignment with verified superintelligence. Ownership evident in starting a company and extending prior formalization work.",
+  "detected_skills": [
+    "AI research",
+    "Deep learning",
+    "Formal verification (Lean)",
+    "RL infrastructure",
+    "Autoformalization",
+    "Transformers"
+  ],
+  "red_flags": [],
+  "recommended_role": "research",
+  "standout_tweets": [
+    10,
+    27,
+    28
+  ],
+  "exceptional_work": "Worked at Google and xAI; founded Mathematics Inc., built RL infrastructure at Morph Labs, extended formalization with 22,000 lines of LLM-generated Lean code for verified superintelligence"
+}

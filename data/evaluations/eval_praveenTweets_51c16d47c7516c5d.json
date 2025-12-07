@@ -1,0 +1,23 @@
+{
+  "relevant": false,
+  "score": 0.15,
+  "reasoning": "No evidence of personal exceptional technical work, shipping code, or deep technical contributions; tweets focus on leadership, promotions, partnerships, and personal life rather than hands-on building. Mentions AI adoption at Uber and robotaxi partnerships but lacks specifics on individual ownership or technical depth. Does not demonstrate mission obsession with AI for understanding the universe, prioritizing Uber's mobility products instead.",
+  "detected_skills": [
+    "Engineering Leadership",
+    "Team Management",
+    "AI Product Adoption"
+  ],
+  "red_flags": [
+    "Pure promotional content without substance",
+    "No original technical thinking or code",
+    "No evidence of personal hands-on building"
+  ],
+  "recommended_role": "none",
+  "standout_tweets": [
+    1,
+    5,
+    9,
+    28
+  ],
+  "exceptional_work": ""
+}

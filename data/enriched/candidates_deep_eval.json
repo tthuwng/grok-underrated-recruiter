@@ -1,0 +1,2182 @@
+[
+  {
+    "handle": "nifleisch",
+    "name": "Nils Fleischmann @ NeurIPS 2025",
+    "bio": "ML Research Engineer @PrunaAI",
+    "followers_count": 77,
+    "pagerank_score": 2.6682764214658907e-05,
+    "underratedness_score": 6.124523183922204e-06,
+    "final_score": 96.5,
+    "recommended_role": "research",
+    "summary": "Nils is a promising ML research engineer with recent NeurIPS publications and hands-on experience shipping highly optimized frontier models at PrunaAI. His focus on AI efficiency and practical speedups demonstrates strong potential for xAI's scaling needs. Junior but already exceptional output.",
+    "strengths": [
+      "NeurIPS publications",
+      "Proven model optimization at scale",
+      "Deep insights into generative models"
+    ],
+    "concerns": [
+      "Limited personal OSS visibility",
+      "Recent entrant to field (first NeurIPS)"
+    ],
+    "technical_depth": {
+      "score": 10,
+      "evidence": "NeurIPS 2025 papers: 'Predictive Feature Caching for Training-free Acceleration of Molecular Geometry Generation' (arXiv:2510.04646, AI for Science workshop) and 'TreeGen: A Bayesian Generative Model for Hierarchies'. Posts demonstrate deep knowledge of diffusion models, inference optimization, video training benefits for image gen."
+    },
+    "project_evidence": {
+      "score": 9,
+      "evidence": "Key contributor at PrunaAI: open-source pruna framework (1000+ stars on GitHub), optimized models like P-Image (0.6s gen), Flux-Schnell (3x faster), deployed on Replicate/HF. Personal GitHub (nifleisch) has minor projects like lauzhack-amazon-reviews."
+    },
+    "mission_alignment": {
+      "score": 10,
+      "evidence": "Posts frequently about frontier image/video gen models (Flux, Wan, Qwen-Image), efficiency optimizations aligning with scalable AI. Work at PrunaAI: 'making AI faster, smaller, greener'. Attending NeurIPS."
+    },
+    "exceptional_ability": {
+      "score": 10,
+      "evidence": "Achieved 5x speedups (e.g., Flux-Kontext during offsite hackathon), real-time image models without quality loss, novel research on molecular accel and hierarchies, unique insights like video training for world models."
+    },
+    "communication": {
+      "score": 9,
+      "evidence": "Clear, engaging X posts with demos, images, theories (e.g., LLM for img gen distillation, variety vs text rendering). Promotes work effectively, good explanations."
+    },
+    "github_url": "https://github.com/nifleisch",
+    "linkedin_url": "https://de.linkedin.com/in/nilsfleischmann",
+    "top_repos": [
+      "PrunaAI/pruna",
+      "nifleisch/lauzhack-amazon-reviews"
+    ]
+  },
+  {
+    "handle": "pariljain",
+    "name": "Paril Jain",
+    "bio": "Founder/CTO @thebotcompany . Built Tesla FSD. Former Head of AI+Planning @Tesla",
+    "followers_count": 8895,
+    "pagerank_score": 6.247928803570409e-06,
+    "underratedness_score": 6.870871551881326e-07,
+    "final_score": 96.5,
+    "recommended_role": "engineering",
+    "summary": "Paril Jain is an exceptional candidate with proven leadership in Tesla's FSD AI planning, delivering scaled autonomy products. His ongoing robotics work at Bot Company and technical posts demonstrate frontier AI expertise perfectly aligned with xAI's mission. Highly recommended for core engineering roles.",
+    "strengths": [
+      "Tesla FSD leadership and shipping at scale",
+      "Deep practical knowledge of RL, imitation, end-to-end AI for embodied systems"
+    ],
+    "concerns": [
+      "Limited public open-source contributions",
+      "Recent focus shifted to Bot Company, though still highly active in discussions"
+    ],
+    "technical_depth": {
+      "score": 9,
+      "evidence": "Deep insights in X posts on end-to-end NN for FSD/robotics, scaling laws in AV (e.g., post on Waymo research, Tesla's quick pivot post-ChatGPT), vision over lidar/depth, sim2real for locomotion/manipulation, RL/imitation learning; led Tesla FSD V12 planning as Head of AI+Planning"
+    },
+    "project_evidence": {
+      "score": 10,
+      "evidence": "Led shipping FSD V12, Smart Summon, Robotaxi efforts at Tesla (deployed to millions); now CTO at The Bot Company building home robots (raised $150M+), though not yet shipped publicly"
+    },
+    "mission_alignment": {
+      "score": 10,
+      "evidence": "Frequent posts on frontier AI/robotics: foundation models for robotics, AI scaling in autonomy, humanoid/generalist robots, critiques of competitors like Waymo; obsessed with embodied AI and scaling to deployment"
+    },
+    "exceptional_ability": {
+      "score": 10,
+      "evidence": "Solved hard autonomy problems at Tesla (FSD from lane-keeping to Robotaxi-ready V12); ownership in rewriting stack multiple times; unique insights on data scaling over priors, visual understanding for dexterous manipulation"
+    },
+    "communication": {
+      "score": 9,
+      "evidence": "Clear, concise X posts explaining complex topics like Tesla's HW bet enabling scale, why robot demos need live verification, e2e policies implicit 3D understanding; engages meaningfully in discussions"
+    },
+    "github_url": null,
+    "linkedin_url": "https://www.linkedin.com/in/pariljain",
+    "top_repos": []
+  },
+  {
+    "handle": "tensor_rotator",
+    "name": "Alek Dimitriev @NeurIPS",
+    "bio": "Inference @AnthropicAI, prev Gemini @Google, prev prev PhD @UTAustin",
+    "followers_count": 533,
+    "pagerank_score": 1.8668817083925966e-05,
+    "underratedness_score": 2.9725542087832544e-06,
+    "final_score": 95.5,
+    "recommended_role": "infrastructure",
+    "summary": "Exceptional candidate with strong research background and production experience at top AI labs. Ideal for xAI's scaling needs in inference and engineering.",
+    "strengths": [
+      "Frontier model inference expertise at Anthropic/Google",
+      "Top conference publications from PhD"
+    ],
+    "concerns": [
+      "Limited recent public open-source activity",
+      "X posts are casual rather than deeply technical threads"
+    ],
+    "technical_depth": {
+      "score": 10,
+      "evidence": "PhD in ML from UT Austin with NeurIPS 2021 (CARMS) and ICML 2021 (ARMS) papers on gradient estimation for discrete variables; contributed to Gemini and Gemini 1.5 papers; X posts demonstrate knowledge of distillation, benchmarks, zero-shot learning."
+    },
+    "project_evidence": {
+      "score": 9,
+      "evidence": "GitHub repos for PhD papers (alekdimi/carms, alekdimi/arms); shipped Gemini finetuning/inference at Google scale; current inference engineering at Anthropic (Claude models)."
+    },
+    "mission_alignment": {
+      "score": 10,
+      "evidence": "Works on frontier AI inference at Anthropic (Claude SWE-bench wins, Haiku 4.5); prev Gemini; X posts frequently on AI benchmarks, models, scaling."
+    },
+    "exceptional_ability": {
+      "score": 10,
+      "evidence": "Novel PhD research published top venues; solved hard inference/finetuning problems for multimodal frontier models at Google/Anthropic."
+    },
+    "communication": {
+      "score": 8,
+      "evidence": "Clear, concise X posts with technical insights (e.g., distillation analogy correction); well-structured personal site; co-authored arXiv papers."
+    },
+    "github_url": "https://github.com/alekdimi",
+    "linkedin_url": "https://www.linkedin.com/in/alekdimi",
+    "top_repos": [
+      "alekdimi/carms",
+      "alekdimi/arms"
+    ]
+  },
+  {
+    "handle": "itfische",
+    "name": "Ian Fischer",
+    "bio": "Ex Google DeepMind Researcher, now cofounder of Poetiq",
+    "followers_count": 403,
+    "pagerank_score": 3.7487572821422455e-06,
+    "underratedness_score": 6.246455808127372e-07,
+    "final_score": 95.5,
+    "recommended_role": "research",
+    "summary": "Ian Fischer is an exceptional AI researcher with DeepMind experience and recent leadership in Poetiq's breakthrough on the ARC-AGI benchmark, showcasing deep expertise in frontier reasoning systems. His work aligns perfectly with xAI's AGI mission through efficient, scalable intelligence advances. Strong research profile with publications and open-source impact.",
+    "strengths": [
+      "Proven frontier AI research at DeepMind/Poetiq",
+      "SOTA on key AGI benchmark ARC-AGI-2",
+      "Ownership as cofounder building scalable reasoning systems"
+    ],
+    "concerns": [
+      "Limited volume of recent X posts/GitHub activity outside Poetiq",
+      "No high-star personal repos visible"
+    ],
+    "technical_depth": {
+      "score": 10,
+      "evidence": "Ex-Google DeepMind researcher; NeurIPS 2018 paper 'GILBO: One Metric to Measure Them All'; coauthor on arXiv 2501.09891 'Evolving Deeper LLM Thinking' (Jan 2025, DeepMind); Poetiq SOTA on ARC-AGI-2 (54%, first >50%) demonstrating novel reasoning systems."
+    },
+    "project_evidence": {
+      "score": 9,
+      "evidence": "Cofounder Poetiq shipping SOTA ARC-AGI solver (open-sourced at github.com/poetiq-ai/poetiq-arc-agi-solver, recent commits by itfische); 14 personal repos on github.com/itfische; contribs to pybrain; high-impact benchmark beater but no 1k+ star repos noted."
+    },
+    "mission_alignment": {
+      "score": 10,
+      "evidence": "Poetiq mission: 'fastest path to safe super intelligence'; obsessed with AGI/reasoning via ARC-AGI posts; ex-DeepMind work on world models/planning; recent posts on frontier benchmarks."
+    },
+    "exceptional_ability": {
+      "score": 10,
+      "evidence": "Led Poetiq to ARC-AGI-2 #1 (54% at half cost of prior SOTA); DeepMind papers solving hard RL/planning problems; cofounder demonstrating ownership/unique insights in efficient LLM reasoning."
+    },
+    "communication": {
+      "score": 8,
+      "evidence": "Clear X announcements of Poetiq results; detailed 2022 thread sharing 166 Imagen prompts for AI film; coauthor on research papers; engages AI community (e.g., karpathy)."
+    },
+    "github_url": "https://github.com/itfische",
+    "linkedin_url": null,
+    "top_repos": [
+      "poetiq-ai/poetiq-arc-agi-solver"
+    ]
+  },
+  {
+    "handle": "hmellor_",
+    "name": "Harry Mellor",
+    "bio": "ML Engineer @huggingface maintaining @vllm_project, prev @graphcoreai, @uniofoxford",
+    "followers_count": 251,
+    "pagerank_score": 1.8668817083925966e-05,
+    "underratedness_score": 3.376264852747765e-06,
+    "final_score": 94.5,
+    "recommended_role": "infrastructure",
+    "summary": "Harry Mellor is an outstanding ML systems engineer with proven track record maintaining vLLM, a leading open-source LLM serving engine. His deep contributions to high-performance inference make him highly suitable for xAI's infrastructure needs. Background includes Oxford Engineering MEng and Graphcore experience.",
+    "strengths": [
+      "Expertise in scalable LLM inference systems",
+      "Proven OSS leadership and ownership"
+    ],
+    "concerns": [
+      "No public papers as lead author",
+      "Relatively low X followers despite impact"
+    ],
+    "technical_depth": {
+      "score": 9,
+      "evidence": "Core maintainer of vLLM with implementations of Transformers backend for encoder-only/MoE/sliding window models; co-author on Graphcore paper 'BESS: Balanced Entity Sampling' (arXiv:2211.12281); deep systems knowledge in LLM inference/serving shown in posts/PRs."
+    },
+    "project_evidence": {
+      "score": 10,
+      "evidence": "Maintainer/core contributor to vLLM (40k+ stars, 1000+ contributors); shipped features at scale used in production; GitHub https://github.com/hmellor with contributions to high-impact OSS."
+    },
+    "mission_alignment": {
+      "score": 10,
+      "evidence": "Posts exclusively about vLLM features, HF integrations, AI serving/inference; talks at Ray Summit/vLLM meetups; obsessed with frontier LLM deployment."
+    },
+    "exceptional_ability": {
+      "score": 9,
+      "evidence": "Ownership of major vLLM features (Transformers backend, docs migration Sphinx->MkDocs, installation revamp); solved hard integration/scaling problems in popular OSS; prev Graphcore IPU ML work."
+    },
+    "communication": {
+      "score": 9,
+      "evidence": "Clear, engaging X threads announcing features/milestones; extensive docs improvements; responsive technical replies; blog posts at Graphcore."
+    },
+    "github_url": "https://github.com/hmellor",
+    "linkedin_url": null,
+    "top_repos": [
+      "vllm-project/vllm"
+    ]
+  },
+  {
+    "handle": "gabriberton",
+    "name": "Gabriele Berton",
+    "bio": "Postdoc @Amazon working on VLM - ex @CarnegieMellon @PoliTOnews @IITalk",
+    "followers_count": 7119,
+    "pagerank_score": 5.623135923213368e-06,
+    "underratedness_score": 6.339025527652645e-07,
+    "final_score": 94.0,
+    "recommended_role": "research",
+    "summary": "Outstanding CV researcher w/ top-tier pubs & OSS in VPR/geo-loc, transitioning to VLM at Amazon; strong fit for xAI vision/reasoning research. Real-world impact (NASA) & reproducible work stand out.",
+    "strengths": [
+      "Elite publication record (8 first-auth top conf)",
+      "High-impact OSS (2k+ stars, NASA use)",
+      "Current VLM expertise at Amazon"
+    ],
+    "concerns": [
+      "Primarily CV/VPR focus vs pure AGI/scaling",
+      "Project stars distributed, no single 1k+ viral repo"
+    ],
+    "technical_depth": {
+      "score": 10,
+      "evidence": "8 first-author papers at CVPR/ICCV/ECCV on visual place recognition/geo-localization (e.g., Rethinking Visual Geo-localization CVPR 2022 w/ 343 cites, EigenPlaces ICCV 2023, Deep VGL Benchmark CVPR 2022 oral); now postdoc on VLMs at Amazon; novel contribs like NASA-used AstroLoc/EarthLoc"
+    },
+    "project_evidence": {
+      "score": 8,
+      "evidence": "Active GitHub (gmberton) w/ 2000+ total stars; key repos: CosPlace (CVPR 2022), MegaLoc (158 stars, SOTA VPR, Gradio demo), EigenPlaces, MeshVPR, EarthLoc, awesome-Visual-Place-Recognition list; benchmarks/datasets; contrib to image-matching-models; NASA impact"
+    },
+    "mission_alignment": {
+      "score": 10,
+      "evidence": "Posts frequently on frontier AI/CV/VLM (NeurIPS/ICCV talks, papers, models like Qwen-VL, Tesla E2E); works on MLLM/VLM at Amazon; obsessed w/ reasoning/localization in vision"
+    },
+    "exceptional_ability": {
+      "score": 10,
+      "evidence": "Solves hard problems: large-scale VPR (millions images), space-to-ground matching (AstroLoc used by NASA for ISS photos), viewpoint-robust models; leads papers/OSS/demos; PhD PoliTO + CMU visit + Amazon postdoc"
+    },
+    "communication": {
+      "score": 9,
+      "evidence": "Clear X threads (Tesla talk summary, conference insights); reproducible papers w/ code/demos; promotes/teaches OSS (image-matching-models saves hours); good engagement 7k followers"
+    },
+    "github_url": "https://github.com/gmberton",
+    "linkedin_url": "https://www.linkedin.com/in/gabriele-berton-781623180",
+    "top_repos": [
+      "CosPlace",
+      "MegaLoc",
+      "EigenPlaces",
+      "awesome-Visual-Place-Recognition"
+    ]
+  },
+  {
+    "handle": "LiaoZeyi",
+    "name": "Zeyi Liao",
+    "bio": "PhD Student at @osunlp",
+    "followers_count": 312,
+    "pagerank_score": 4.1188012481388006e-05,
+    "underratedness_score": 7.1678656524354935e-06,
+    "final_score": 93.0,
+    "recommended_role": "research",
+    "summary": "Zeyi Liao is a promising PhD researcher at OSU NLP with strong contributions to AI agent safety, benchmarks, and evaluations of frontier models. His work on RedTeamCUA demonstrates novel problem-solving in critical areas like CUA security. Highly aligned with xAI's mission in advancing safe, capable AI systems.",
+    "strengths": [
+      "Expertise in agent safety and benchmarks",
+      "Published research on frontier models",
+      "Excellent technical communication"
+    ],
+    "concerns": [
+      "Limited evidence of production-scale engineering",
+      "Primarily academic/group contributions, no solo high-impact open-source"
+    ],
+    "technical_depth": {
+      "score": 10,
+      "evidence": "Co-first author on RedTeamCUA (arxiv:2505.21936), a novel framework and benchmark for adversarial testing of computer-use agents; contributions to AttributionBench (ACL'24 Findings), Mind2Web-2 (NeurIPS'25 D&B), ScienceAgentBench; deep discussions on agent safety, prompt injection, COT monitoring in posts"
+    },
+    "project_evidence": {
+      "score": 8,
+      "evidence": "Contributor to OSU-NLP-Group repos including RedTeamCUA (eval data released), Mind2Web-2, ScienceAgentBench, AttributionBench; personal GitHub lzy37ld with project site; Hugging Face lzy337; quality research projects but no high-star personal repos"
+    },
+    "mission_alignment": {
+      "score": 10,
+      "evidence": "Posts frequently on frontier AI agents, CUAs, safety/security (e.g., RedTeamCUA thread evaluating Claude Opus 4, Sonnet 4.5; OSWorld; prompt injection); attending NeurIPS; exploring on-policy distillation; quotes advisor on CUA alignment"
+    },
+    "exceptional_ability": {
+      "score": 9,
+      "evidence": "Developed RedTeamCUA hybrid sandbox for realistic red-teaming, revealing high ASRs (48% on Opus 4); led prelim experiments; insights on AR vs ASR, decoupled eval; PhD research solving hard agent safety problems"
+    },
+    "communication": {
+      "score": 10,
+      "evidence": "Detailed, engaging X threads on research (10-post RedTeamCUA explainer with videos/demos/results); clear explanations of complex vulnerabilities, COT analysis; professional posts linking papers/demos"
+    },
+    "github_url": "https://github.com/lzy37ld",
+    "linkedin_url": "https://www.linkedin.com/in/zeyi-liao-5373632b4",
+    "top_repos": [
+      "OSU-NLP-Group/RedTeamCUA",
+      "OSU-NLP-Group/Mind2Web-2",
+      "OSU-NLP-Group/ScienceAgentBench"
+    ]
+  },
+  {
+    "handle": "JunlinWang3",
+    "name": "Junlin Wang",
+    "bio": "PhD @duke_nlp. Intern @togethercompute @googledeepmind",
+    "followers_count": 265,
+    "pagerank_score": 2.6682764214658907e-05,
+    "underratedness_score": 4.778863052652577e-06,
+    "final_score": 92.5,
+    "recommended_role": "research",
+    "summary": "Junlin Wang is an outstanding PhD candidate at Duke NLP with a strong track record of publications in top venues on LLM reasoning, alignment, and security, complemented by internships at elite labs like Together AI and DeepMind. His work demonstrates deep technical expertise and direct impact on frontier AI challenges. Ideal for research roles advancing xAI's reasoning capabilities.",
+    "strengths": [
+      "Prolific research output with SOTA results in LLM alignment/reasoning",
+      "Elite internships and collaborations yielding high-impact papers",
+      "633 citations at PhD stage"
+    ],
+    "concerns": [
+      "Sparse public GitHub repositories",
+      "Relatively low X visibility (265 followers)"
+    ],
+    "technical_depth": {
+      "score": 10,
+      "evidence": "PhD Duke NLP, first/co-author on multiple papers at EMNLP 2024 (3), ACL 2024 Findings, NAACL 2024 Findings, arXiv MoA (SOTA on AlpacaEval/MT-Bench with OSS LLMs); topics: LLM reasoning, inference scaling, alignment, security; Google Scholar 633 citations; interns Together AI (MoA), DeepMind"
+    },
+    "project_evidence": {
+      "score": 7,
+      "evidence": "GitHub https://github.com/IsThatYou (low public repos/activity); contributed to RaccoonBench (ACL code), Together's MoA repo; research projects with code from papers (e.g., budget-aware reasoning EMNLP, prompt extraction); no high-star OSS but quality research code"
+    },
+    "mission_alignment": {
+      "score": 10,
+      "evidence": "All X posts on frontier AI: LLM reasoning (o1-like, inference scaling, backtracking), alignment (MoA), agents, security (Raccoon); shares ICML/EMNLP papers; interns Together/DeepMind; obsessed with reasoning/scaling"
+    },
+    "exceptional_ability": {
+      "score": 10,
+      "evidence": "Novel contributions: MoA pipeline using OSS LLMs for SOTA alignment; inference scaling evals showing majority vote superior, non-reasoning can't match reasoning models; budget-aware metrics for reasoning strategies; prompt extraction benchmark; top interns solving hard LLM problems"
+    },
+    "communication": {
+      "score": 10,
+      "evidence": "Clear X threads with visuals/key findings (e.g., inference scaling plots, MoA ICML poster); well-organized personal site with pubs/CV; conference presentations (EMNLP/ICML); concise insightful replies (e.g., slop metric, RL modes)"
+    },
+    "github_url": "https://github.com/IsThatYou",
+    "linkedin_url": null,
+    "top_repos": [
+      "togethercomputer/MoA",
+      "M0gician/RaccoonBench"
+    ]
+  },
+  {
+    "handle": "gu_xiangming",
+    "name": "Xiangming Gu",
+    "bio": "Final-year PhD @NUSingapore, SR @GoogleDeepmind. Prev: @SeaAIL,  @Tsinghua_Uni. Looking for jobs.",
+    "followers_count": 1450,
+    "pagerank_score": 3.7487572821422455e-06,
+    "underratedness_score": 5.149386033535148e-07,
+    "final_score": 92.5,
+    "recommended_role": "research",
+    "summary": "Xiangming Gu is an outstanding final-year PhD with top-tier publications on LLM architectures and safety, current DeepMind Student Researcher, demonstrating exceptional research ability. His work on attention sinks has influenced major models like GPT-OSS and Qwen. Highly suitable for research roles at xAI.",
+    "strengths": [
+      "Influential frontier LLM research (attention sinks, scaling)",
+      "DeepMind experience and top conf publications",
+      "Code releases for papers"
+    ],
+    "concerns": [
+      "Limited evidence of large-scale engineering or infra experience",
+      "GitHub repos modest in popularity"
+    ],
+    "technical_depth": {
+      "score": 10,
+      "evidence": "ICLR 2025 Spotlight 'When Attention Sink Emerges in Language Models', COLM 2025 'Why Do LLMs Attend to the First Token?', ICML 2024 'Agent Smith' jailbreak, TMLR 2025 diffusion memorization; deep posts on attention sinks, test-time scaling, DeepMind projects."
+    },
+    "project_evidence": {
+      "score": 7,
+      "evidence": "GitHub guxm2021 with repos like SVT_SpeechBrain, MM_ALT; contribs to sail-sg/Attention-Sink (143 stars), DiffMemorize (29 stars), Agent-Smith; code for multiple papers but no 1k+ stars or massive scale products."
+    },
+    "mission_alignment": {
+      "score": 10,
+      "evidence": "Frequent posts on frontier LLMs: attention sinks (influencing OpenAI GPT-OSS, Qwen NeurIPS best paper), reasoning, scaling, safety; DeepMind SR on LLM understanding package, test-time scaling."
+    },
+    "exceptional_ability": {
+      "score": 10,
+      "evidence": "Pioneering attention sink research cited in industry models; collabs with Petar Veli\u010dkovi\u0107, Razvan Pascanu; solved hard problems in LLM pretraining, jailbreaks, memorization; awards like Dean's Graduate Research Excellence."
+    },
+    "communication": {
+      "score": 10,
+      "evidence": "Clear X threads explaining attention sink mitigations (softmax-off-by-one, key biases); shared slides; top conf papers (ICLR spotlight, ICML); insightful replies/teaching."
+    },
+    "github_url": "https://github.com/guxm2021",
+    "linkedin_url": "https://sg.linkedin.com/in/xiangming-gu",
+    "top_repos": [
+      "sail-sg/Attention-Sink",
+      "sail-sg/DiffMemorize",
+      "guxm2021/MM_ALT"
+    ]
+  },
+  {
+    "handle": "fjord41",
+    "name": "Curtis Hawthorne",
+    "bio": "@OpenAI Agents. Previously @AdeptAILabs (https://t.co/rw1bysH7iW) / Amazon, Google Brain (https://t.co/wVi990fBax).\n\nPipe organ enthusiast: https://t.co/PC38goAEHc",
+    "followers_count": 2391,
+    "pagerank_score": 3.7487572821422455e-06,
+    "underratedness_score": 4.818525243876001e-07,
+    "final_score": 92.5,
+    "recommended_role": "research",
+    "summary": "Curtis is an exceptional AI researcher/engineer with a strong track record in music ML (SOTA transcription/synthesis) and recent pivot to frontier agent systems at top labs including OpenAI. Demonstrates deep technical expertise and ownership through publications and launches, ideal for xAI's ambitious goals.",
+    "strengths": [
+      "Proven novel research in transformers/diffusion for multimodal AI",
+      "Hands-on experience building/launching agent systems at scale (Nova Act)"
+    ],
+    "concerns": [
+      "Limited recent public technical posts (more personal organ content)",
+      "No prominent personal GitHub with high-impact repos found"
+    ],
+    "technical_depth": {
+      "score": 10,
+      "evidence": "Published novel research papers and blog posts on music transcription (Onsets and Frames, Sequence-to-Sequence with Transformers ISMIR 2021), diffusion-based music synthesis from MIDI, Perceiver AR for long-context modeling (ICML). Deep systems knowledge shown in GPU FP arithmetic post, JAX autograd implementation (Functional MicroGrad). Recent agents work at Adept (Persimmon-8B), Amazon (Nova Act), OpenAI."
+    },
+    "project_evidence": {
+      "score": 7,
+      "evidence": "Contributed to Google Magenta open-source projects (Onsets and Frames transcription model, widely used; MusicVAE, diffusion music synth code). Perceiver AR open-source. Personal JAX MicroGrad gist. No prominent personal GitHub profile with starred repos found; no evidence of 1k+ stars personal projects or shipped scale products, but meaningful research code releases."
+    },
+    "mission_alignment": {
+      "score": 10,
+      "evidence": "Deeply engaged in frontier AI: music ML research at Google Brain/Magenta, then agents at Adept (Persimmon model, Experiments workflows), Amazon AGI Lab (Nova Act browser agents launch), now OpenAI Agents team. Posts frequently about AI models, agents, reasoning."
+    },
+    "exceptional_ability": {
+      "score": 10,
+      "evidence": "SOTA results in hard music transcription/synthesis problems (raw audio to MIDI). Pioneered transformer/diffusion approaches in music AI. Led/owned Nova Act agent launch (effortless browser agents). Career progression: Google Brain -> Amazon AGI -> Adept -> OpenAI. Hand-soldered SBC in college, systems depth."
+    },
+    "communication": {
+      "score": 10,
+      "evidence": "Clear, detailed X threads explaining technical concepts (e.g., notes2audio diffusion pipeline with architecture details, improvements). Blog posts/tutorials (Magenta). Recommends resources like Karpathy videos. Engaging launch posts for Nova Act."
+    },
+    "github_url": null,
+    "linkedin_url": null,
+    "top_repos": [
+      "magenta/magenta (Onsets and Frames)",
+      "google-research/perceiver-ar",
+      "cghawthorne/Functional MicroGrad gist"
+    ]
+  },
+  {
+    "handle": "lightetal",
+    "name": "Jonathan @NeurIPS",
+    "bio": "I\u2019m a PhD researcher at @RPI @Caltech @NEC working in LLM-agents, reasoning, reinforcement learning, inference scaling, and computer use agents.",
+    "followers_count": 266,
+    "pagerank_score": 2.6682764214658907e-05,
+    "underratedness_score": 4.775653608067403e-06,
+    "final_score": 92.0,
+    "recommended_role": "research",
+    "summary": "Strong PhD researcher with multiple first-author NeurIPS/ICLR papers on cutting-edge LLM reasoning, scaling, and agents. Demonstrates deep expertise and research output but limited engineering/shipping scale. Ideal for research roles advancing xAI's reasoning capabilities.",
+    "strengths": [
+      "Top-tier publications on LLM inference/reasoning/agents",
+      "Open-source code releases for reproducible work"
+    ],
+    "concerns": [
+      "Low public visibility/engagement (268 followers, likely low repo stars)",
+      "PhD-focused, less evidence of production engineering"
+    ],
+    "technical_depth": {
+      "score": 10,
+      "evidence": "First-author NeurIPS 2025 'DISC: Dynamic Decomposition Improves LLM Inference Scaling'; ICLR 2025 'Strategist: Self-Improvement via Bi-Level Tree Search' and 'Scattered Forest Search'; deep work on LLM reasoning decomposition, agent self-play, code gen optimization with SOTA results on APPS/MATH/HumanEval."
+    },
+    "project_evidence": {
+      "score": 8,
+      "evidence": "Released code for NeurIPS/ICLR projects: github.com/disc-search/disc (DISC, <300 LOC impl), jonathanmli/Avalon-LLM (Resistance Avalon benchmark for Strategist), project pages for Strategist/codespace-optimization with evals; active but low stars/visibility."
+    },
+    "mission_alignment": {
+      "score": 10,
+      "evidence": "Bio/posts exclusively on LLM-agents, reasoning, RL, inference scaling, computer use agents; promotes NeurIPS/ICLR work on frontier topics like self-improving agents, search/discovery."
+    },
+    "exceptional_ability": {
+      "score": 9,
+      "evidence": "Early PhD (started 2023) first-author top conf papers; collaborations NEC/Caltech/RPI/Princeton; solves hard inference scaling/agent problems with adaptive methods beating baselines 4x on open models; featured in State of AI Report."
+    },
+    "communication": {
+      "score": 9,
+      "evidence": "Clear X threads explaining papers (e.g., DISC 10-part breakdown); detailed project pages with results/videos; engaging conference posters/promos."
+    },
+    "github_url": "https://github.com/jonathanmli",
+    "linkedin_url": "https://www.linkedin.com/in/jonathan-li-rpi",
+    "top_repos": [
+      "disc-search/disc",
+      "jonathanmli/Avalon-LLM",
+      "llm-strategist (project page code)",
+      "codespace-optimization (project page code)"
+    ]
+  },
+  {
+    "handle": "emrecanacikgoz",
+    "name": "Emre Can Acikgoz @ NeurIPS 2025",
+    "bio": "PhD Student @UofIllinois, @convai_uiuc, @uiuc_nlp | Prev. Amazon Alexa Intern | Self-Evolving Agents",
+    "followers_count": 308,
+    "pagerank_score": 2.6682764214658907e-05,
+    "underratedness_score": 4.6539640544643605e-06,
+    "final_score": 92.0,
+    "recommended_role": "research",
+    "summary": "Emre is a standout PhD student at UIUC with exceptional research output in LLM agents and self-improvement, multiple top-tier publications, and practical OSS releases including competitive open models. His work directly aligns with xAI's focus on advanced AI agents and reasoning. Strong candidate for research engineering roles.",
+    "strengths": [
+      "Prolific frontier AI agent research with NeurIPS/ACL pubs",
+      "Hands-on OSS: code, models, leaderboards",
+      "Amazon experience + self-evolving agents focus"
+    ],
+    "concerns": [
+      "GitHub repos have modest stars (research-oriented)",
+      "Early PhD stage, limited production-scale shipping"
+    ],
+    "technical_depth": {
+      "score": 10,
+      "evidence": "Multiple publications at NeurIPS 2025 (ToolRL, MAC), ACL 2025 (CoALM, SMART), SIGDIAL 2025 oral (TD-Eval), arXiv preprints on test-time self-improvement (TT-SI), conversational agents taxonomy; deep work on agentic RL, tool learning, self-evolving agents."
+    },
+    "project_evidence": {
+      "score": 8,
+      "evidence": "Active GitHub (66 repos) with quality releases: TD-Eval eval framework (github.com/emrecanacikgoz/TD-Eval), contrib to ToolRL (387 stars), awesome-conversational-agents list, turkish-llm, Medical-Factory; HF models/collections for ToolRL/SMART; CoALM-405B open model topping BFCL leaderboard; Amazon Alexa intern."
+    },
+    "mission_alignment": {
+      "score": 10,
+      "evidence": "Bio and all recent X posts focused on self-evolving agents, LLM agents, tool RL, test-time training, conversational AI, frontier topics like multi-turn RL, agentic learning; attends/presents NeurIPS/ACL."
+    },
+    "exceptional_ability": {
+      "score": 9,
+      "evidence": "First/co-first author on top conf papers solving hard agent problems (tool overuse, test-time SI, unified TOD/tool models); open models beating closed-source on benchmarks; wins like MRL 2022 1st place all categories; Amazon intern; UIUC PhD advised by top NLP profs."
+    },
+    "communication": {
+      "score": 9,
+      "evidence": "Detailed X threads explaining papers with findings/figures (e.g., TT-SI 17-post thread); clear project pages (emrecanacikgoz.github.io); well-structured pubs; engages community."
+    },
+    "github_url": "https://github.com/emrecanacikgoz",
+    "linkedin_url": "https://www.linkedin.com/in/emrecanacikgoz97",
+    "top_repos": [
+      "qiancheng0/ToolRL",
+      "emrecanacikgoz/TD-Eval",
+      "emrecanacikgoz/awesome-conversational-agents",
+      "emrecanacikgoz/turkish-llm"
+    ]
+  },
+  {
+    "handle": "jaewon_chung_cs",
+    "name": "Jae-Won Chung",
+    "bio": "PhD student at @UMichCSE. Systems for Deep Learning. Energy as a first-class systems resource.",
+    "followers_count": 243,
+    "pagerank_score": 2.6682764214658907e-05,
+    "underratedness_score": 4.853910799361744e-06,
+    "final_score": 91.5,
+    "recommended_role": "infrastructure",
+    "summary": "Outstanding PhD candidate specializing in energy-efficient ML systems with publications at premier systems conferences and leadership in relevant OSS projects like Zeus and Cornserve. Strong alignment with xAI's infrastructure needs for scalable AI training/serving. Limited production-scale shipping but exceptional academic/indie track record.",
+    "strengths": [
+      "Top-tier systems publications (NSDI, SOSP)",
+      "Hands-on OSS leadership in DL infra/energy tools",
+      "Deep expertise in multimodal/LLM efficiency"
+    ],
+    "concerns": [
+      "PhD student, not yet industry experience at scale",
+      "Projects nascent (low stars/followers)"
+    ],
+    "technical_depth": {
+      "score": 10,
+      "evidence": "Published papers at top venues: Zeus (NSDI'23) on GPU energy for DNN training, Perseus (SOSP'24) on energy bloat in large model training, ML.ENERGY Benchmark (NeurIPS D&B'25 spotlight); NeurIPS 2025 tutorial on energy/power with NVIDIA; deep X posts on multimodal serving challenges, energy optimization."
+    },
+    "project_evidence": {
+      "score": 9,
+      "evidence": "Co-leading Cornserve (distributed multimodal serving, github.com/cornserve-ai/cornserve); major contributor to Zeus (ml.energy/zeus, PyTorch ecosystem, Mozilla funded); ML.ENERGY leaderboard; Cornstarch for multimodal training; active in SymbioticLabUM projects."
+    },
+    "mission_alignment": {
+      "score": 9,
+      "evidence": "Focus on systems for deep learning with energy as first-class resource; frequent posts on LLM/multimodal efficiency (Gemma3, Qwen Omni), training/serving infra, power capping; ml.energy initiative."
+    },
+    "exceptional_ability": {
+      "score": 9,
+      "evidence": "Tackling hard problems like energy bloat/power delivery in AI datacenters (Perseus), multimodal model fission/scaling (Cornserve); top-tier pubs (NSDI/SOSP), ownership in co-leading projects, PyTorch talk."
+    },
+    "communication": {
+      "score": 8,
+      "evidence": "Clear X threads explaining projects (Cornserve features, Perseus energy bloat); blog posts on technical tips (Matplotlib, Pyright); NeurIPS tutorial; accessible explanations in posts."
+    },
+    "github_url": "https://github.com/jaywonchung",
+    "linkedin_url": "https://www.linkedin.com/in/jae-won-chung-cs",
+    "top_repos": [
+      "cornserve-ai/cornserve",
+      "ml-energy/zeus",
+      "cornstarch-org/Cornstarch"
+    ]
+  },
+  {
+    "handle": "XiaohanWang96",
+    "name": "Xiaohan Wang",
+    "bio": "Postdoc @Stanford. Video Understanding, Multimodal Foundation Models",
+    "followers_count": 296,
+    "pagerank_score": 2.6682764214658907e-05,
+    "underratedness_score": 4.686339919789388e-06,
+    "final_score": 91.5,
+    "recommended_role": "research",
+    "summary": "Xiaohan Wang is an exceptional researcher specializing in video understanding and multimodal foundation models, with a strong track record of publications at top venues and innovative benchmarks/models. His work directly advances frontier AI capabilities in long-context video reasoning. Highly suitable for research engineering roles at xAI.",
+    "strengths": [
+      "Deep technical expertise in multimodal/video AI with proven publications",
+      "Active in open research/benchmarks aligned with AGI goals"
+    ],
+    "concerns": [
+      "Limited evidence of large-scale open-source projects or engineering/production experience",
+      "Primarily academic focus, no shipped products at scale visible"
+    ],
+    "technical_depth": {
+      "score": 10,
+      "evidence": "Postdoc at Stanford AI Lab; publications at CVPR, ECCV, NeurIPS (e.g., VideoAgent ECCV 2024 with 215 citations, T2VLAD CVPR 2021 256 citations, Apollo CVPR 2025); develops benchmarks like SciVideoBench, ApolloBench; 2937 total citations on Google Scholar; deep expertise in video understanding, long-form video, multimodal LMMs, temporal grounding."
+    },
+    "project_evidence": {
+      "score": 7,
+      "evidence": "Leads/co-leads research projects like VideoAgent, TPO (Temporal Preference Optimization), Apollo family of video-LMMs (3B/7B models), ApolloBench; announces open-sourcing code/models (e.g., Apollo training code); project pages (wxh1996.github.io/VideoAgent, apollo-lmms.github.io, ruili33.github.io/tpo); no highly starred public GitHub repos found (e.g., Xiaohan-Wang has 5 repos, low activity); active in releasing benchmarks."
+    },
+    "mission_alignment": {
+      "score": 10,
+      "evidence": "Bio and all recent X posts focused on video understanding, multimodal foundation models, LMMs (e.g., praises Gemini 3 Pro, Qwen2.5-VL; announces TPO, SciVideoBench, Apollo; discusses agentic workflows for video); obsessed with frontier AI in video/multimodal domain."
+    },
+    "exceptional_ability": {
+      "score": 10,
+      "evidence": "Solves hard problems in long-form video understanding (e.g., VideoAgent agentic approach SOTA zero-shot; TPO self-improvement without annotations; Apollo explores design space for video LMMs); co-organizes CVPR workshops; high-impact papers quickly cited (215 for VideoAgent); Stanford postdoc under Serena Yeung-Levy."
+    },
+    "communication": {
+      "score": 9,
+      "evidence": "X posts are clear, structured with bullets/key highlights (e.g., TPO announcement details features/performance; Apollo insights); engaging/teaching style; promotes collaborations; technical yet accessible explanations."
+    },
+    "github_url": null,
+    "linkedin_url": "https://www.linkedin.com/in/xiaohan-wang-883895bb",
+    "top_repos": [
+      "Apollo (apollo-lmms)",
+      "TPO",
+      "VideoAgent"
+    ]
+  },
+  {
+    "handle": "AntheaYLi",
+    "name": "Anthea Li @ NeurIPS2025",
+    "bio": "Ph.D. Student at MIT CSAIL w/ Torralba",
+    "followers_count": 306,
+    "pagerank_score": 2.6682764214658907e-05,
+    "underratedness_score": 4.65924106781095e-06,
+    "final_score": 91.5,
+    "recommended_role": "research",
+    "summary": "Outstanding PhD researcher from MIT CSAIL with a strong track record of publications in multimodal AI, world models, and optimization techniques highly relevant to AGI pursuits. Demonstrates deep technical expertise and active engagement in frontier topics like ES for reasoning.",
+    "strengths": [
+      "Top-tier publications in relevant AI areas",
+      "Active research in world models and reasoning",
+      "Technical discussions on X showing depth"
+    ],
+    "concerns": [
+      "Limited non-academic engineering experience",
+      "Low GitHub repo popularity/stars"
+    ],
+    "technical_depth": {
+      "score": 10,
+      "evidence": "Multiple top-tier publications (ICCV 2025 Multimodal Video Gen, ICLR 2024 Visual-Tactile, CVPR 2024 3D Assembly, ICML 2023 Preconditioners, etc.); recent ES/LoRA for reasoning research discussed technically on X with trust-region/spectral norm analysis."
+    },
+    "project_evidence": {
+      "score": 7,
+      "evidence": "GitHub repos for papers: MMVidSim (ICCV 2025, 1 star), Preconditioner (ICML 2023), multi-joint-assembly (CVPR 2024), 3DPartAssembly (ECCV 2020); active research code releases, no high-star OSS."
+    },
+    "mission_alignment": {
+      "score": 10,
+      "evidence": "Focus on multimodal world models, video generation, RL/ES for reasoning, physics sim; posts on frontier AI topics like ES+LoRA for reasoning at NeurIPS 2025."
+    },
+    "exceptional_ability": {
+      "score": 10,
+      "evidence": "First-author papers solving hard problems in multimodal rep learning, scalable post-training (ES), 3D assembly planning; PhD CSAIL Torralba; ownership of projects."
+    },
+    "communication": {
+      "score": 9,
+      "evidence": "Clear, technical X threads/posts explaining research (e.g., ES hyperparameters, LoRA updates); structured paper abstracts; WIP blog."
+    },
+    "github_url": "https://github.com/AntheaLi",
+    "linkedin_url": null,
+    "top_repos": [
+      "MMVidSim",
+      "Preconditioner",
+      "multi-joint-assembly",
+      "3DPartAssembly"
+    ]
+  },
+  {
+    "handle": "sohamg121",
+    "name": "Soham",
+    "bio": "Research Scientist @MistralAI on multimodal/audio LLMs.\n\nPreviously: @GoogleDeepMind\nMS @CarnegieMellon",
+    "followers_count": 432,
+    "pagerank_score": 2.6682764214658907e-05,
+    "underratedness_score": 4.395308348041347e-06,
+    "final_score": 91.5,
+    "recommended_role": "research",
+    "summary": "Strong research scientist with publications and contributions to frontier multimodal/audio models at DeepMind and Mistral. Excellent fit for AI research, less evidence of personal open-source engineering projects.",
+    "strengths": [
+      "Proven research in multimodal LLMs at top labs",
+      "Direct experience shipping open audio models like Voxtral"
+    ],
+    "concerns": [
+      "Limited visible personal GitHub projects",
+      "Infrequent recent X posting beyond replies"
+    ],
+    "technical_depth": {
+      "score": 10,
+      "evidence": "Co-author on DeepMind's TIPS (ICLR 2025, text-image pretraining), Mistral's Magistral and Voxtral (audio LLMs) papers. Works on multimodal/audio LLMs at frontier labs, cited 706 times on Google Scholar."
+    },
+    "project_evidence": {
+      "score": 7,
+      "evidence": "Contributed to released open models like Voxtral (Apache 2.0) at Mistral, TIPS code at DeepMind. GitHub https://github.com/sohamghosh121 has 28 repos but no high-star personal projects visible (no 1k+ stars)."
+    },
+    "mission_alignment": {
+      "score": 10,
+      "evidence": "Bio and posts focused on multimodal/audio LLMs; announced Voxtral details (pretraining, DPO, evals like GSM8K-speech); attending NeurIPS for Mistral audio work; frequently engages on frontier AI."
+    },
+    "exceptional_ability": {
+      "score": 10,
+      "evidence": "Built Voxtral audio LLMs at Mistral with no prior audio expertise; novel contributions in TIPS spatial pretraining; MS CMU -> DeepMind -> Mistral research."
+    },
+    "communication": {
+      "score": 9,
+      "evidence": "Clear technical threads on Voxtral training (continued pretraining patterns, on-policy DPO); insightful replies (e.g., defending DINOv3 for vision tasks); co-authors arXiv tech reports."
+    },
+    "github_url": "https://github.com/sohamghosh121",
+    "linkedin_url": "https://www.linkedin.com/in/sohamghosh121",
+    "top_repos": [
+      "TIPS (team: google-deepmind/tips)",
+      "Voxtral (Mistral release)"
+    ]
+  },
+  {
+    "handle": "Lindon_Gao",
+    "name": "Lindon Gao",
+    "bio": "Cofounder & CEO @DynaRobotics, Instacart VPE, Caper AI ($350m exit)",
+    "followers_count": 1225,
+    "pagerank_score": 5.623135923213368e-06,
+    "underratedness_score": 7.907089000340321e-07,
+    "final_score": 91.5,
+    "recommended_role": "engineering",
+    "summary": "Lindon Gao is a proven engineering leader and serial entrepreneur in AI/robotics with major exits and production-scale deployments. Strong alignment with xAI's AGI mission via embodied AI focus, though lacks personal OSS/research pubs. Ideal for leadership in applied AI engineering.",
+    "strengths": [
+      "Proven scaler of AI hardware/software products to production",
+      "Deep expertise in embodied AI/robotics foundation models",
+      "Repeat founder success with $470M+ total funding/exits"
+    ],
+    "concerns": [
+      "No public GitHub or open-source contributions",
+      "Limited personal deep technical posts/papers; more leadership-oriented"
+    ],
+    "technical_depth": {
+      "score": 7,
+      "evidence": "Leads development of end-to-end VLA models for robotics with agentic reasoning (e.g., arbitrary candy serving without memory modules); patent on training data generation for object detection from Caper AI; strong applied knowledge in CV/ML/robotics from shipping products, but no personal published papers or novel research contributions found."
+    },
+    "project_evidence": {
+      "score": 10,
+      "evidence": "Cofounder/CEO Caper AI (smart carts, $350M acquisition by Instacart); Cofounder/CEO Dyna Robotics ($23.5M seed + $120M Series A, production demos: 99.4% success napkin folding over 24h at 60% human speed, zero-shot generalization); no public GitHub or OSS."
+    },
+    "mission_alignment": {
+      "score": 10,
+      "evidence": "Obsessed with embodied AI/robotics as 'last frontier of AI'; frequent posts on Dyna's foundation models, production robotics, hiring robotics talent; 'unlocking physical agents'."
+    },
+    "exceptional_ability": {
+      "score": 10,
+      "evidence": "Repeat founder with $350M exit at Caper, rapid scaling Dyna to production-ready general-purpose robots solving reliability/speed/generalization challenges; VP Eng at Instacart post-acq leading in-store AI teams."
+    },
+    "communication": {
+      "score": 9,
+      "evidence": "Clear, engaging X posts explaining technical demos (e.g., 'End-to-end architecture without external memory modules or counting logic'); effective CEO announcements on funding/tech breakthroughs."
+    },
+    "github_url": null,
+    "linkedin_url": "https://www.linkedin.com/in/lindon-gao",
+    "top_repos": []
+  },
+  {
+    "handle": "BillZheng155508",
+    "name": "Bill Zheng",
+    "bio": "EECS Undergraduate at Berkeley | Research at Robotics AI & Learning Lab @berkeley_ai",
+    "followers_count": 92,
+    "pagerank_score": 2.6682764214658907e-05,
+    "underratedness_score": 5.886856814718509e-06,
+    "final_score": 90.5,
+    "recommended_role": "research",
+    "summary": "Exceptional undergrad researcher at Berkeley's RAIL lab with top-tier publications in robotics AI as lead contributor on conference papers. Strong alignment with xAI's AI focus through frontier robot learning work. Limited public open-source footprint.",
+    "strengths": [
+      "Published papers at NeurIPS/CoRL as undergrad",
+      "Deep expertise in RL/robotics at top lab (BAIR/RAIL)"
+    ],
+    "concerns": [
+      "No personal GitHub or visible open-source projects",
+      "Low X engagement (92 followers, infrequent posts)"
+    ],
+    "technical_depth": {
+      "score": 10,
+      "evidence": "Co-author and presenter on PALO (CoRL 2024, arXiv:2408.16228) and TRA (NeurIPS 2025) papers on robot learning: few-shot imitation via language optimization and temporally-aligned representations for compositional generalization."
+    },
+    "project_evidence": {
+      "score": 7,
+      "evidence": "Contributed to PALO project with code released at https://github.com/vivekmyers/palo-robot (team repo from RAIL lab); no personal GitHub repos found, but lab projects presented at top conferences."
+    },
+    "mission_alignment": {
+      "score": 10,
+      "evidence": "Research at Berkeley RAIL/BAIR lab (Robotics AI & Learning Lab); X posts frequently about frontier robotics/ML topics like RL, imitation learning, representations; advised by Sergey Levine, Kuan Fang."
+    },
+    "exceptional_ability": {
+      "score": 10,
+      "evidence": "As EECS undergrad, solved hard problems in robot instruction-following and few-shot adaptation, leading to NeurIPS/CoRL publications; ownership shown in presentations and collaborations."
+    },
+    "communication": {
+      "score": 8,
+      "evidence": "Clear, concise X posts summarizing complex research (e.g., PALO achieving 15x data efficiency, TRA for long-horizon tasks); presents at conferences."
+    },
+    "github_url": null,
+    "linkedin_url": "https://www.linkedin.com/in/bill-zheng-5207991ab",
+    "top_repos": [
+      "vivekmyers/palo-robot"
+    ]
+  },
+  {
+    "handle": "ManasiSharma_",
+    "name": "Manasi Sharma @ NeurIPS",
+    "bio": "research engineer @scale_AI, working on reasoning for frontier models, agents, rl\n| prev @stanford, @StanfordAILab, @mitll, @Columbia",
+    "followers_count": 436,
+    "pagerank_score": 2.6682764214658907e-05,
+    "underratedness_score": 4.388660756368622e-06,
+    "final_score": 90.5,
+    "recommended_role": "research",
+    "summary": "Manasi is a strong research engineer deeply focused on reasoning, agents, and evals for frontier models, with recent novel publications and public code releases at Scale AI. Her work directly aligns with xAI's mission in advancing AGI capabilities. Limited personal OSS activity is a minor gap.",
+    "strengths": [
+      "Novel benchmark contributions in agent evals",
+      "Strong publication record and conference engagement",
+      "Clear passion for frontier AI reasoning/RL"
+    ],
+    "concerns": [
+      "Personal GitHub inactive recently, mostly old student projects",
+      "No high-profile shipped products or 1k+ star repos",
+      "Low follower count (436)"
+    ],
+    "technical_depth": {
+      "score": 10,
+      "evidence": "First author on ResearchRubrics arXiv paper (2511.07685) introducing novel benchmark for deep research agents with 2.5K+ expert rubrics and 2.8K+ hours human labor; co-author on human trust in LMs (2406.02018), Remote Labor Index, BEHAVIOR-1K; deep discussions on agents, RL, post-training, evals in X threads"
+    },
+    "project_evidence": {
+      "score": 7,
+      "evidence": "Released code/dataset for ResearchRubrics (github.com/scaleapi/researchrubrics, HF dataset); personal GitHub (github.com/manasi-sharma) has older student projects from Columbia/Stanford (e.g., Gattini-IR-ML-Project, coms-w-4733-projects) but no recent high-star personal repos or shipped scale products visible"
+    },
+    "mission_alignment": {
+      "score": 10,
+      "evidence": "Bio and posts obsessed with reasoning for frontier models, agents, RL; frequent shares on evals for open-ended tasks, deep research agents, attends NeurIPS/ICML to discuss frontier AI; hiring for Scale's reasoning/agents team"
+    },
+    "exceptional_ability": {
+      "score": 9,
+      "evidence": "Led/featured in building complex benchmarks tackling hard evals for top agents (Gemini/OpenAI <68% compliance); prior at Stanford AI Lab, MITLL, Columbia; ownership in public releases and conference networking"
+    },
+    "communication": {
+      "score": 10,
+      "evidence": "Excellent X threads breaking down ResearchRubrics with figures, key insights, clear explanations; arXiv preprints well-structured; teaches concepts like rubric grading, task complexity frameworks effectively"
+    },
+    "github_url": "https://github.com/manasi-sharma",
+    "linkedin_url": null,
+    "top_repos": [
+      "scaleapi/researchrubrics",
+      "manasi-sharma/Gattini-IR-ML-Project"
+    ]
+  },
+  {
+    "handle": "sserenazz",
+    "name": "Serena Zhang",
+    "bio": "Research @GoogleDeepmind",
+    "followers_count": 191,
+    "pagerank_score": 2.0761278297382995e-05,
+    "underratedness_score": 3.948891407083732e-06,
+    "final_score": 90.5,
+    "recommended_role": "research",
+    "summary": "Serena Zhang is a talented Staff Research Engineer at Google DeepMind specializing in advanced video generation, with publications on motion control and contributions to flagship models like Veo. Her work demonstrates deep expertise in frontier generative AI, making her a strong candidate for research roles. Limited public open-source presence but exceptional industry impact.",
+    "strengths": [
+      "DeepMind experience on cutting-edge video AI",
+      "Published novel research papers",
+      "Shipped products at massive scale"
+    ],
+    "concerns": [
+      "No visible personal GitHub repositories",
+      "Low X engagement and follower count",
+      "Limited depth in public posts"
+    ],
+    "technical_depth": {
+      "score": 10,
+      "evidence": "Author on arXiv paper 'Controlling Video Generation with Motion Trajectories' (motion-prompting.github.io project); contributor to Veo and V2A at Google DeepMind, novel research in controllable video generation."
+    },
+    "project_evidence": {
+      "score": 7,
+      "evidence": "Shipped features in Veo (state-of-the-art video model used at scale, e.g., by Donald Glover); research project pages like motion-prompting.github.io; no personal GitHub profile or high-star repos found."
+    },
+    "mission_alignment": {
+      "score": 10,
+      "evidence": "X posts focused on frontier AI video models (Veo 3.1, Genie 3, ingredients-to-video); bio and work at DeepMind on AGI-adjacent generative models."
+    },
+    "exceptional_ability": {
+      "score": 10,
+      "evidence": "Staff Research Engineer at Google DeepMind; publications and contributions solving hard problems in video generation control, physics simulation, and multimodal generation."
+    },
+    "communication": {
+      "score": 8,
+      "evidence": "Clear, enthusiastic X posts with demos explaining Veo features; co-authored technical papers; LinkedIn activity sharing insights."
+    },
+    "github_url": null,
+    "linkedin_url": "https://www.linkedin.com/in/zhang-serena",
+    "top_repos": []
+  },
+  {
+    "handle": "aksh_555",
+    "name": "Akshara Prabhakar \u2708\ufe0f NeurIPS",
+    "bio": "applied scientist @SFResearch | prev @princeton_nlp, @surathkal_nitk",
+    "followers_count": 453,
+    "pagerank_score": 1.8668817083925966e-05,
+    "underratedness_score": 3.0514090377483072e-06,
+    "final_score": 90.5,
+    "recommended_role": "research",
+    "summary": "Akshara is a strong AI researcher with publications at top venues and hands-on experience building agent frameworks and benchmarks at Princeton NLP and Salesforce AI Research. Her work aligns closely with frontier AI challenges in reasoning and agents. More engineering-scale shipping would strengthen infra fit, but excellent for research roles.",
+    "strengths": [
+      "Proven research impact with NeurIPS/EMNLP papers",
+      "Deep agentic AI expertise and open-source contributions",
+      "Excellent communicator via threads and presentations"
+    ],
+    "concerns": [
+      "Limited visible personal high-star repos (>1k)",
+      "Primarily research; less evidence of production-scale engineering"
+    ],
+    "technical_depth": {
+      "score": 10,
+      "evidence": "Published papers at NeurIPS (APIGen-MT D&B track, InterCode), EMNLP Findings (CoT reasoning analysis), COLING Industry (LoRA Soups), NAACL, AAAI; deep work on LLM reasoning, agentic data generation, skill composition, interactive benchmarks"
+    },
+    "project_evidence": {
+      "score": 7,
+      "evidence": "Contributions to SalesforceAIResearch/enterprise-deep-research (~800 stars), princeton-nlp/intercode (NeurIPS benchmark), APIGen-MT-5k dataset on HF; personal GitHub with 29 repos; active in team research repos"
+    },
+    "mission_alignment": {
+      "score": 10,
+      "evidence": "Frequent posts on frontier AI topics: LLM agents, post-training, function calling (xLAM #1 on BFCL), reasoning, benchmarks like UserBench, CRMArena; work at Salesforce AI Research focused on AI agents/EGI"
+    },
+    "exceptional_ability": {
+      "score": 9,
+      "evidence": "Novel contributions like APIGen-MT pipeline outperforming GPT-4o/Claude in multi-turn FC, LoRA Soups for RAG-free skill comp, CoT noisy reasoning analysis; Siebel Scholar; MS thesis on reasoning/benchmarking; conference presentations"
+    },
+    "communication": {
+      "score": 10,
+      "evidence": "Clear, engaging X threads explaining papers (e.g., LoRA Soups 6-part, CoT 8-part); videos/demos of agents; presenting at NeurIPS/EMNLP; promotes open-source/datasets"
+    },
+    "github_url": "https://github.com/aksh555",
+    "linkedin_url": "https://www.linkedin.com/in/p-akshara",
+    "top_repos": [
+      "SalesforceAIResearch/enterprise-deep-research",
+      "princeton-nlp/intercode"
+    ]
+  },
+  {
+    "handle": "TianhongLi6",
+    "name": "Tianhong Li",
+    "bio": "EECS PhD student at MIT",
+    "followers_count": 433,
+    "pagerank_score": 5.623135923213368e-06,
+    "underratedness_score": 9.259171230573428e-07,
+    "final_score": 90.5,
+    "recommended_role": "research",
+    "summary": "Tianhong Li is an exceptional ML researcher with top-tier publications in generative models and representation learning, releasing production-quality code for NeurIPS/CVPR papers. Strong fit for xAI research on frontier AI scaling and reasoning via novel architectures. Limited public discussion depth on X but evidenced by accepts/awards.",
+    "strengths": [
+      "Top conference publications (NeurIPS oral/spotlight, CVPR, ICLR)",
+      "Hands-on code for SOTA generative models",
+      "Working with leading advisors like Kaiming He"
+    ],
+    "concerns": [
+      "Low X posting volume (only ~8 posts, all paper announcements)",
+      "Primarily academic; no evident large-scale engineering experience"
+    ],
+    "technical_depth": {
+      "score": 10,
+      "evidence": "Novel contributions in generative models and representation learning: NeurIPS 2024 oral/spotlight on VQ-free autoregressive image generation (MAR), continuous tokens scaling (Fluid/ICLR 2025), MAGE (CVPR 2023 unifying rep and synthesis), ICLR 2024 spotlight ITIT; 4622 citations, h-index implied high from top papers >1000 cites."
+    },
+    "project_evidence": {
+      "score": 7,
+      "evidence": "Active GitHub (LTH14, 791 followers) with quality research repos including mage (CVPR23), mar (NeurIPS24 with Colab/HF), rcg (NeurIPS24), fractalgen, FSKD (CVPR20); code releases for papers but no massive stars or production-scale products."
+    },
+    "mission_alignment": {
+      "score": 10,
+      "evidence": "All X posts and publications focused on frontier AI: scaling autoregressive gen models w/o quantization, continuous tokens for T2I SOTA, vision-language gen with unpaired data; research synergy of rep learning + gen models."
+    },
+    "exceptional_ability": {
+      "score": 10,
+      "evidence": "Solved hard problems in AR image gen scaling (power-law loss, SOTA FID/GenEval), through-wall sensing w/ RF (early CVPR/ICCV); NeurIPS orals/spotlights, postdoc w/ Kaiming He, area chair ICLR/ICML/ICCV 2025."
+    },
+    "communication": {
+      "score": 8,
+      "evidence": "Clear concise X announcements of papers; well-organized personal site w/ pubs, code links, colabs; co-instructor MIT CV course; workshop organizer."
+    },
+    "github_url": "https://github.com/LTH14",
+    "linkedin_url": "https://www.linkedin.com/in/tianhong-li-846390b6",
+    "top_repos": [
+      "LTH14/mage",
+      "LTH14/mar",
+      "LTH14/rcg",
+      "LTH14/fractalgen"
+    ]
+  },
+  {
+    "handle": "tianyue_01",
+    "name": "Tianyue Ou",
+    "bio": "MS @LTIatCMU | BS @JohnsHopkins CS | https://t.co/51t8PZxhcR",
+    "followers_count": 100,
+    "pagerank_score": 4.1188012481388006e-05,
+    "underratedness_score": 8.924580047495366e-06,
+    "final_score": 89.5,
+    "recommended_role": "research",
+    "summary": "Tianyue Ou is a standout CMU LTI MS student with impressive research output including first-author NeurIPS on web agents and multiple top-tier publications. Strong expertise in LLM agents, synthetic data, and reasoning benchmarks aligns perfectly with xAI's mission. Prior Meta ML eng experience adds practical skills.",
+    "strengths": [
+      "High-impact research publications (NeurIPS, ICLR)",
+      "Expertise in AI agents and reasoning",
+      "Practical ML engineering at Meta"
+    ],
+    "concerns": [
+      "Limited public GitHub activity/stars (research-lab focused)",
+      "Low X engagement (100 followers)"
+    ],
+    "technical_depth": {
+      "score": 10,
+      "evidence": "First-author NeurIPS 2024 paper 'Synatra' on synthetic data for web agents achieving SOTA; co-author ICLR 2025 MultiUI (7.3M dataset), VisualPuzzles benchmark for multimodal reasoning; multiple arXiv papers on agents/reasoning; deep posts explaining methods."
+    },
+    "project_evidence": {
+      "score": 7,
+      "evidence": "Synatra project (100k demos, CodeLlama-7B model on HF beating GPT-3.5); contributions to neulab/MultiUI, VisualPuzzles, WebArena; personal GitHub (oootttyyy) with 5 repos, low stars but research-focused; prior ML eng at Meta on recs."
+    },
+    "mission_alignment": {
+      "score": 10,
+      "evidence": "Focused on LLM agents, synthetic data, reasoning (VisualPuzzles decouples reasoning from knowledge), web/GUI agents, multi-agent planning; frequent posts on frontier AI research like NeurIPS/ICLR papers."
+    },
+    "exceptional_ability": {
+      "score": 9,
+      "evidence": "Solved data scarcity for web agents via Synatra (cheap synthetic data > human data); SOTA results on WebArena/Mind2Web; first-authorship/leadership in top conf papers as MS student; prior Meta exp."
+    },
+    "communication": {
+      "score": 9,
+      "evidence": "Detailed X threads on Synatra (methods, results, ablations); clear project pages (oootttyyy.github.io/synatra); well-written paper abstracts; teaches concepts like indirect-to-direct knowledge transform."
+    },
+    "github_url": "https://github.com/oootttyyy",
+    "linkedin_url": null,
+    "top_repos": [
+      "neulab/MultiUI",
+      "neulab/VisualPuzzles",
+      "Synatra (project site, data/model on HF)"
+    ]
+  },
+  {
+    "handle": "alexzhuang_",
+    "name": "Alex Zhuang",
+    "bio": "cs @ uwaterloo",
+    "followers_count": 100,
+    "pagerank_score": 3.311746575590742e-05,
+    "underratedness_score": 7.175861526271497e-06,
+    "final_score": 89.5,
+    "recommended_role": "research",
+    "summary": "Exceptional UWaterloo CS undergrad with top AI conference publications and awards, already joined xAI after TIGER Lab internship. Demonstrates deep technical ability in frontier AI research but limited public project visibility and X activity.",
+    "strengths": [
+      "Top-tier AI research publications as undergrad",
+      "Recruited to xAI, CRA award",
+      "Contributions to StructLM and benchmarks"
+    ],
+    "concerns": [
+      "Low GitHub stars/followers, no popular OSS",
+      "Sparse recent X activity, no LinkedIn found"
+    ],
+    "technical_depth": {
+      "score": 10,
+      "evidence": "Published papers in NeurIPS 2024 Datasets & Benchmarks Spotlight (MMLU-Pro), ACL 2023 (Program of Thoughts), core contributor to StructLM (generalist models for structured knowledge, arXiv), undergrad research at TIGER Lab."
+    },
+    "project_evidence": {
+      "score": 7,
+      "evidence": "GitHub https://github.com/azhx with 41 repos, pinned contribution to TIGER-AI-Lab/StructLM; lab projects like RALACs action recognition; Hack the North 2018 participant; no high-star personal repos visible (17 followers)."
+    },
+    "mission_alignment": {
+      "score": 10,
+      "evidence": "AI/LLM research focus (StructLM, MMLU-Pro, PoT); interned at TIGER Lab then joined xAI; early X posts on GPT-4, Karpathy software 3.0, Hinton."
+    },
+    "exceptional_ability": {
+      "score": 10,
+      "evidence": "CRA Outstanding Undergraduate Researcher Award 2024; multiple top-tier AI publications as UWaterloo undergrad; recruited to xAI post-internship; solved hard problems in structured LLM grounding and benchmarks."
+    },
+    "communication": {
+      "score": 7,
+      "evidence": "Clear X posts sharing AI insights (e.g., Karpathy quote, Hinton/Hamilton timelines); co-authored papers in top venues; no exceptional writing samples but adequate."
+    },
+    "github_url": "https://github.com/azhx",
+    "linkedin_url": null,
+    "top_repos": [
+      "TIGER-AI-Lab/StructLM (contributor)",
+      "azhx personal repos (41 total, details sparse)"
+    ]
+  },
+  {
+    "handle": "rhubarbwu",
+    "name": "Rupert Wu @ NeurIPS 11/30-12/7",
+    "bio": "Researcher @togethercompute; MS '24 @UofTCompSci/@VectorInst",
+    "followers_count": 175,
+    "pagerank_score": 1.8668817083925966e-05,
+    "underratedness_score": 3.610651749786185e-06,
+    "final_score": 89.5,
+    "recommended_role": "research",
+    "summary": "Rupert Wu is a strong recent MS grad from UofT/Vector with a NeurIPS 2024 publication on neural collapse in LLMs and researcher role at Together AI. Demonstrates deep ML research experience and engineering skills via internships and GitHub projects. Ideal for research-oriented engineering roles.",
+    "strengths": [
+      "NeurIPS publication and multiple ML papers",
+      "Experience training/analyzing LLMs at Vector/Together/Cohere",
+      "Systems programming skills (CUDA, Rust, etc.)"
+    ],
+    "concerns": [
+      "Limited evidence of large-scale production engineering",
+      "Low GitHub stars and sparse recent technical X posts"
+    ],
+    "technical_depth": {
+      "score": 10,
+      "evidence": "NeurIPS 2024 main conference paper 'Linguistic Collapse: Neural Collapse in (Large) Language Models'; MSc thesis on LLM dynamics under Prof. Vardan Papyan; multiple publications including AAAI, ICML workshop; trained dozens of LLMs; GitHub repos with NC library and analysis code"
+    },
+    "project_evidence": {
+      "score": 7,
+      "evidence": "Active GitHub (23 repos): linguistic-collapse (17 stars, NeurIPS code), neural-collapse (16 stars, NC library), Multimodal-CLIP-Applications/CLIP_FAISS_NNs (CLIP prototypes), Game-of-Life (C++/CUDA), ENAS-Experiments; Cohere ML intern (finetuned LLMs); no high-star or production-scale projects"
+    },
+    "mission_alignment": {
+      "score": 10,
+      "evidence": "Researcher at Together AI (frontier LLM company); MSc/BSc UofT CS AI/Vector Institute; pubs on LLMs, NAS poisoning; NeurIPS 2024/2025 attendance; X posts on LLM neural collapse"
+    },
+    "exceptional_ability": {
+      "score": 9,
+      "evidence": "NeurIPS publication as recent MS grad; high GPA 3.94; analyzed LLM inductive biases/interpretability; Cohere embeddings intern blending datasets for multilingual LLMs; AAAI top 20 oral finalist"
+    },
+    "communication": {
+      "score": 9,
+      "evidence": "Clear X thread explaining NeurIPS paper concepts (NC1-4, scaling trends); well-structured CV; accepted NeurIPS paper demonstrates strong technical writing"
+    },
+    "github_url": "https://github.com/rhubarbwu",
+    "linkedin_url": "https://www.linkedin.com/in/wu-robert",
+    "top_repos": [
+      "rhubarbwu/linguistic-collapse",
+      "rhubarbwu/neural-collapse",
+      "rhubarbwu/Multimodal-CLIP-Applications"
+    ]
+  },
+  {
+    "handle": "awinyimgprocess",
+    "name": "Jinpeng Wang",
+    "bio": "Tenure-track Professor in Central South University\uff0c NUS PHD. Focus on Multi-modality Learning and Data-centric AI.",
+    "followers_count": 556,
+    "pagerank_score": 5.623135923213368e-06,
+    "underratedness_score": 8.893757058769456e-07,
+    "final_score": 89.5,
+    "recommended_role": "research",
+    "summary": "Jinpeng Wang is a tenure-track professor with strong publications in multi-modality and vision-language models, releasing code/datasets for frontier topics like token compression and diffusion acceleration. Ideal for research-focused roles leveraging his data-centric AI expertise.",
+    "strengths": [
+      "Top-tier publications (NeurIPS/CVPR/ICLR)",
+      "Open-source research repos and datasets",
+      "Deep focus on efficient multi-modal AI"
+    ],
+    "concerns": [
+      "Repos have low stars/popularity (<100)",
+      "Limited evidence of production-scale engineering"
+    ],
+    "technical_depth": {
+      "score": 10,
+      "evidence": "Novel research in multi-modality: NeurIPS 2024/2025 on visual token compression for text (VisInContext, VIST), CVPR 2023 (PTP, All-in-One), ICLR acceptances, datasets like TextAtlas5M, diffusion acceleration (Glance arXiv 2512.02899)"
+    },
+    "project_evidence": {
+      "score": 7,
+      "evidence": "Active CSU-JPG GitHub org (9 repos): Glance (diffusion accel), VCode (SVG gen), TextAtlas (81 stars), V-MAGE (23 stars); showlab/VisInContext (25 stars); HF spaces/demos; quality research code but low stars (<100)"
+    },
+    "mission_alignment": {
+      "score": 10,
+      "evidence": "Frequent posts on frontier AI: VLMs, token compression, diffusion speedups, data-centric AI, visual reasoning; critiques/insights on DeepSeek-OCR, Qwen-Image/Flux adaptations"
+    },
+    "exceptional_ability": {
+      "score": 9,
+      "evidence": "Solves hard problems: 1-sample diffusion speedup (50-><10 steps), vision-centric text compression matching human reading; tenure-track prof post-NUS PhD; unique blog on visual text processing"
+    },
+    "communication": {
+      "score": 9,
+      "evidence": "Clear technical posts/papers/blogs (e.g., people_see_text.html explaining visual token history); threads citing prior art; promotes work accessibly"
+    },
+    "github_url": "https://github.com/CSU-JPG",
+    "linkedin_url": "https://sg.linkedin.com/in/jinpeng-wang-068b70226",
+    "top_repos": [
+      "CSU-JPG/Glance",
+      "CSU-JPG/VCode",
+      "CSU-JPG/TextAtlas",
+      "showlab/VisInContext"
+    ]
+  },
+  {
+    "handle": "SaberaTalukder",
+    "name": "Sabera Talukder \ud83e\udd13 @NeurIPS2025",
+    "bio": "\u27e1 PhD @Caltech\n\u27e1 Intern @GoogleResearch\n\u27e1 Fellow @NSF, Chen, @PIMCO\n\u27e1 BS x 2 @Stanford",
+    "followers_count": 3400,
+    "pagerank_score": 5.623135923213368e-06,
+    "underratedness_score": 6.914974279304264e-07,
+    "final_score": 89.5,
+    "recommended_role": "research",
+    "summary": "Sabera is an exceptional PhD researcher specializing in foundation models for time series, multimodal, and neuroscience data, with top-tier publications and code releases. Her entrepreneurial move to co-found a multimodal AI startup demonstrates strong ownership and frontier focus. Ideal for research-oriented engineering at xAI.",
+    "strengths": [
+      "Novel ML research contributions in foundation models",
+      "Prestigious fellowships and top publications",
+      "Hands-on code for research projects",
+      "Entrepreneurial initiative with startup"
+    ],
+    "concerns": [
+      "Limited visibility/popularity of open-source repos",
+      "Recent X activity more promotional than deep technical dives"
+    ],
+    "technical_depth": {
+      "score": 10,
+      "evidence": "PhD Caltech with publications including ICLR 2025 oral 'Population Transformer' (neuroscience foundation model), TMLR 2024 'TOTEM' (time series foundation model across 30+ datasets), NeurIPS workshops on multimodal fusion and architecture-agnostic NNs; Google Scholar top papers with 84/52/19 citations; deep work in tokenization, multimodal representations, neural imputation."
+    },
+    "project_evidence": {
+      "score": 7,
+      "evidence": "GitHub https://github.com/SaberaTalukder with 10 repos, 40 followers; released code for TOTEM (https://github.com/SaberaTalukder/TOTEM), contributions to PopulationTransformer (https://github.com/czlwang/PopulationTransformer) and TOTEM_for_EEG; active research projects with code, Google Research intern experience; no high-star OSS or shipped products."
+    },
+    "mission_alignment": {
+      "score": 9,
+      "evidence": "Focus on foundation models for time series/multimodal/neuro data; co-founding startup rethinking multimodal model architecture; X posts on AI constraints, data wrangling, tokenization, generators/discriminators; 'obsessed' with frontier AI via research and startup."
+    },
+    "exceptional_ability": {
+      "score": 10,
+      "evidence": "Prestigious NSF/Chen/PIMCO fellowships; lead-authored novel foundation models solving hard problems (sparse neural data, sensor failure, time series generality); ICLR oral (top 1.8%); Google Research intern; co-founding startup from PhD with advisor; undergrad honors theses with pubs."
+    },
+    "communication": {
+      "score": 9,
+      "evidence": "Clear personal site detailing research; insightful X threads on ML principles (e.g., generators vs discriminators, constraints in academia); conference blogs (Cosyne); well-written arXiv preprints; engaging startup announcements."
+    },
+    "github_url": "https://github.com/SaberaTalukder",
+    "linkedin_url": "https://www.linkedin.com/in/sabera-talukder-69600bb1",
+    "top_repos": [
+      "TOTEM (https://github.com/SaberaTalukder/TOTEM)",
+      "PopulationTransformer (https://github.com/czlwang/PopulationTransformer)",
+      "TOTEM_for_EEG_code (https://github.com/glchau/TOTEM_for_EEG_code)"
+    ]
+  },
+  {
+    "handle": "ckaplanis1",
+    "name": "Christos Kaplanis",
+    "bio": "Research Scientist at DeepMind",
+    "followers_count": 498,
+    "pagerank_score": 2.0761278297382995e-05,
+    "underratedness_score": 3.341798591026166e-06,
+    "final_score": 88.5,
+    "recommended_role": "research",
+    "summary": "Christos Kaplanis is a strong research candidate with proven track record at DeepMind on frontier world models and continual RL publications. Limited recent public OSS and low social engagement, but exceptional research depth aligns well with xAI's mission.",
+    "strengths": [
+      "Deep expertise in RL and world models",
+      "Publications in top conferences, DeepMind experience"
+    ],
+    "concerns": [
+      "Inactive GitHub (old single repo)",
+      "Low X followers/activity, no standout OSS projects"
+    ],
+    "technical_depth": {
+      "score": 10,
+      "evidence": "Published papers at ICML (e.g., Policy Consolidation for Continual Reinforcement Learning, Continual Reinforcement Learning with Multi-Timescale Replay), contributor to DeepMind's Genie 2 and Genie 3 world models, Google Scholar with papers cited up to 3191 (Gemini 1.5 co-authorship), research in computational neuroscience and ML."
+    },
+    "project_evidence": {
+      "score": 7,
+      "evidence": "GitHub repo multi_timescale_replay (24 stars, 5 forks) for PhD paper on continual RL, last updated 5 years ago; contributed to large-scale DeepMind projects like Genie 2/3 (foundation world models), but no recent or popular open-source projects (no 1k+ stars)."
+    },
+    "mission_alignment": {
+      "score": 10,
+      "evidence": "Research Scientist at DeepMind working on world models for embodied AGI (explicitly stated in Genie 2 post), engages with frontier AI demos (Genie 3 videos), PhD and papers on continual RL towards AGI challenges."
+    },
+    "exceptional_ability": {
+      "score": 9,
+      "evidence": "DeepMind RS solving hard problems in continual learning and scalable world models (Genie series), ICML publications, PhD from Imperial College London under top advisors (Murray Shanahan, Claudia Clopath)."
+    },
+    "communication": {
+      "score": 8,
+      "evidence": "Clear, enthusiastic posts on X about research (e.g., Genie 2 team joy and AGI progress), well-written colleague tribute; papers published in top venues indicate strong technical writing."
+    },
+    "github_url": "https://github.com/ChristosKap",
+    "linkedin_url": "https://uk.linkedin.com/in/christos-kaplanis-265463170",
+    "top_repos": [
+      "multi_timescale_replay"
+    ]
+  },
+  {
+    "handle": "junfanzhu98",
+    "name": "Junfan Zhu\u2708\ufe0fNeurIPS",
+    "bio": "AI Engineer, RL+Agent (open) | @UChicago Math, @GeorgiaTech CS, @StanfordGSB, ex-Quant | Github (1.1k\u2b50\ufe0f): junfanz1 | LinkedIn: junfan-zhu | WeChat: junfanzhu98",
+    "followers_count": 170,
+    "pagerank_score": 1.8668817083925966e-05,
+    "underratedness_score": 3.630890446014407e-06,
+    "final_score": 85.0,
+    "recommended_role": "engineering",
+    "summary": "Junfan is a strong AI engineer with quant math rigor, building agentic RL systems and attending frontier events. Excellent alignment with xAI's focus on reasoning/agents, backed by practical OSS and prototypes.",
+    "strengths": [
+      "Deep RL/agentic AI projects and implementations",
+      "Strong math/quant background for hard reasoning problems",
+      "Active in AI community/conferences"
+    ],
+    "concerns": [
+      "No publications or massive-scale shipped products",
+      "Modest public visibility (170 X followers, ~1k GitHub stars)"
+    ],
+    "technical_depth": {
+      "score": 8,
+      "evidence": "Implemented advanced HFT models (Hawkes processes, RL for trading, stochastic volatility); PyTorch MoE, DeepSeek MLA attention; PhD-level math courses (stochastic calc, real analysis); shares deep conference insights on RL/agents/reasoning"
+    },
+    "project_evidence": {
+      "score": 8,
+      "evidence": "Active GitHub (junfanz1, ~1.1k total stars): MoE-PyTorch, LangGraph agents/RAG chatbots, Cursor AI SaaS, multi-agent systems, interview prep repo; recent 2025 projects at Tensor Auto (agentic RL prototypes, vLLM/DSPy)"
+    },
+    "mission_alignment": {
+      "score": 10,
+      "evidence": "Bio/ posts obsessed with RL+Agents; frequent shares on frontier AI (NeurIPS, DeepSeek, Gemini Robotics, agentic workflows, reasoning); attends PyTorch Conf, Ray Summit, dAGI"
+    },
+    "exceptional_ability": {
+      "score": 8,
+      "evidence": "Ex-quant solving microstructure/RL trading hard problems; ownership in complex agent prototypes (multi-modal RAG, self-org orchestration, DAPO/GRPO); scales LLMs with DeepSpeed/Ray"
+    },
+    "communication": {
+      "score": 9,
+      "evidence": "Clear, structured LinkedIn/X summaries of papers/confs (e.g., Nemotron RL, Nested Learning); key takeaways with visuals/emojis; teaches via OSS repos/docs"
+    },
+    "github_url": "https://github.com/junfanz1",
+    "linkedin_url": "https://www.linkedin.com/in/junfan-zhu",
+    "top_repos": [
+      "Software-Engineer-Coding-Interviews",
+      "MoE-Mixture-of-Experts-in-PyTorch",
+      "Awesome-AI-Engineer-Review",
+      "Cognito-LangGraph-RAG-Chatbot",
+      "MCP-MultiServer-Interoperable-Agent2Agent-LangGraph-AI-System"
+    ]
+  },
+  {
+    "handle": "watneyrobotics",
+    "name": "Watney Robotics",
+    "bio": "Intelligent Robots, Today",
+    "followers_count": 5341,
+    "pagerank_score": 6.247928803570409e-06,
+    "underratedness_score": 7.279121645339492e-07,
+    "final_score": 85.0,
+    "recommended_role": "engineering",
+    "summary": "Watney Robotics demonstrates exceptional real-world robotics engineering with deployed teleop systems solving hard latency/scalability issues, built in Rust for production reliability. Strong alignment with AI scaling through datacenter automation, though lacks public open-source projects. Ideal for infrastructure-heavy engineering roles.",
+    "strengths": [
+      "Proven production deployments of dexterous robots",
+      "Deep expertise in low-latency systems and Rust robotics"
+    ],
+    "concerns": [
+      "No visible GitHub repositories or open-source contributions",
+      "Company account; limited insight into individual engineers' personal projects"
+    ],
+    "technical_depth": {
+      "score": 8,
+      "evidence": "Detailed threads on building low-latency teleoperation system in Rust, replacing ROS2 for prod performance (3.4ms command latency), hardware-accelerated video encoding (<10ms), custom grippers from ALOHA2, Starlink laser links for 87ms photon-to-photon over 7000mi, world's largest cloth manipulation dataset, crates like webrtc and optimization_engine."
+    },
+    "project_evidence": {
+      "score": 8,
+      "evidence": "Live 24/7 deployments folding clothes handling long-tail cases with no downtime, pilots in SF Bay Area, extending infra for cloud robot foundation models, raised $21M seed, partnering hyperscalers for datacenter robots; no public GitHub repos found."
+    },
+    "mission_alignment": {
+      "score": 9,
+      "evidence": "Focused on intelligent robots via teleop data factories for foundation models, autonomous systems for datacenter/supercomputing infra to scale compute, frequent posts on dexterous manipulation, real-world AI robotics deployments."
+    },
+    "exceptional_ability": {
+      "score": 9,
+      "evidence": "Overcoming extreme teleop challenges (high loss/latency/bandwidth), 0 software downtime via Rust stack, custom hardware for high payload/force control, deployed pilots, co-founder backgrounds in low-latency trading and research."
+    },
+    "communication": {
+      "score": 9,
+      "evidence": "Engaging video demos and technical threads clearly explaining stack (e.g., Rust rewrite, ASICs, network optimizations), teaches tradeoffs like wheeled vs humanoid form factors."
+    },
+    "github_url": null,
+    "linkedin_url": "https://www.linkedin.com/company/watneyrobotics",
+    "top_repos": []
+  },
+  {
+    "handle": "kauterry",
+    "name": "Kaushik Ram Sadagopan @ NeurIPS 2025",
+    "bio": "Founding Research Engineer @ Pramaana Labs | Past: Research Engineer @AIatMeta @Stanford @iitmadras",
+    "followers_count": 165,
+    "pagerank_score": 2.6682764214658907e-05,
+    "underratedness_score": 5.219645531124629e-06,
+    "final_score": 83.5,
+    "recommended_role": "research",
+    "summary": "Strong research engineer with proven track record at Meta FAIR on frontier multilingual AI models, publications, and OSS contributions. Founding role at new AI lab indicates ownership and ambition. Limited recent public technical activity on X.",
+    "strengths": [
+      "Deep expertise in NLP/speech translation with high-impact papers and products",
+      "Meaningful OSS contributions to Meta repos",
+      "Strong academic pedigree (Stanford, IIT) and scaling experience"
+    ],
+    "concerns": [
+      "Low X activity/engagement (165 followers, sparse technical posts recently)",
+      "No highly popular personal repos",
+      "Obscure current lab (Pramaana Labs) with limited public info"
+    ],
+    "technical_depth": {
+      "score": 9,
+      "evidence": "Co-authored major Meta FAIR papers like SeamlessM4T (massively multilingual multimodal translation, arXiv preprint), Scaling NMT to 200 languages (Nature paper), over 1000 citations on Google Scholar. Contributions to fairseq2, stopes, deep systems knowledge in speech/NLP/ML translation pipelines."
+    },
+    "project_evidence": {
+      "score": 8,
+      "evidence": "GitHub https://github.com/kauterry with 6 repos including Stanford CS231n retrieval and CS234 projects. Key contributor to facebookresearch/seamless_communication (fixed CPU inference, tutorials, issues). Active in Meta OSS like fairseq2. Shipped products like SeamlessM4T at Meta scale, but no own high-star repos (1k+)."
+    },
+    "mission_alignment": {
+      "score": 8,
+      "evidence": "Past Research Engineer at Meta FAIR on frontier multilingual AI translation models. Founding RE at Pramaana Labs (AI lab). Shared Transformer math resources, proud posts on Seamless launches. Follows AI space (replies on RL infra, conferences), but recent X posts less frequent/technical."
+    },
+    "exceptional_ability": {
+      "score": 9,
+      "evidence": "Founding RE at Pramaana Labs shows ownership. Key role in Meta's SeamlessM4T (TIME Best Invention 2023) and scaling NMT to 200 langs. Publications at NeurIPS workshops, OpenReview. Stanford/IIT background. Evidence of solving hard multilingual speech/text translation at massive scale."
+    },
+    "communication": {
+      "score": 7,
+      "evidence": "Clear professional LinkedIn posts (e.g., citation milestone, paper shares). X posts concise and informative (e.g., Transformer resource share). GitHub issues/PRs practical. Adequate but not exceptional teaching/writing examples."
+    },
+    "github_url": "https://github.com/kauterry",
+    "linkedin_url": "https://www.linkedin.com/in/kaushik95",
+    "top_repos": [
+      "facebookresearch/seamless_communication (contributor)",
+      "kauterry/cs231n-retrieval",
+      "kauterry/cs234_project"
+    ]
+  },
+  {
+    "handle": "iamgrigorev",
+    "name": "George Grigorev",
+    "bio": "now: exploring opensource; prev: training @togethercompute, chatbots&diffusion@snap rare specialty coffee lover",
+    "followers_count": 2803,
+    "pagerank_score": 3.7487572821422455e-06,
+    "underratedness_score": 4.722069104333355e-07,
+    "final_score": 83.0,
+    "recommended_role": "engineering",
+    "summary": "George Grigorev is a skilled ML engineer with production experience at Snap and Together AI, now focused on open-source LLM training optimizations like efficient tokenizers and low-precision stability. Strong on practical engineering for scalable, sample-efficient models on consumer hardware.",
+    "strengths": [
+      "Hands-on training optimizations (FP8, MoE, tokenizers)",
+      "Open-source contributions and clear technical communication"
+    ],
+    "concerns": [
+      "Limited evidence of massive-scale projects or peer-reviewed papers",
+      "Repos not yet at 1k+ stars"
+    ],
+    "technical_depth": {
+      "score": 8,
+      "evidence": "Deep discussions on MoE training dynamics (decoupled FFN, data rephrasing), FP8/NVFP4 stability (muP, bungee scalars, no grad clip), tokenizers (SuperBPE for 20% sample efficiency), normalizations (QK-Norm, LayerNorm scaling); implements DDP/FSDP/TP from scratch; ablations on schedules, optimizers."
+    },
+    "project_evidence": {
+      "score": 8,
+      "evidence": "https://github.com/thepowerfuldeez/sample_efficient_gpt (70M model <20 perplexity on single GPU in 5h); Rust BPE/tokenizer tools; Mixture-of-Depths impl (10% speed, memory savings); FP8 training plans; shipped products at Snap (chatbots/diffusion), Together AI (training)."
+    },
+    "mission_alignment": {
+      "score": 9,
+      "evidence": "Frequent posts on frontier LLM training (DeepSeek V3/V3.2, OLMo, Qwen), open-source optimizations, MoE/RLHF/post-training; exploring sample-efficient GPTs, consumer GPU scaling."
+    },
+    "exceptional_ability": {
+      "score": 8,
+      "evidence": "Solves hard problems like FP8 MoE stability on limited hardware, SuperBPE cross-word merges, efficient single-GPU training; unique insights on activation kurtosis, cautious WD; ownership in personal repos/ablations; ex-Snap/Together scale experience."
+    },
+    "communication": {
+      "score": 9,
+      "evidence": "Detailed X threads (e.g., FP8 normalizations, tokenizer principles); blog https://ggrigorev.me/posts/tokenizer-superbpe/ with plots/code; clear explanations of complex topics like GRPO/KL fixes."
+    },
+    "github_url": "https://github.com/thepowerfuldeez",
+    "linkedin_url": "https://uk.linkedin.com/in/george-grigorev",
+    "top_repos": [
+      "sample_efficient_gpt",
+      "LayerNorm-Scaling"
+    ]
+  },
+  {
+    "handle": "theomonnom",
+    "name": "Th\u00e9o Monnom",
+    "bio": "voice ai @livekit - interested in CG & ML",
+    "followers_count": 266,
+    "pagerank_score": 1.6516752669044782e-05,
+    "underratedness_score": 2.9561513508464266e-06,
+    "final_score": 82.0,
+    "recommended_role": "engineering",
+    "summary": "Strong realtime voice AI engineer with significant OSS contributions to popular LiveKit projects and leadership in Rust SDK. Demonstrates depth in agent frameworks and systems at scale, aligned with AI infrastructure needs. O-1 visa highlights exceptional talent.",
+    "strengths": [
+      "Realtime voice AI expertise and scale",
+      "Proven OSS contributions to high-impact repos",
+      "O-1 visa and startup ownership"
+    ],
+    "concerns": [
+      "Limited personal projects/visibility (low followers, no standout personal repos)",
+      "Sparse recent X activity"
+    ],
+    "technical_depth": {
+      "score": 8,
+      "evidence": "Contributions to LiveKit Agents (8.4k stars) including logs, prometheus, recorder fixes, Rust SDK leadership; posts on AgentTask/workflows, low-latency voice AI, turn detection, Gaussian Splatting/CG"
+    },
+    "project_evidence": {
+      "score": 8,
+      "evidence": "Heavy contributor to livekit/agents (8.4k stars, 1MM downloads/month, 3B calls/year); led Rust SDK used across platforms; personal GitHub with 7 repos, 142 followers"
+    },
+    "mission_alignment": {
+      "score": 8,
+      "evidence": "Works on voice AI agents at LiveKit ('nervous system for AI'); frequent posts on realtime AI agents, multimodal context, WebRTC; interests in ML/CG like Street View Gaussian Splatting"
+    },
+    "exceptional_ability": {
+      "score": 9,
+      "evidence": "O-1 visa approved (extraordinary ability); shipped features at scale in fast-growing startup (Series B); many merged PRs (#1043 PRs total), ownership in complex realtime systems"
+    },
+    "communication": {
+      "score": 8,
+      "evidence": "Clear technical announcements (e.g., Agents 1.2 features, browser integration ideas); responsive GitHub comments; LiveKit blog posts"
+    },
+    "github_url": "https://github.com/theomonnom",
+    "linkedin_url": "https://be.linkedin.com/in/theomonnom",
+    "top_repos": [
+      "livekit/agents",
+      "livekit/rust-sdks"
+    ]
+  },
+  {
+    "handle": "WesleyYue",
+    "name": "Wesley",
+    "bio": "Building high-performance coding assistants @double_ide (YC W23). Previously at @KittyHawkCorp, @Waymo, and other robotics groups. Waterloo \ud83c\udde8\ud83c\udde6",
+    "followers_count": 534,
+    "pagerank_score": 8.101916408396972e-05,
+    "underratedness_score": 1.2896485830373302e-05,
+    "final_score": 78.5,
+    "recommended_role": "engineering",
+    "summary": "Wesley is a strong robotics engineer with Waymo/Kitty Hawk experience now leading a YC-backed AI coding infra startup, demonstrating deep systems knowledge and ownership. Ideal for AI engineering roles leveraging autonomy/ML infra expertise.",
+    "strengths": [
+      "Proven track record in hard robotics/autonomy engineering",
+      "YC founder building AI performance tools",
+      "Engages thoughtfully in AI/ML infra discussions"
+    ],
+    "concerns": [
+      "Limited public OSS contributions or popular repos",
+      "Infrequent posting limits visibility into recent thoughts"
+    ],
+    "technical_depth": {
+      "score": 8,
+      "evidence": "Strong robotics/autonomy experience at Waymo and Kitty Hawk (owned visual-inertial nav system); informed posts on vLLM/SGLang modifiability, robotics data sync frequency as hyperparam, FSD analysis, scaling laws TPP skepticism, inference stacks like Cursor/VSCode SSH."
+    },
+    "project_evidence": {
+      "score": 7,
+      "evidence": "Co-founder Double IDE (YC W23) building high-performance AI coding assistants; GitHub https://github.com/WesleyYue with 38 repos, active in discussions (Remix, Turborepo, ROS, CVAT); shipped systems at Kitty Hawk/Waymo; no 1k+ star repos."
+    },
+    "mission_alignment": {
+      "score": 8,
+      "evidence": "Building AI coding copilot/infra at YC startup; posts on AI models (LoRA, Llama scaling), tools (DuckDB, vLLM), robotics ML; follows AI/ML space closely."
+    },
+    "exceptional_ability": {
+      "score": 9,
+      "evidence": "Ownership of nav system at Kitty Hawk; engineering at Waymo/other robotics; co-founder YC W23 startup solving perf issues in AI coding; transitions hard problems from autonomy to AI infra."
+    },
+    "communication": {
+      "score": 7,
+      "evidence": "Clear, concise technical replies on X e.g., explaining FSD viz/trajectories, robotics freq tradeoffs, inference modifiability; adequate explanations without fluff."
+    },
+    "github_url": "https://github.com/WesleyYue",
+    "linkedin_url": "https://www.linkedin.com/in/wesleyyue",
+    "top_repos": []
+  },
+  {
+    "handle": "MatricesAI",
+    "name": "Matrices",
+    "bio": "Towards self-driving computers",
+    "followers_count": 422,
+    "pagerank_score": 4.1188012481388006e-05,
+    "underratedness_score": 6.810894263148148e-06,
+    "final_score": 78.0,
+    "recommended_role": "engineering",
+    "summary": "Strong AI engineering background in ML infra and agents, building relevant project Matrices.ai aligned with frontier AI goals. Limited public technical posts or high-impact OSS, but credible experience at top labs.",
+    "strengths": [
+      "Deep experience in ML infrastructure and agentic AI",
+      "High mission alignment with AGI/agent focus"
+    ],
+    "concerns": [
+      "Low activity/visibility on X and GitHub repos",
+      "No evidence of popular OSS or published research"
+    ],
+    "technical_depth": {
+      "score": 7,
+      "evidence": "Background as founding engineer at Weights & Biases (ML infra) and engineer at Adept AI (agents); blog posts on RNNs, AI safety showing strong understanding; no papers or novel research visible."
+    },
+    "project_evidence": {
+      "score": 7,
+      "evidence": "Cofounder of Matrices.ai building training environments for LLM agents, partnered with frontier AI labs; GitHub https://github.com/xyzrr with 31 repos but low visibility/stars; shipped products at W&B and Adept."
+    },
+    "mission_alignment": {
+      "score": 10,
+      "evidence": "Building 'self-driving computers' / computer-use agents; bio 'Towards self-driving computers'; posts and blog focused on AI agents, world modeling, freeing humans from work via AI."
+    },
+    "exceptional_ability": {
+      "score": 8,
+      "evidence": "Founding engineer at W&B, engineer at Adept scaling agentic AI; cofounding Matrices partnering frontier labs on hard agent training problems; ownership in early startups."
+    },
+    "communication": {
+      "score": 7,
+      "evidence": "Clear blog posts distilling thoughts (e.g., 'Why RNNs work', startup dynamics); tweets casual/promotional but coherent."
+    },
+    "github_url": "https://github.com/xyzrr",
+    "linkedin_url": "https://www.linkedin.com/in/qianjohn",
+    "top_repos": []
+  },
+  {
+    "handle": "TheNoise2Signal",
+    "name": "Saksham Consul",
+    "bio": "ML Sys Engineer @bfl_ml | Ex @LaminiAI, @Nvidia, @Stanford | Builder",
+    "followers_count": 169,
+    "pagerank_score": 2.0761278297382995e-05,
+    "underratedness_score": 4.042463611423816e-06,
+    "final_score": 77.5,
+    "recommended_role": "infrastructure",
+    "summary": "Strong ML systems engineer with hands-on experience scaling training/serving at frontier AI companies like BFL and Lamini, backed by Stanford MS and relevant publications. Lacks prominent open-source contributions and deep public technical discourse. Solid for infrastructure roles.",
+    "strengths": [
+      "Proven scale infra experience at BFL/Lamini",
+      "Academic pedigree (Stanford MS EE, publications)",
+      "Alignment with frontier gen AI/visual models"
+    ],
+    "concerns": [
+      "Minimal public GitHub activity/projects",
+      "Limited depth in X posts/discussions"
+    ],
+    "technical_depth": {
+      "score": 8,
+      "evidence": "Publications including 'Banishing LLM Hallucinations Requires Rethinking Generalization' (18 cites, Lamini), co-author on FLUX.1 Kontext (19 cites); MS EE Stanford with MLSys focus; built training platform at BFL; conference talks on pretraining visual models"
+    },
+    "project_evidence": {
+      "score": 7,
+      "evidence": "Shipped model serving and training infrastructure from scratch for FLUX at Black Forest Labs (used by millions); Founding ML Sys Engineer at Lamini; GitHub https://github.com/saksham36 exists but no prominent public repos or stars visible"
+    },
+    "mission_alignment": {
+      "score": 9,
+      "evidence": "Current role at Black Forest Labs on visual intelligence/FLUX models; posts on generative AI, visual intelligence, NeurIPS AI/compute discussions; ex-Lamini LLM sys"
+    },
+    "exceptional_ability": {
+      "score": 8,
+      "evidence": "Built exa-scale training platform (A100/H100) from scratch at BFL; Founding engineer at Lamini; Stanford MS EE admit from top Indian undergrad; Nvidia intern; publications solving hallucination/generalization issues"
+    },
+    "communication": {
+      "score": 6,
+      "evidence": "Conference speaking (MSIgnite, NeurIPS attendance); X posts adequate but sparse/not deeply technical; LinkedIn activity promotional"
+    },
+    "github_url": "https://github.com/saksham36",
+    "linkedin_url": "https://www.linkedin.com/in/saksham-consul",
+    "top_repos": []
+  },
+  {
+    "handle": "j_m_sommer",
+    "name": "Johanna Sommer @ NeurIPS 2025",
+    "bio": "ML Research Engineer @PrunaAI | PhD student @TU_Muenchen",
+    "followers_count": 262,
+    "pagerank_score": 2.6682764214658907e-05,
+    "underratedness_score": 4.788590563105895e-06,
+    "final_score": 76.5,
+    "recommended_role": "research",
+    "summary": "Strong ML researcher with top-tier publications in generative modeling and graphs during PhD at TUM, now engineering optimized AI models at PrunaAI. Demonstrates depth via papers but limited visible personal OSS projects or deep X discussions. Aligned with AI advancement through efficiency.",
+    "strengths": [
+      "Published novel research at NeurIPS/ICLR",
+      "Hands-on with frontier models and optimization at PrunaAI"
+    ],
+    "concerns": [
+      "Limited public GitHub activity/stars",
+      "X posts more promotional than deeply technical"
+    ],
+    "technical_depth": {
+      "score": 9,
+      "evidence": "Multiple publications at top conferences (NeurIPS 2021 'Neural Flows', ICLR 2022 'Generalization of Neural Combinatorial Solvers', recent arXiv on molecular generation, GNNs, protein models). PhD at TUM-DAML under G\u00fcnnemann, research in generative models, flows, graphs. PrunaAI work on model optimization shows systems knowledge."
+    },
+    "project_evidence": {
+      "score": 6,
+      "evidence": "Personal GitHub (johannaSommer) with repo generalization-neural-co-solvers for ICLR paper. Contributions to TUM-DAML/MAGNet (motif-aware molecular graphs). No high-star repos or shipped personal products, but PrunaAI releases optimized models (P-Image, Flux). Academic code quality projects."
+    },
+    "mission_alignment": {
+      "score": 8,
+      "evidence": "Frequent posts on frontier AI image/video gen (Flux 2, Nano Banana Pro, P-Image), inference efficiency, OSS AI, NeurIPS. Bio and work fully AI/ML focused, PrunaAI on high-performance models."
+    },
+    "exceptional_ability": {
+      "score": 8,
+      "evidence": "Lead-authored papers solving hard problems in molecular geometry generation, neural flows as ODE alternatives, GNN biases. PhD research + engineering at PrunaAI on real-time optimized models demonstrates ownership and unique insights."
+    },
+    "communication": {
+      "score": 7,
+      "evidence": "Clear, engaging X posts with examples (image gens, prompts). Promotes work effectively. Academic papers well-received (NeurIPS/ICLR). No overly complex explanations in posts, but teaches via shares."
+    },
+    "github_url": "https://github.com/johannaSommer",
+    "linkedin_url": "https://de.linkedin.com/in/johanna-sommer-69a76113b",
+    "top_repos": [
+      "generalization-neural-co-solvers",
+      "TUM-DAML/MAGNet (contributor)"
+    ]
+  },
+  {
+    "handle": "einsums",
+    "name": "fwdpass",
+    "bio": "matmul enthusiast",
+    "followers_count": 167,
+    "pagerank_score": 3.39366777406299e-05,
+    "underratedness_score": 6.6231296467041515e-06,
+    "final_score": 74.5,
+    "recommended_role": "engineering",
+    "summary": "Strong performer in tensor systems programming with a relevant open-source project demonstrating deep ML-adjacent expertise. Engages thoughtfully with AI community on X but lacks high visibility or scale experience. Good fit for performance-critical engineering.",
+    "strengths": [
+      "Deep tensor contraction optimization expertise",
+      "Active open-source contributor in C++ for scientific computing/ML",
+      "Clear alignment with AI performance themes"
+    ],
+    "concerns": [
+      "Low X engagement and followers (167)",
+      "No found professional background or shipped products at scale",
+      "Repo stars modest (65)"
+    ],
+    "technical_depth": {
+      "score": 8,
+      "evidence": "Developed Einsums, a C++ library providing compile-time contraction pattern analysis for optimal tensor operations (e.g., BLAS dgemm), with demos in Hartree-Fock and Coupled Cluster Doubles computations showing performance gains over manual BLAS/Fortran."
+    },
+    "project_evidence": {
+      "score": 7,
+      "evidence": "Active GitHub org https://github.com/Einsums with main repo Einsums/Einsums (65 stars, 11 forks, 8 contributors, recent activity Dec 2025); EinHF repo (1 star, Psi4 plugin demo); conda package available."
+    },
+    "mission_alignment": {
+      "score": 7,
+      "evidence": "Bio 'matmul enthusiast'; X posts/replies on frontier AI like Gemini 3, shampoo/muon papers, model evals, AI infra, labs (OpenAI/Google), tensor multiplication puns."
+    },
+    "exceptional_ability": {
+      "score": 8,
+      "evidence": "Ownership and development of sophisticated tensor optimization library addressing hard problems in tensor algebra for HPC/ML, with compile-time analysis and real-world quantum chem applications."
+    },
+    "communication": {
+      "score": 7,
+      "evidence": "Clear, concise X replies with wit; well-structured README with code examples and performance plots; dedicated docs site https://einsums.github.io/Einsums/."
+    },
+    "github_url": "https://github.com/Einsums",
+    "linkedin_url": null,
+    "top_repos": [
+      "Einsums/Einsums",
+      "Einsums/EinHF"
+    ]
+  },
+  {
+    "handle": "zhzHNN",
+    "name": "Hunter Zhang, Ph.D",
+    "bio": "AGI Infra. Prev. Founding Engineer at Bay Area. PhD @NTUsg. Opinions are my own.",
+    "followers_count": 391,
+    "pagerank_score": 2.6682764214658907e-05,
+    "underratedness_score": 4.468530258856515e-06,
+    "final_score": 74.0,
+    "recommended_role": "infrastructure",
+    "summary": "Competent PhD with ML background now focused on AGI infra/MLSys; strong community engagement and startup experience, but limited standout publications or high-star OSS projects. Suitable for infra roles with potential in scaling AI systems.",
+    "strengths": [
+      "Deep interest in MLSys/AGI infra",
+      "Founding engineer ownership",
+      "Active conference participation"
+    ],
+    "concerns": [
+      "Few novel research contributions or popular repos",
+      "Posts more reactive than deeply technical"
+    ],
+    "technical_depth": {
+      "score": 7,
+      "evidence": "PhD in Computer Science from NTU Singapore with publications on ML topics like resume quality assessment (arXiv:1810.02832) and multimodal learning; active discussions on MLSys, Ray debugging, LLM training infra (e.g., Kaiju, HuggingFace playbook), AI for systems at NeurIPS."
+    },
+    "project_evidence": {
+      "score": 7,
+      "evidence": "GitHub (HuaizhengZhang) with Awesome MLSys/AI Engineering lists and 127 repos showing curation/activity; Founding Engineer at BreezeML (Bay Area startup); current ByteDance Seed Training Infra for AGI."
+    },
+    "mission_alignment": {
+      "score": 9,
+      "evidence": "Bio emphasizes AGI Infra; frequent posts on frontier topics like NeurIPS ML for sys workshop, RL frameworks/hiring, Gemini scaling, agent training (rLLM), PyTorchCon LLM infra."
+    },
+    "exceptional_ability": {
+      "score": 7,
+      "evidence": "Founding Engineer role at BreezeML demonstrates ownership/startup experience; PhD research; now building AGI training infra at ByteDance Seed, networking/inviting talks at confs."
+    },
+    "communication": {
+      "score": 7,
+      "evidence": "Clear, concise X posts sharing insights (e.g., Ray pain points, conf highlights); engages community by inviting talks (e.g., MAP agents); curates Awesome lists effectively."
+    },
+    "github_url": "https://github.com/HuaizhengZhang",
+    "linkedin_url": "https://www.linkedin.com/in/huaizheng",
+    "top_repos": [
+      "Awesome System for Machine Learning",
+      "MLSys and MLOps Awesome"
+    ]
+  },
+  {
+    "handle": "the_philbert",
+    "name": "Philip Herron",
+    "bio": "Lead Maintainer for Rust GCC https://t.co/NKTEZsNIxG",
+    "followers_count": 330,
+    "pagerank_score": 3.39366777406299e-05,
+    "underratedness_score": 5.849015057095324e-06,
+    "final_score": 73.0,
+    "recommended_role": "infrastructure",
+    "summary": "Philip Herron is an exceptional systems/compiler engineer with deep expertise demonstrated through leading the gccrs project, a ambitious alternative Rust compiler for GCC. His work shows outstanding technical depth and ownership on hard problems, but lacks any alignment with AI/AGI interests. Ideal for infrastructure-heavy roles requiring compiler/systems optimization skills.",
+    "strengths": [
+      "Deep compiler expertise (Rust type system, traits, MIR)",
+      "Proven open-source leadership (gccrs maintainer)"
+    ],
+    "concerns": [
+      "No AI/ML experience or interest shown",
+      "Limited evidence of shipped production-scale systems"
+    ],
+    "technical_depth": {
+      "score": 9,
+      "evidence": "Lead maintainer of gccrs (Rust GCC frontend), implementing advanced features like const generics, fn traits, impl Trait (APIT/RPIT), trait solver fixes; deep discussions on type systems, borrow checker (Polonius), memory safety tradeoffs; technical blogs on Substack (e.g., 'Implementing impl Trait in gccrs'); talks at conferences (GNU Tools Cauldron, LPC); authored 'Learning Cython Programming' book."
+    },
+    "project_evidence": {
+      "score": 9,
+      "evidence": "Lead maintainer of https://github.com/Rust-GCC/gccrs (2.8k stars, active upstream to GCC); contributions to GCC 15+ Rust updates (Phoronix coverage); personal GitHub https://github.com/philberty with compiler-related work; long-term GCC Python frontend project; patent on storage replication."
+    },
+    "mission_alignment": {
+      "score": 1,
+      "evidence": "No posts or evidence of interest in AI/ML/AGI; all activity focused on compilers, systems languages (Rust/GCC), embedded systems."
+    },
+    "exceptional_ability": {
+      "score": 9,
+      "evidence": "Solving extremely hard problems: building full Rust compiler frontend in C++ for GCC (type system, MIR, traits); leadership on gccrs upstreaming; nominated OpenUK Awards 2023; persistent multi-year contributions despite challenges (e.g., GCC 13 disablement)."
+    },
+    "communication": {
+      "score": 8,
+      "evidence": "Clear technical X posts explaining progress/challenges (e.g., hello world requiring full libstd); detailed Substack blogs with diagrams on complex topics like impl Trait desugaring; conference talks; book authorship."
+    },
+    "github_url": "https://github.com/philberty",
+    "linkedin_url": "https://uk.linkedin.com/in/philip-herron-a0527b3b",
+    "top_repos": [
+      "Rust-GCC/gccrs",
+      "philberty/cython-book"
+    ]
+  },
+  {
+    "handle": "romeovdean",
+    "name": "Romeo Dean",
+    "bio": "Harvard CS | @AI_Futures_",
+    "followers_count": 1242,
+    "pagerank_score": 3.7487572821422455e-06,
+    "underratedness_score": 5.261204690391367e-07,
+    "final_score": 73.0,
+    "recommended_role": "research",
+    "summary": "Romeo Dean excels as a Harvard CS AB/SM researcher focused on AI forecasting, infrastructure scaling, and policy, with standout contributions to the 'AI 2027' report and Dwarkesh's AI buildout analysis demonstrating deep systems-level understanding. His mission passion and communication are top-tier, but absence of engineering projects limits production readiness. Ideal for research-oriented roles advancing xAI's strategic foresight.",
+    "strengths": [
+      "Exceptional AI compute/infrastructure forecasting and analysis",
+      "Perfect mission fit with frontier AI obsession",
+      "Outstanding research output and communication"
+    ],
+    "concerns": [
+      "No evidence of hands-on projects, code, or shipped products",
+      "Experience skewed toward research/policy over engineering implementation"
+    ],
+    "technical_depth": {
+      "score": 8,
+      "evidence": "Co-authored 'AI 2027' report with detailed compute and security forecasts (ai-2027.com); co-authored Dwarkesh Patel's 'Thoughts on the AI buildout' blog with quantitative models on fab CapEx, power needs, supply chains, labor, US-China dynamics, and growth scenarios using spreadsheets; Harvard CS243 presentation on data ingestion for production ML systems; frequent X posts analyzing chips, energy scaling, timelines."
+    },
+    "project_evidence": {
+      "score": 2,
+      "evidence": "No public GitHub profile, repositories, or open-source contributions found despite extensive searches; only academic presentation in CS course noted."
+    },
+    "mission_alignment": {
+      "score": 10,
+      "evidence": "Obsessed with frontier AI: personal AGI median 2032, co-authored reports/blogs on scaling to superintelligence, US-China AI race, compute forecasts; bio links to @AI_Futures_; posts frequently on AI infra, timelines, policy."
+    },
+    "exceptional_ability": {
+      "score": 9,
+      "evidence": "Harvard CS concurrent AB/SM cum laude; Researcher at AI Futures Project; former AI Policy Fellow at IAPS; AI Safety Student Team lead; Top Ten Seniors in Innovation; co-authored influential works with experts (ex-OpenAI Daniel Kokotajlo, Dwarkesh Patel, Scott Alexander); unique quantitative insights on hard problems like AI buildout feasibility and geopolitical risks."
+    },
+    "communication": {
+      "score": 10,
+      "evidence": "Excellent technical writing in detailed blog/report with calcs, graphs, spreadsheets; clear, engaging X posts with charts (e.g., solar doubling); teaches complex topics like CapEx overhangs, energy lead times accessibly."
+    },
+    "github_url": null,
+    "linkedin_url": "https://www.linkedin.com/in/romeo-dean-789313200",
+    "top_repos": []
+  },
+  {
+    "handle": "BahlAnuraag",
+    "name": "Anuraag Bahl",
+    "bio": "Head of AIP, Commercial @PalantirTech",
+    "followers_count": 531,
+    "pagerank_score": 5.739502685329998e-05,
+    "underratedness_score": 9.144222855856376e-06,
+    "final_score": 67.5,
+    "recommended_role": "engineering",
+    "summary": "Anuraag Bahl has strong Palantir experience in AI platform commercialization and prior engineering contributions evidenced by patents, making him a solid engineering candidate with enterprise AI exposure. Lacks public deep technical discussions or personal OSS projects. Suited for infrastructure/engineering roles leveraging scalable systems knowledge.",
+    "strengths": [
+      "Palantir AIP leadership and scale deployments",
+      "Patents demonstrating systems engineering depth"
+    ],
+    "concerns": [
+      "No personal GitHub or open-source projects",
+      "X activity promotional, not technically deep"
+    ],
+    "technical_depth": {
+      "score": 6,
+      "evidence": "Listed as inventor on multiple Palantir patents related to data resolution, network troubleshooting, and database systems (e.g., US11106692B1, US10721142B1). X posts discuss AI FDE, AIP primitives, Ontology at high level but no deep technical explanations or novel research."
+    },
+    "project_evidence": {
+      "score": 7,
+      "evidence": "Shipped products at Palantir scale including AIP (AI Platform) as Head of AIP Commercial. Contributor (@bahlanuraag) to Palantir's aip-community-registry GitHub repo (TypeScript/Python). No personal GitHub profile or popular OSS projects (1k+ stars) found."
+    },
+    "mission_alignment": {
+      "score": 7,
+      "evidence": "Frequent posts about Palantir AIP, AI in enterprise (e.g., AI FDE + AIP, xAI at DevCon2, Industry AI). Collaborations like Panasonic using AIP. Clearly interested in ML/AI via job, follows space, but enterprise-focused not pure frontier AGI."
+    },
+    "exceptional_ability": {
+      "score": 7,
+      "evidence": "Leadership role at Palantir (Head of AIP Commercial, prior Edge & IoT Engineering lead), patents indicate solving hard data/systems problems at scale. Competent track record in high-impact environment."
+    },
+    "communication": {
+      "score": 7,
+      "evidence": "Clear, concise X posts promoting Palantir AI products and events. Explains concepts like 'AI FDE + AIP = Builder velocity' straightforwardly, engages community."
+    },
+    "github_url": null,
+    "linkedin_url": "https://www.linkedin.com/in/anuraag-bahl",
+    "top_repos": [
+      "palantir/aip-community-registry"
+    ]
+  },
+  {
+    "handle": "Ani_nlp",
+    "name": "Ani Nrusimha",
+    "bio": "infra @ humans&",
+    "followers_count": 84,
+    "pagerank_score": 4.5966560798852275e-05,
+    "underratedness_score": 1.0346650714862941e-05,
+    "final_score": 67.0,
+    "recommended_role": "infrastructure",
+    "summary": "Strong systems/ML researcher with relevant publications in model optimization and PhD at MIT, suitable for infra/engineering roles. Lacks visible open-source projects or massive impact/scale experience. Good AI interest but not frontier AGI-focused.",
+    "strengths": [
+      "Deep systems knowledge from Checkmate/MLSys paper and GPU/ML internships",
+      "MIT PhD in NLP/systems aligning with AI infra needs",
+      "Thoughtful public discourse on AI/recsys"
+    ],
+    "concerns": [
+      "No prominent GitHub repos or OSS contributions",
+      "Low X engagement/followers, limited visibility",
+      "Current role at small/unknown humans& lacks scale evidence"
+    ],
+    "technical_depth": {
+      "score": 8,
+      "evidence": "Published papers including MLSys 2020 'Checkmate' on tensor rematerialization for memory optimization in DNN training, WACV 2022 on self-supervised pretraining, consumer prediction papers; PhD at MIT EECS/NLP with Yoon Kim; systems/ML internships at Samsung GPU perf and Apple ML; X posts show knowledge of recsys scaling laws citing meta-research"
+    },
+    "project_evidence": {
+      "score": 4,
+      "evidence": "No personal GitHub profile or popular repos found (1k+ stars); contributed to Berkeley project program-gan; research projects like SymGen, Checkmate but no code links; substack posts on recsys ideas but no implementations; internships but no shipped products evident"
+    },
+    "mission_alignment": {
+      "score": 7,
+      "evidence": "Posts frequently on AI topics: recsys scaling, AI adoption, companions risks, video gen, persuasion/recsys risks; follows AI researchers like @random_walker, @nabeelqu; NLP PhD MIT, now infra at humans& AI company; interested in ML/AI scaling/applications"
+    },
+    "exceptional_ability": {
+      "score": 8,
+      "evidence": "Solved hard systems problems (Checkmate breaks memory wall for large models); MIT PhD candidate in competitive EECS/NLP; Berkeley CS BS; quality research publications/venues; thoughtful insights on AI progress/adoption"
+    },
+    "communication": {
+      "score": 7,
+      "evidence": "Clear, concise X replies with nuanced takes (e.g., recsys scaling citing substack, AI error rates); substack posts explain recsys policy ideas accessibly; no poor explanations noted"
+    },
+    "github_url": null,
+    "linkedin_url": null,
+    "top_repos": []
+  },
+  {
+    "handle": "RomiLifshitz",
+    "name": "Romi Lifshitz @NeurIPS \u2708\ufe0f",
+    "bio": "Quantum machine learning, quantum information theory, non-local games, quantum security | co-founder @ stealth | ex-@pasqal_quantum @QuantumIQC",
+    "followers_count": 178,
+    "pagerank_score": 1.8668817083925966e-05,
+    "underratedness_score": 3.598887336065451e-06,
+    "final_score": 63.50000000000001,
+    "recommended_role": "research",
+    "summary": "Romi Lifshitz is a strong quantum information researcher with publications from Master's under Thomas Vidick and practical experience at Pasqal, showing depth in quantum-ML intersections. While enthusiastic about AI reasoning advances, lacks visible software engineering projects or core ML scaling work. Suitable for research roles bridging quantum and AI.",
+    "strengths": [
+      "Deep quantum research with publications",
+      "Interest in AI reasoning and quantum ML",
+      "Startup founding experience"
+    ],
+    "concerns": [
+      "No public GitHub repos or OSS contributions",
+      "Primary focus on quantum over classical ML/AGI",
+      "Low X engagement and visibility"
+    ],
+    "technical_depth": {
+      "score": 9,
+      "evidence": "Published Master's thesis on Noise-Robust Self-Testing for non-local games (arxiv:2505.13537, supervised by Thomas Vidick); undergrad thesis Quantum Deep Dreaming for quantum circuit design (arxiv:2211.04343); posts demonstrating deep quantum information theory knowledge, e.g., entanglement detection in noisy systems, quantum error correction analyses."
+    },
+    "project_evidence": {
+      "score": 2,
+      "evidence": "GitHub profile https://github.com/rolifshitz exists with 5 repositories (likely private, no public repos, stars, or activity visible); co-founder of stealth quantum startup; ex-Pasqal quantum algorithms developer, but no open-source contributions or shipped products evident."
+    },
+    "mission_alignment": {
+      "score": 6,
+      "evidence": "Bio emphasizes quantum machine learning; posts excitement about AI reasoning (o1/o3 discovering quantum results used by Scott Aaronson), attends NeurIPS for networking; follows frontier AI but content primarily quantum-focused."
+    },
+    "exceptional_ability": {
+      "score": 8,
+      "evidence": "Novel contributions to quantum self-testing under noise (applicable to noisy hardware); worked at Pasqal on quantum hardware/applications; co-founder stealth startup; collaborations/visits at top quantum labs (Weizmann, IQC, etc.)."
+    },
+    "communication": {
+      "score": 8,
+      "evidence": "Clear, structured Twitter threads explaining complex quantum concepts (e.g., non-local games for entanglement detection, noise robustness benchmarks); accessible explanations with visuals and references; engaging style."
+    },
+    "github_url": "https://github.com/rolifshitz",
+    "linkedin_url": null,
+    "top_repos": []
+  },
+  {
+    "handle": "mihiranand",
+    "name": "Mihir Anand",
+    "bio": "@xai \u2022 @stanford \u2022 https://t.co/sz7Lj3M1Vu",
+    "followers_count": 492,
+    "pagerank_score": 3.311746575590742e-05,
+    "underratedness_score": 5.341088098788355e-06,
+    "final_score": 49.0,
+    "recommended_role": "engineering",
+    "summary": "Mihir is a Stanford CS student affiliated with xAI, indicating solid engineering foundation, but public presence lacks technical depth, projects, or standout work. Suitable for entry-level roles with potential given affiliations.",
+    "strengths": [
+      "xAI experience/affiliation",
+      "Stanford CS education",
+      "Interest in AI via posts"
+    ],
+    "concerns": [
+      "No public GitHub repos or projects",
+      "Limited technical content on X",
+      "Private/low-visibility professional details"
+    ],
+    "technical_depth": {
+      "score": 4,
+      "evidence": "Stanford CS student employed at xAI per bio/LinkedIn, but no public papers, research, or deep technical discussions. One X post on LLMs aiding momentum in writing/learning shows basic insight."
+    },
+    "project_evidence": {
+      "score": 4,
+      "evidence": "GitHub profile https://github.com/mihiranan exists with 7 repositories (details private or not indexed), no visible public projects, stars, or contributions."
+    },
+    "mission_alignment": {
+      "score": 7,
+      "evidence": "xAI affiliation in bio, quotes xAI announcements (e.g., Grok 4.1), occasional AI-related posts like on language models, but mostly casual content."
+    },
+    "exceptional_ability": {
+      "score": 4,
+      "evidence": "xAI and Stanford CS suggest standard competent background, no public evidence of hard problems solved or unique insights."
+    },
+    "communication": {
+      "score": 7,
+      "evidence": "Clear, engaging writing in motivational X posts (e.g., LLM momentum post), good explanations in casual context."
+    },
+    "github_url": "https://github.com/mihiranan",
+    "linkedin_url": "https://www.linkedin.com/in/mihiranan",
+    "top_repos": []
+  },
+  {
+    "handle": "juleszqiu",
+    "name": "Jules",
+    "bio": "@radicalvcfund, @HarvardMath \u2229 @Harvard_History",
+    "followers_count": 92,
+    "pagerank_score": 6.747727420698903e-05,
+    "underratedness_score": 1.4887102712012655e-05,
+    "final_score": 47.5,
+    "recommended_role": "none",
+    "summary": "Jules Qiu is a talented AI VC investor with a strong math background from Harvard and impressive early career progression in top funds like Coatue and Radical Ventures. However, lacks any visible engineering experience, projects, or technical depth beyond education.",
+    "strengths": [
+      "Elite AI ecosystem connections (Dean, Hinton, Fan, startup CEOs)",
+      "Harvard Math education",
+      "Passion for frontier AI demonstrated via investing/hosting"
+    ],
+    "concerns": [
+      "No software engineering or technical project evidence",
+      "Career focused on VC/investing, not building",
+      "Low X activity with no deep technical content"
+    ],
+    "technical_depth": {
+      "score": 4,
+      "evidence": "Harvard Math secondary (BA 2019, Phi Beta Kappa), but no published papers, novel research, or deep technical discussions/posts found. Posts are high-level AI hype (e.g., Sunday Robotics ACT-1, NeurIPS events)."
+    },
+    "project_evidence": {
+      "score": 1,
+      "evidence": "No GitHub profile, repositories, or open-source contributions found despite searches. No evidence of side projects, shipped products, or code."
+    },
+    "mission_alignment": {
+      "score": 10,
+      "evidence": "Principal AI investor at Radical Ventures (@radicalvcfund), posts about frontier AI (Sunday Robotics launch, NVDA, hosting Jeff Dean & Geoff Hinton at NeurIPS), moderating AI panels, dinners with Nvidia Jim Fan."
+    },
+    "exceptional_ability": {
+      "score": 4,
+      "evidence": "Progressed to VP at Coatue Management post-Harvard, now Principal at top AI VC; strong network/connections. No evidence of solving hard engineering problems or unique technical insights."
+    },
+    "communication": {
+      "score": 7,
+      "evidence": "Clear, concise X/LinkedIn posts (e.g., event invites, investment announcements); hosts panels/dinners effectively."
+    },
+    "github_url": null,
+    "linkedin_url": "https://www.linkedin.com/in/jules-qiu",
+    "top_repos": []
+  },
+  {
+    "handle": "shmkane",
+    "name": "Kane",
+    "bio": "swe @getbestlifeapp / opinions my own / $TSLA / \ud83c\uddfa\ud83c\uddf8\ud83c\udde8\ud83c\udde6",
+    "followers_count": 504,
+    "pagerank_score": 4.1009842107520326e-05,
+    "underratedness_score": 6.588393791058772e-06,
+    "final_score": 47.0,
+    "recommended_role": "engineering",
+    "summary": "Soham Kane is a software engineer focused on mobile health apps with side projects in gaming plugins and RN health integrations. Strong enthusiasm for Tesla's AI efforts but lacks public demonstration of advanced technical depth or impactful work.",
+    "strengths": [
+      "Alignment with AI via Tesla/xAI interest",
+      "Experience in health data mobile apps"
+    ],
+    "concerns": [
+      "Minimal GitHub activity and low project traction",
+      "No published papers, popular OSS, or deep tech posts",
+      "Limited professional profile visibility"
+    ],
+    "technical_depth": {
+      "score": 4,
+      "evidence": "Contributions to react-native-health and react-native-google-fit for health data integration; Minecraft plugin SellStick shows basic Java plugin dev; no deep systems/ML discussions in posts"
+    },
+    "project_evidence": {
+      "score": 4,
+      "evidence": "GitHub repo SellStick (5 stars, Minecraft economy plugin); issues/PRs on RN health libs; SWE at getbestlifeapp (health tracking mobile app by nonprofit LLIF)"
+    },
+    "mission_alignment": {
+      "score": 7,
+      "evidence": "Frequent X posts on Tesla FSD, Robotaxi, Neuralink, AI UI/software critiques, comma.ai data, xAI healthcare ideas; bio $TSLA"
+    },
+    "exceptional_ability": {
+      "score": 4,
+      "evidence": "Standard SWE role at small nonprofit; no evidence of scale, ownership of hard problems, or unique insights"
+    },
+    "communication": {
+      "score": 5,
+      "evidence": "Clear, concise X replies on tech topics like FSD UI, software integration; adequate explanations"
+    },
+    "github_url": "https://github.com/shmkane",
+    "linkedin_url": null,
+    "top_repos": [
+      "SellStick"
+    ]
+  },
+  {
+    "handle": "Sbhaiwala03",
+    "name": "Sahil Bhaiwala",
+    "bio": "Building Handshake AI",
+    "followers_count": 152,
+    "pagerank_score": 2.2492543692853474e-06,
+    "underratedness_score": 4.4712893875902344e-07,
+    "final_score": 36.5,
+    "recommended_role": "none",
+    "summary": "Sahil Bhaiwala is a strategy leader with experience at Scale AI and Handshake AI in the AI data labeling space. Lacks any evidence of hands-on engineering, technical depth, or projects, making him unsuitable for engineering roles.",
+    "strengths": [
+      "AI industry experience in data for frontier models",
+      "Strong mission alignment with AGI-relevant work"
+    ],
+    "concerns": [
+      "No technical background or contributions demonstrated",
+      "Inactive on technical content, low X engagement"
+    ],
+    "technical_depth": {
+      "score": 2,
+      "evidence": "No technical posts, code, or discussions on X. High-level mentions of AI applications and human data for training, but no deep systems knowledge, papers, or novel contributions evident."
+    },
+    "project_evidence": {
+      "score": 1,
+      "evidence": "No GitHub profile or repositories found. No open-source projects or engineering contributions visible."
+    },
+    "mission_alignment": {
+      "score": 7,
+      "evidence": "Current role as Chief Strategy & Innovation Officer at Handshake AI, focused on human data for frontier AI models. Recent posts promote AI data business."
+    },
+    "exceptional_ability": {
+      "score": 4,
+      "evidence": "Previous Director at Scale AI (public sector), leadership in AI data companies, but business/strategy roles, no standout engineering achievements."
+    },
+    "communication": {
+      "score": 7,
+      "evidence": "Clear, professional blog post on Handshake AI strategy. X posts are concise and articulate business insights."
+    },
+    "github_url": null,
+    "linkedin_url": "https://www.linkedin.com/in/sahil-bhaiwala-459b0354/",
+    "top_repos": []
+  }
+]

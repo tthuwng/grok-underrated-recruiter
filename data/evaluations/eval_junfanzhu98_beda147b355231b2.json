@@ -1,0 +1,24 @@
+{
+  "relevant": false,
+  "score": 0.25,
+  "reasoning": "Candidate shows familiarity with cutting-edge AI papers on RL, agents, transformers, and diffusion models through detailed summaries, but provides no evidence of personally building or shipping exceptional work. Tweets focus on networking, conferences (e.g., NeurIPS), and sharing others' research without original contributions, code, or ownership of hard problems. Github with 1.1k stars is mentioned in bio but not demonstrated or linked in tweets, failing the 'builders over talkers' principle.",
+  "detected_skills": [
+    "AI paper summarization",
+    "RLHF/RL agents knowledge",
+    "Transformers and diffusion models",
+    "Multi-modal LLMs"
+  ],
+  "red_flags": [
+    "No original technical content or code",
+    "Heavy networking/promotional tweets",
+    "Mostly retweets/shares of others' work",
+    "No evidence of shipping products"
+  ],
+  "recommended_role": "none",
+  "standout_tweets": [
+    9,
+    10,
+    12
+  ],
+  "exceptional_work": ""
+}

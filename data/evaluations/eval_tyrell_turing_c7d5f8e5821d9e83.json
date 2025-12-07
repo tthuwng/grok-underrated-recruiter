@@ -1,0 +1,25 @@
+{
+  "relevant": false,
+  "score": 0.25,
+  "reasoning": "Candidate shows theoretical depth in multi-agent RL, embedded agency, and game theory via a detailed thread on the MUPI framework paper, but no evidence of personally building or shipping exceptional engineering work like code, models, or infrastructure. Ownership is unclear as they credit a team and others for spearheading, with focus on academia/Google research rather than hands-on implementation. Mission alignment is partial with AI/LLM mentions, but anti-Elon tweet and Google affiliation raise red flags for xAI fit.",
+  "detected_skills": [
+    "Multi-agent RL",
+    "Game Theory",
+    "Embedded Agency",
+    "Theory of Mind",
+    "Neuroscience-AI"
+  ],
+  "red_flags": [
+    "Anti-Elon bias (tweet 26)",
+    "Google employee",
+    "Theoretical focus without code/implementation evidence",
+    "Team promotion over personal ownership"
+  ],
+  "recommended_role": "none",
+  "standout_tweets": [
+    10,
+    12,
+    20
+  ],
+  "exceptional_work": ""
+}

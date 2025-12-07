@@ -1,0 +1,23 @@
+{
+  "relevant": true,
+  "score": 0.65,
+  "reasoning": "Candidate has co-authored papers at top conferences like NeurIPS 2021 ('Neural Flows: Efficient Alternative to Neural ODEs') and ICLR 2022 ('realistic evaluation of Neural Combinatorial Solvers'), showing evidence of exceptional research ability and technical depth in advanced ML topics like flow models and combinatorial optimization. Current role at PrunaAI involves OSS AI and inference efficiency for diffusion/flow matching models, aligning somewhat with xAI's ML stack, though more image-gen focused than foundational training/reasoning. Limited direct evidence of personal ownership or shipping production systems, with tweets emphasizing team promo over solo builds.",
+  "detected_skills": [
+    "ML Research",
+    "Neural ODEs/Flows",
+    "Combinatorial Optimization",
+    "Diffusion Models",
+    "Inference Optimization"
+  ],
+  "red_flags": [
+    "Heavy promotional content for company booth/events",
+    "Older research highlights (2021-2022), recent tweets lack new technical depth"
+  ],
+  "recommended_role": "research",
+  "standout_tweets": [
+    15,
+    16,
+    5
+  ],
+  "exceptional_work": "Co-authored NeurIPS/ICLR papers on Neural Flows as Neural ODE alternative and realistic evals of Neural Combinatorial Solvers"
+}

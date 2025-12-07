@@ -1,0 +1,23 @@
+{
+  "relevant": true,
+  "score": 0.87,
+  "reasoning": "Candidate demonstrates exceptional ability through leading open-source projects like Cornserve (distributed serving for multimodal models), Cornstarch (multimodal training system), and Perseus/Zeus (energy optimization for ML training), with NeurIPS tutorial on ML power/energy. Shows deep technical depth in systems for DL infra, handling multimodality challenges, model fission, and energy bloat with code/papers. Strong mission alignment with xAI via focus on efficient training/serving for advanced models, ownership as co-lead, and clear communication.",
+  "detected_skills": [
+    "distributed ML serving",
+    "multimodal model training",
+    "energy/power optimization",
+    "open source systems",
+    "ML infrastructure"
+  ],
+  "red_flags": [],
+  "recommended_role": "infrastructure",
+  "standout_tweets": [
+    6,
+    14,
+    15,
+    24,
+    25,
+    29
+  ],
+  "exceptional_work": "Co-led Cornserve, a programmable distributed serving platform for any-to-any multimodal models; built Perseus/Zeus for energy-efficient DL training without throughput loss; developed Cornstarch for stitching multimodal encoders/LLMs"
+}

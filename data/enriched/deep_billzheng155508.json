@@ -1,0 +1,102 @@
+{
+  "handle": "BillZheng155508",
+  "bio": "EECS Undergraduate at Berkeley | Research at Robotics AI & Learning Lab @berkeley_ai",
+  "followers": 92,
+  "technical_depth": {
+    "score": 10,
+    "evidence": "Co-author and presenter on PALO (CoRL 2024, arXiv:2408.16228) and TRA (NeurIPS 2025) papers on robot learning: few-shot imitation via language optimization and temporally-aligned representations for compositional generalization."
+  },
+  "project_evidence": {
+    "score": 7,
+    "evidence": "Contributed to PALO project with code released at https://github.com/vivekmyers/palo-robot (team repo from RAIL lab); no personal GitHub repos found, but lab projects presented at top conferences."
+  },
+  "mission_alignment": {
+    "score": 10,
+    "evidence": "Research at Berkeley RAIL/BAIR lab (Robotics AI & Learning Lab); X posts frequently about frontier robotics/ML topics like RL, imitation learning, representations; advised by Sergey Levine, Kuan Fang."
+  },
+  "exceptional_ability": {
+    "score": 10,
+    "evidence": "As EECS undergrad, solved hard problems in robot instruction-following and few-shot adaptation, leading to NeurIPS/CoRL publications; ownership shown in presentations and collaborations."
+  },
+  "communication": {
+    "score": 8,
+    "evidence": "Clear, concise X posts summarizing complex research (e.g., PALO achieving 15x data efficiency, TRA for long-horizon tasks); presents at conferences."
+  },
+  "final_score": 90.5,
+  "summary": "Exceptional undergrad researcher at Berkeley's RAIL lab with top-tier publications in robotics AI as lead contributor on conference papers. Strong alignment with xAI's AI focus through frontier robot learning work. Limited public open-source footprint.",
+  "strengths": [
+    "Published papers at NeurIPS/CoRL as undergrad",
+    "Deep expertise in RL/robotics at top lab (BAIR/RAIL)"
+  ],
+  "concerns": [
+    "No personal GitHub or visible open-source projects",
+    "Low X engagement (92 followers, infrequent posts)"
+  ],
+  "recommended_role": "research",
+  "github_url": null,
+  "linkedin_url": "https://www.linkedin.com/in/bill-zheng-5207991ab",
+  "top_repos": [
+    "vivekmyers/palo-robot"
+  ],
+  "citations": [
+    "https://dblp.org/pid/386/2313",
+    "https://openreview.net/pdf/7d44b9b34f8443654f0b834a9bfe9a359da617e8.pdf",
+    "https://x.com/i/status/1834797737176416488",
+    "https://www.linkedin.com/posts/billzheng22_after-a-few-long-months-of-recruiting-while-activity-7256650933441318914-XljT",
+    "https://x.com/BillZheng155508",
+    "https://www.linkedin.com/in/bill-zheng-678478b",
+    "https://www.researchgate.net/publication/383530480_Policy_Adaptation_via_Language_Optimization_Decomposing_Tasks_for_Few-Shot_Imitation",
+    "https://people.eecs.berkeley.edu/~jrs/189/",
+    "https://link.springer.com/content/pdf/10.1007/978-3-031-70378-2.pdf",
+    "https://lti.cmu.edu/research/dissertations/sun-zhiqing-thesis-document.pdf",
+    "https://aircconline.com/csit/csit1012.pdf",
+    "https://link.springer.com/content/pdf/10.1007/978-1-4615-0413-9.pdf",
+    "https://rail.eecs.berkeley.edu/people.html",
+    "https://x.com/search?lang=ar&src=typed_query&q=%2523BerkeleyResearch",
+    "https://x.com/i/status/1834797735469367504",
+    "https://x.com/i/status/1943778341552894350",
+    "https://x.com/i/user/1676035342879834112",
+    "https://x.com/i/status/1997089935405600908",
+    "https://www.linkedin.com/pub/dir/Bill/Zheng/us-0-United-States",
+    "https://x.com/i/status/1890176800237711633",
+    "https://x.com/i/status/1834785002116255832",
+    "https://www.facebook.com/groups/hackathonhackers/posts/1526669590721854/",
+    "https://cr.linkedin.com/pub/dir/Bill/Zheng",
+    "http://www2.eecs.berkeley.edu/Pubs/TechRpts/Withdrawn/EECS-2025-152.pdf",
+    "https://www.researchgate.net/publication/397356994_Efficient_On-Device_Agents_via_Adaptive_Context_Management",
+    "https://nxtaim.de/wp-content/uploads/nxtAIM_Whitepaper_AutomotiveFM_D01.pdf",
+    "https://www.linkedin.com/posts/bill-zheng-5207991ab_corl2024-activity-7241739116147564545-Qyca",
+    "https://openreview.net/profile?id=~Bill_Zheng1",
+    "https://arxiv.org/abs/2408.16228",
+    "https://www.researchgate.net/publication/394636766_Vision-Language-Action_Models_for_Robotics_A_Review_Towards_Real-World_Applications",
+    "https://www.linkedin.com/pub/dir/Bill/Zheng",
+    "https://github.com/vivekmyers/palo-robot",
+    "http://x.com/BillZheng155508",
+    "https://escholarship.org/content/qt9t52s9p8/qt9t52s9p8.pdf",
+    "https://cronfa.swan.ac.uk/Record/cronfa56979/Download/56979__20020__b22cb50f44a04f6292ccffbd0eccc855.pdf",
+    "https://rdi.berkeley.edu/responsible-genai/f23",
+    "https://arxiv.org/html/2408.16228v1",
+    "https://www.linkedin.com/in/bill-zheng-5207991ab",
+    "https://www.instalker.org/oier_mees",
+    "https://arxiv.org/html/2510.07077v1",
+    "https://www6.twstalker.com/dylan_works_",
+    "https://people.eecs.berkeley.edu/~vmyers/papers/myers2024policy.pdf",
+    "https://cal-cs180.github.io/fa24/",
+    "https://www.linkedin.com/posts/ekberndt_hello-world-activity-7396227664279252994-hldt",
+    "https://research-repository.uwa.edu.au/files/74129655/THESIS_DOCTOR_OF_PHILOSOPHY_LIU_Jian.pdf",
+    "https://dokumen.pub/machine-learning-optimization-and-data-science-6th-international-conference-lod-2020-siena-italy-july-1923-2020-revised-selected-papers-part-ii-3030645797-9783030645793.html",
+    "https://www.linkedin.com/posts/hivamohammadzadeh_hackathon-ai-largelanguagemodels-activity-7076779518329307136-Zh-g",
+    "https://x.com/i/status/1834797738363699378",
+    "https://uc-berkeley-ai-hackathon.devpost.com/project-gallery",
+    "https://openaccess.thecvf.com/content/ICCV2025/papers/Chang_LANGTRAJ_Diffusion_Model_and_Dataset_for_Language-Conditioned_Trajectory_Simulation_ICCV_2025_paper.pdf",
+    "https://ca.linkedin.com/in/yiming-qian-b09a20a7",
+    "https://x.com/i/status/1943774135827804417",
+    "https://openreview.net/profile?id=~Vivek_Myers1",
+    "https://x.com/i/status/1890143881108550119",
+    "https://aclanthology.org/2020.sigdial-1.pdf",
+    "https://liralab.usc.edu/pdfs/publications/zhang2025rewind.pdf",
+    "https://openreview.net/profile?id=~Chunyuan_Zheng2",
+    "https://arc.aiaa.org/doi/pdfplus/10.2514/6.2025-2348"
+  ],
+  "raw_response": "{\n  \"technical_depth\": {\"score\": 10, \"evidence\": \"Co-author and presenter on PALO (CoRL 2024, arXiv:2408.16228) and TRA (NeurIPS 2025) papers on robot learning: few-shot imitation via language optimization and temporally-aligned representations for compositional generalization.\"},\n  \"project_evidence\": {\"score\": 7, \"evidence\": \"Contributed to PALO project with code released at https://github.com/vivekmyers/palo-robot (team repo from RAIL lab); no personal GitHub repos found, but lab projects presented at top conferences.\"},\n  \"mission_alignment\": {\"score\": 10, \"evidence\": \"Research at Berkeley RAIL/BAIR lab (Robotics AI & Learning Lab); X posts frequently about frontier robotics/ML topics like RL, imitation learning, representations; advised by Sergey Levine, Kuan Fang.\"},\n  \"exceptional_ability\": {\"score\": 10, \"evidence\": \"As EECS undergrad, solved hard problems in robot instruction-following and few-shot adaptation, leading to NeurIPS/CoRL publications; ownership shown in presentations and collaborations.\"},\n  \"communication\": {\"score\": 8, \"evidence\": \"Clear, concise X posts summarizing complex research (e.g., PALO achieving 15x data efficiency, TRA for long-horizon tasks); presents at conferences.\"},\n  \"summary\": \"Exceptional undergrad researcher at Berkeley's RAIL lab with top-tier publications in robotics AI as lead contributor on conference papers. Strong alignment with xAI's AI focus through frontier robot learning work. Limited public open-source footprint.\",\n  \"strengths\": [\"Published papers at NeurIPS/CoRL as undergrad\", \"Deep expertise in RL/robotics at top lab (BAIR/RAIL)\"],\n  \"concerns\": [\"No personal GitHub or visible open-source projects\", \"Low X engagement (92 followers, infrequent posts)\"],\n  \"recommended_role\": \"research\",\n  \"github_url\": null,\n  \"linkedin_url\": \"https://www.linkedin.com/in/bill-zheng-5207991ab\",\n  \"top_repos\": [\"vivekmyers/palo-robot\"]\n}"
+}

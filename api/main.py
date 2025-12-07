@@ -8,27 +8,76 @@ Endpoints:
 - POST /search - Natural language search with re-ranking
 """
 
+import base64
+import hashlib
 import json
 import math
 import os
 import pickle
+import secrets
 import sqlite3
 import sys
 import uuid
+from datetime import datetime, timedelta
 from pathlib import Path
-from typing import Any, AsyncGenerator, Dict, List, Optional
+from typing import Any, Dict, List, Optional
 from urllib.parse import quote
 
+import httpx
 import networkx as nx
 import requests
 from dotenv import load_dotenv
-from fastapi import BackgroundTasks, FastAPI, HTTPException, Query
+from fastapi import (
+    BackgroundTasks,
+    Depends,
+    FastAPI,
+    Header,
+    HTTPException,
+    Query,
+    Request,
+)
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import StreamingResponse
+from fastapi.responses import RedirectResponse, StreamingResponse
+from jose import JWTError, jwt
 
 # Add parent directory to path for imports
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
+from api.database import (
+    # Submission functions
+    create_submission as db_create_submission,
+)
+from api.database import (
+    get_pending_approvals as db_get_pending_approvals,
+)
+from api.database import (
+    get_saved_count,
+    get_submission_queue_position,
+    init_db,
+    is_candidate_saved,
+    save_dm_history,
+)
+from api.database import (
+    get_saved_handles as db_get_saved_handles,
+)
+from api.database import (
+    get_submission as db_get_submission,
+)
+from api.database import (
+    get_submission_by_handle as db_get_submission_by_handle,
+)
+from api.database import (
+    save_candidate as db_save_candidate,
+)
+from api.database import (
+    unsave_candidate as db_unsave_candidate,
+)
+from api.database import (
+    update_submission_approval as db_update_submission_approval,
+)
+from api.database import (
+    update_submission_status as db_update_submission_status,
+)
 from api.models import (
     AddSourceRequest,
     CandidateDeepEval,
@@ -54,24 +103,6 @@ from api.models import (
 )
 from src.grok_client import GrokClient
 from src.x_client import XClient
-from api.database import (
-    init_db,
-    save_candidate as db_save_candidate,
-    unsave_candidate as db_unsave_candidate,
-    get_saved_handles as db_get_saved_handles,
-    get_saved_candidates as db_get_saved_candidates,
-    is_candidate_saved,
-    get_saved_count,
-    save_dm_history,
-    # Submission functions
-    create_submission as db_create_submission,
-    get_submission as db_get_submission,
-    get_submission_by_handle as db_get_submission_by_handle,
-    update_submission_status as db_update_submission_status,
-    update_submission_approval as db_update_submission_approval,
-    get_pending_approvals as db_get_pending_approvals,
-    get_submission_queue_position,
-)
 
 load_dotenv()
 
@@ -92,16 +123,77 @@ async def startup_event():
 # Enable CORS for frontend
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:3000",
-        "http://localhost:5173",
-        "https://grok-underrated-recruiter.vercel.app",
-        "https://grok-recruiter-api.fly.dev",
-    ],
+    allow_origins=["*"],  # Allow all origins for now (Vercel preview URLs are dynamic)
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# --- X OAuth 2.0 Configuration ---
+X_CLIENT_ID = os.getenv("X_CLIENT_SECRET_ID", "")  # X uses "Client ID" naming
+X_CLIENT_SECRET = os.getenv("X_CLIENT_SECRET", "")
+X_CALLBACK_URL = os.getenv(
+    "X_CALLBACK_URL", "https://grok-recruiter-api.fly.dev/auth/x/callback"
+)
+FRONTEND_URL = os.getenv("FRONTEND_URL", "https://grok-underrated-recruiter.vercel.app")
+JWT_SECRET = os.getenv("JWT_SECRET", secrets.token_urlsafe(32))
+JWT_ALGORITHM = "HS256"
+JWT_EXPIRE_HOURS = 24 * 7  # 1 week
+
+# In-memory storage for OAuth state (use Redis in production)
+oauth_states: Dict[str, dict] = {}
+
+# Admin handles that can approve/reject submissions
+ADMIN_HANDLES = [
+    h.strip().lower() for h in os.getenv("ADMIN_HANDLES", "huwng_tran").split(",")
+]
+
+
+def create_jwt_token(user_data: dict) -> str:
+    """Create a JWT token for authenticated user."""
+    expire = datetime.utcnow() + timedelta(hours=JWT_EXPIRE_HOURS)
+    payload = {
+        **user_data,
+        "exp": expire,
+        "iat": datetime.utcnow(),
+    }
+    return jwt.encode(payload, JWT_SECRET, algorithm=JWT_ALGORITHM)
+
+
+def verify_jwt_token(token: str) -> Optional[dict]:
+    """Verify and decode a JWT token."""
+    try:
+        payload = jwt.decode(token, JWT_SECRET, algorithms=[JWT_ALGORITHM])
+        return payload
+    except JWTError:
+        return None
+
+
+async def get_current_user(authorization: str = Header(None)) -> Optional[dict]:
+    """Dependency to get current authenticated user."""
+    if not authorization or not authorization.startswith("Bearer "):
+        return None
+    token = authorization.split(" ")[1]
+    return verify_jwt_token(token)
+
+
+async def require_auth(authorization: str = Header(...)) -> dict:
+    """Dependency that requires authentication."""
+    if not authorization or not authorization.startswith("Bearer "):
+        raise HTTPException(status_code=401, detail="Not authenticated")
+    token = authorization.split(" ")[1]
+    user = verify_jwt_token(token)
+    if not user:
+        raise HTTPException(status_code=401, detail="Invalid or expired token")
+    return user
+
+
+async def require_admin(user: dict = Depends(require_auth)) -> dict:
+    """Dependency that requires admin access."""
+    if user.get("handle", "").lower() not in ADMIN_HANDLES:
+        raise HTTPException(status_code=403, detail="Admin access required")
+    return user
+
 
 # Data directories
 DATA_DIR = Path(__file__).parent.parent / "data"
@@ -162,7 +254,9 @@ def compute_pagerank_scores():
 
     # Compute PageRank
     try:
-        pr = nx.pagerank(G, alpha=0.85, personalization=personalization, weight="weight")
+        pr = nx.pagerank(
+            G, alpha=0.85, personalization=personalization, weight="weight"
+        )
         graph_state["pagerank"] = pr
 
         # Update underratedness scores
@@ -196,7 +290,8 @@ def add_user_to_graph(user: Dict[str, Any], is_seed: bool = False, depth: int = 
         "following_count": metrics.get("following_count", 0),
         "tweet_count": metrics.get("tweet_count", 0),
         "is_seed": is_seed,
-        "is_candidate": not is_seed and 50 <= metrics.get("followers_count", 0) <= 50000,
+        "is_candidate": not is_seed
+        and 50 <= metrics.get("followers_count", 0) <= 50000,
         "pagerank_score": 0.0,
         "underratedness_score": 0.0,
         "depth": depth,
@@ -216,7 +311,9 @@ def add_user_to_graph(user: Dict[str, Any], is_seed: bool = False, depth: int = 
     return node_data
 
 
-def add_edge_to_graph(src_id: str, dst_id: str, interaction_type: str = "follow", weight: float = 5.0):
+def add_edge_to_graph(
+    src_id: str, dst_id: str, interaction_type: str = "follow", weight: float = 5.0
+):
     """Add an edge to the graph."""
     G = graph_state["graph"]
     G.add_edge(src_id, dst_id, weight=weight, interaction_type=interaction_type)
@@ -229,7 +326,7 @@ async def expand_from_source(handle: str, depth: int, max_following: int):
         graph_state["last_error"] = None
 
         # Clean up handle
-        handle = handle.strip().lstrip('@').strip()
+        handle = handle.strip().lstrip("@").strip()
         print(f"[expand] Looking up @{handle}")
 
         client = get_x_client()
@@ -260,7 +357,9 @@ async def expand_from_source(handle: str, depth: int, max_following: int):
             next_frontier = []
 
             for user_id in current_frontier:
-                following = client.get_user_following(user_id, max_results=max_following)
+                following = client.get_user_following(
+                    user_id, max_results=max_following
+                )
 
                 for fol_user in following:
                     fol_id = fol_user.get("id")
@@ -324,7 +423,9 @@ def load_graph_from_pickle():
         # Compute PageRank
         compute_pagerank_scores()
 
-        print(f"[startup] Loaded {len(graph_state['nodes'])} nodes, {G.number_of_edges()} edges, {len(graph_state['seeds'])} seeds")
+        print(
+            f"[startup] Loaded {len(graph_state['nodes'])} nodes, {G.number_of_edges()} edges, {len(graph_state['seeds'])} seeds"
+        )
         return True
     except Exception as e:
         print(f"[startup] Error loading graph: {e}")
@@ -339,15 +440,17 @@ def save_graph_to_pickle():
         # Update node attributes in the graph
         for node_id, node_data in graph_state["nodes"].items():
             if node_id in G:
-                G.nodes[node_id].update({
-                    "handle": node_data.get("handle", ""),
-                    "name": node_data.get("name", ""),
-                    "bio": node_data.get("bio", ""),
-                    "followers_count": node_data.get("followers_count", 0),
-                    "following_count": node_data.get("following_count", 0),
-                    "is_root": node_data.get("is_seed", False),
-                    "is_candidate": node_data.get("is_candidate", False),
-                })
+                G.nodes[node_id].update(
+                    {
+                        "handle": node_data.get("handle", ""),
+                        "name": node_data.get("name", ""),
+                        "bio": node_data.get("bio", ""),
+                        "followers_count": node_data.get("followers_count", 0),
+                        "following_count": node_data.get("following_count", 0),
+                        "is_root": node_data.get("is_seed", False),
+                        "is_candidate": node_data.get("is_candidate", False),
+                    }
+                )
 
         GRAPH_PICKLE_PATH.parent.mkdir(parents=True, exist_ok=True)
         with open(GRAPH_PICKLE_PATH, "wb") as f:
@@ -663,7 +766,10 @@ Respond with JSON only:
             json={
                 "model": "grok-3-mini",
                 "messages": [
-                    {"role": "system", "content": "You are an expert technical recruiter."},
+                    {
+                        "role": "system",
+                        "content": "You are an expert technical recruiter.",
+                    },
                     {"role": "user", "content": prompt},
                 ],
                 "temperature": 0.3,
@@ -754,8 +860,7 @@ async def search_candidates_stream(request: SearchRequest):
 
     # Build summary for Grok
     candidates_summary = "\n".join(
-        f"@{e.get('handle', '')}: {e.get('summary', '')[:150]}"
-        for e in filtered[:50]
+        f"@{e.get('handle', '')}: {e.get('summary', '')[:150]}" for e in filtered[:50]
     )
 
     handle_to_eval = {e.get("handle", "").lower(): e for e in filtered}
@@ -828,12 +933,14 @@ async def search_candidates(request: SearchRequest):
 
     matched = []
     for e in filtered:
-        text = " ".join([
-            e.get("bio", ""),
-            e.get("summary", ""),
-            " ".join(e.get("strengths", [])),
-            e.get("technical_depth", {}).get("evidence", ""),
-        ]).lower()
+        text = " ".join(
+            [
+                e.get("bio", ""),
+                e.get("summary", ""),
+                " ".join(e.get("strengths", [])),
+                e.get("technical_depth", {}).get("evidence", ""),
+            ]
+        ).lower()
         match_score = sum(1 for kw in keywords if kw in text)
         # Only include if at least one keyword matches
         if match_score > 0:
@@ -866,13 +973,17 @@ async def get_stats():
         len(list(fast_screen_dir.glob("*.json"))) if fast_screen_dir.exists() else 0
     )
 
-    # Count seeds
-    seed_count = sum(1 for n in nodes.values() if n.get("is_root") == "True")
+    # Count seeds (CSV loads booleans as strings)
+    seed_count = sum(
+        1 for n in nodes.values() if str(n.get("is_root", "")).lower() == "true"
+    )
 
     return StatsResponse(
         total_nodes=len(nodes),
         total_candidates=sum(
-            1 for n in nodes.values() if n.get("is_candidate") == "True"
+            1
+            for n in nodes.values()
+            if str(n.get("is_candidate", "")).lower() == "true"
         ),
         fast_screened=fast_screened,
         deep_evaluated=len(evaluations),
@@ -984,16 +1095,24 @@ def build_dm_prompt(eval_data: dict, custom_context: Optional[str], tone: str) -
     tone_instructions = {
         "professional": "Use a professional but warm tone. Be direct and respectful.",
         "casual": "Use a casual, friendly tone. Feel free to use contractions and be conversational.",
-        "enthusiastic": "Use an enthusiastic, energetic tone. Show genuine excitement about their work."
+        "enthusiastic": "Use an enthusiastic, energetic tone. Show genuine excitement about their work.",
     }
 
     # Build score details if available
     score_details = []
-    for criterion in ['technical_depth', 'project_evidence', 'mission_alignment', 'exceptional_ability', 'communication']:
+    for criterion in [
+        "technical_depth",
+        "project_evidence",
+        "mission_alignment",
+        "exceptional_ability",
+        "communication",
+    ]:
         if criterion in eval_data and eval_data[criterion]:
             data = eval_data[criterion]
             if isinstance(data, dict):
-                score_details.append(f"  - {criterion.replace('_', ' ').title()}: {data.get('score', 'N/A')}/10 - {data.get('evidence', '')}")
+                score_details.append(
+                    f"  - {criterion.replace('_', ' ').title()}: {data.get('score', 'N/A')}/10 - {data.get('evidence', '')}"
+                )
 
     score_section = "\n".join(score_details) if score_details else "Not available"
 
@@ -1008,24 +1127,24 @@ ADDITIONAL CONTEXT FROM RECRUITER:
     return f"""Generate a personalized outreach message for this candidate:
 
 CANDIDATE PROFILE:
-- Handle: @{eval_data.get('handle', '')}
-- Name: {eval_data.get('name', '')}
-- Bio: {eval_data.get('bio', '')}
-- Followers: {eval_data.get('followers_count', 0):,}
-- Recommended Role: {eval_data.get('recommended_role', '')}
-- GitHub: {eval_data.get('github_url', 'Not available')}
-- LinkedIn: {eval_data.get('linkedin_url', 'Not available')}
+- Handle: @{eval_data.get("handle", "")}
+- Name: {eval_data.get("name", "")}
+- Bio: {eval_data.get("bio", "")}
+- Followers: {eval_data.get("followers_count", 0):,}
+- Recommended Role: {eval_data.get("recommended_role", "")}
+- GitHub: {eval_data.get("github_url", "Not available")}
+- LinkedIn: {eval_data.get("linkedin_url", "Not available")}
 
 EVALUATION SUMMARY:
-{eval_data.get('summary', '')}
+{eval_data.get("summary", "")}
 
 KEY STRENGTHS:
-{chr(10).join('- ' + s for s in eval_data.get('strengths', [])[:4])}
+{chr(10).join("- " + s for s in eval_data.get("strengths", [])[:4])}
 
 DETAILED SCORES:
 {score_section}
 {context_section}
-TONE: {tone_instructions.get(tone, tone_instructions['professional'])}
+TONE: {tone_instructions.get(tone, tone_instructions["professional"])}
 
 Write a compelling outreach message that:
 1. Opens with something SPECIFIC about their work - reference their actual strengths, projects, or expertise
@@ -1099,7 +1218,11 @@ async def generate_dm_stream(request: DMGenerateRequest):
 
                 try:
                     chunk = json.loads(data_str)
-                    content = chunk.get("choices", [{}])[0].get("delta", {}).get("content", "")
+                    content = (
+                        chunk.get("choices", [{}])[0]
+                        .get("delta", {})
+                        .get("content", "")
+                    )
                     if content:
                         full_message += content
                         yield f"data: {json.dumps({'type': 'content', 'content': content})}\n\n"
@@ -1110,7 +1233,9 @@ async def generate_dm_stream(request: DMGenerateRequest):
             save_dm_history(handle, request.custom_context, full_message)
 
             # Send final result with X intent URL
-            x_dm_url = f"https://twitter.com/messages/compose?text={quote(full_message)}"
+            x_dm_url = (
+                f"https://twitter.com/messages/compose?text={quote(full_message)}"
+            )
             yield f"data: {json.dumps({'type': 'done', 'message': full_message, 'x_intent_url': x_dm_url, 'character_count': len(full_message)})}\n\n"
             yield "data: [DONE]\n\n"
 
@@ -1243,34 +1368,38 @@ async def get_graph(
         # Get Grok filter info if available
         filter_result = graph_state["filter_results"].get(node["id"])
 
-        nodes_data.append(GraphNode(
-            id=node["id"],
-            handle=node.get("handle", ""),
-            name=node.get("name", ""),
-            bio=node.get("bio", ""),
-            followers_count=node.get("followers_count", 0),
-            following_count=node.get("following_count", 0),
-            is_seed=node.get("is_seed", False),
-            is_candidate=node.get("is_candidate", False),
-            pagerank_score=node.get("pagerank_score", 0),
-            underratedness_score=node.get("underratedness_score", 0),
-            grok_relevant=filter_result.pass_filter if filter_result else None,
-            grok_role=filter_result.potential_role if filter_result else None,
-            depth=node.get("depth", 0),
-            discovered_via=node.get("discovered_via"),
-            submission_pending=node.get("submission_pending"),
-        ))
+        nodes_data.append(
+            GraphNode(
+                id=node["id"],
+                handle=node.get("handle", ""),
+                name=node.get("name", ""),
+                bio=node.get("bio", ""),
+                followers_count=node.get("followers_count", 0),
+                following_count=node.get("following_count", 0),
+                is_seed=node.get("is_seed", False),
+                is_candidate=node.get("is_candidate", False),
+                pagerank_score=node.get("pagerank_score", 0),
+                underratedness_score=node.get("underratedness_score", 0),
+                grok_relevant=filter_result.pass_filter if filter_result else None,
+                grok_role=filter_result.potential_role if filter_result else None,
+                depth=node.get("depth", 0),
+                discovered_via=node.get("discovered_via"),
+                submission_pending=node.get("submission_pending"),
+            )
+        )
 
     # Get edges between visible nodes
     G = graph_state["graph"]
     for src, dst, data in G.edges(data=True):
         if src in node_ids and dst in node_ids:
-            edges_data.append(GraphEdge(
-                source=src,
-                target=dst,
-                weight=data.get("weight", 1.0),
-                interaction_type=data.get("interaction_type", "follow"),
-            ))
+            edges_data.append(
+                GraphEdge(
+                    source=src,
+                    target=dst,
+                    weight=data.get("weight", 1.0),
+                    interaction_type=data.get("interaction_type", "follow"),
+                )
+            )
 
     # Compute stats
     stats = {
@@ -1301,7 +1430,10 @@ async def add_source(request: AddSourceRequest, background_tasks: BackgroundTask
         request.max_following,
     )
 
-    return {"message": f"Started expanding from @{request.handle}", "depth": request.depth}
+    return {
+        "message": f"Started expanding from @{request.handle}",
+        "depth": request.depth,
+    }
 
 
 @app.post("/filter")
@@ -1317,8 +1449,10 @@ async def filter_nodes(request: FilterRequest, background_tasks: BackgroundTasks
 
             # Filter candidates
             candidates = [
-                n for n in graph_state["nodes"].values()
-                if n.get("is_candidate") and n["id"] not in graph_state["filter_results"]
+                n
+                for n in graph_state["nodes"].values()
+                if n.get("is_candidate")
+                and n["id"] not in graph_state["filter_results"]
             ]
 
             for i, node in enumerate(candidates[:200]):  # Limit to 200 for speed
@@ -1413,7 +1547,7 @@ def generate_submission_id() -> str:
 
 async def add_submission_to_graph(handle: str) -> Optional[dict]:
     """Add a submitted handle to the graph before evaluation."""
-    handle = handle.strip().lstrip('@').lower()
+    handle = handle.strip().lstrip("@").lower()
 
     try:
         client = get_x_client()
@@ -1487,8 +1621,10 @@ async def process_submission(submission_id: str, handle: str):
 
         if not node:
             db_update_submission_status(
-                submission_id, "failed", "error",
-                error_message=f"Node for @{handle} not found in graph"
+                submission_id,
+                "failed",
+                "error",
+                error_message=f"Node for @{handle} not found in graph",
             )
             return
 
@@ -1507,24 +1643,30 @@ async def process_submission(submission_id: str, handle: str):
         graph_state["filter_results"][node_id] = fast_result
 
         # Save fast screen result to database
-        fast_result_json = json.dumps({
-            "pass_filter": fast_result.pass_filter,
-            "potential_role": fast_result.potential_role,
-            "reason": fast_result.reason,
-            "confidence": getattr(fast_result, 'confidence', None),
-        })
+        fast_result_json = json.dumps(
+            {
+                "pass_filter": fast_result.pass_filter,
+                "potential_role": fast_result.potential_role,
+                "reason": fast_result.reason,
+                "confidence": getattr(fast_result, "confidence", None),
+            }
+        )
 
         if not fast_result.pass_filter:
             db_update_submission_status(
-                submission_id, "filtered_out", "done",
-                fast_screen_result=fast_result_json
+                submission_id,
+                "filtered_out",
+                "done",
+                fast_screen_result=fast_result_json,
             )
             print(f"[submit] @{handle} filtered out: {fast_result.reason}")
             return
 
         db_update_submission_status(
-            submission_id, "processing", "fast_screen",
-            fast_screen_result=fast_result_json
+            submission_id,
+            "processing",
+            "fast_screen",
+            fast_screen_result=fast_result_json,
         )
 
         # Stage 2: Deep Evaluation
@@ -1564,20 +1706,20 @@ async def process_submission(submission_id: str, handle: str):
         deep_eval_json = json.dumps(deep_result) if deep_result else None
 
         db_update_submission_status(
-            submission_id, "completed", "done",
-            deep_eval_result=deep_eval_json
+            submission_id, "completed", "done", deep_eval_result=deep_eval_json
         )
 
         # Recompute PageRank after evaluation
         compute_pagerank_scores()
 
-        print(f"[submit] @{handle} evaluation complete: score={deep_result.get('final_score', 'N/A')}")
+        print(
+            f"[submit] @{handle} evaluation complete: score={deep_result.get('final_score', 'N/A')}"
+        )
 
     except Exception as e:
         print(f"[submit] Error processing @{handle}: {e}")
         db_update_submission_status(
-            submission_id, "failed", "error",
-            error_message=str(e)
+            submission_id, "failed", "error", error_message=str(e)
         )
 
 
@@ -1609,8 +1751,12 @@ async def submit_handle(
             submitted_at=existing["submitted_at"],
             started_at=existing.get("started_at"),
             completed_at=existing.get("completed_at"),
-            fast_screen_result=json.loads(existing["fast_screen_result"]) if existing.get("fast_screen_result") else None,
-            deep_eval_result=json.loads(existing["deep_eval_result"]) if existing.get("deep_eval_result") else None,
+            fast_screen_result=json.loads(existing["fast_screen_result"])
+            if existing.get("fast_screen_result")
+            else None,
+            deep_eval_result=json.loads(existing["deep_eval_result"])
+            if existing.get("deep_eval_result")
+            else None,
             error=existing.get("error_message"),
             position_in_queue=position if existing["status"] == "pending" else None,
         )
@@ -1624,12 +1770,13 @@ async def submit_handle(
     if not node:
         # Still create submission but note the error
         db_update_submission_status(
-            submission_id, "failed", "fetching",
-            error_message=graph_state.get("last_error", "Failed to fetch user profile")
+            submission_id,
+            "failed",
+            "fetching",
+            error_message=graph_state.get("last_error", "Failed to fetch user profile"),
         )
         raise HTTPException(
-            status_code=404,
-            detail=f"Could not find user @{handle} on X"
+            status_code=404, detail=f"Could not find user @{handle} on X"
         )
 
     # Auto-approve and start processing (no approval queue for now)
@@ -1666,15 +1813,19 @@ async def get_submission_status(submission_id: str):
         submitted_at=submission["submitted_at"],
         started_at=submission.get("started_at"),
         completed_at=submission.get("completed_at"),
-        fast_screen_result=json.loads(submission["fast_screen_result"]) if submission.get("fast_screen_result") else None,
-        deep_eval_result=json.loads(submission["deep_eval_result"]) if submission.get("deep_eval_result") else None,
+        fast_screen_result=json.loads(submission["fast_screen_result"])
+        if submission.get("fast_screen_result")
+        else None,
+        deep_eval_result=json.loads(submission["deep_eval_result"])
+        if submission.get("deep_eval_result")
+        else None,
         error=submission.get("error_message"),
         position_in_queue=position if submission["status"] == "pending" else None,
     )
 
 
 @app.get("/admin/pending", response_model=List[PendingApproval])
-async def get_pending_submissions():
+async def get_pending_submissions(user: dict = Depends(require_admin)):
     """Get list of submissions pending approval (admin only)."""
     pending = db_get_pending_approvals()
     return [
@@ -1692,6 +1843,7 @@ async def get_pending_submissions():
 async def approve_submission(
     submission_id: str,
     background_tasks: BackgroundTasks,
+    user: dict = Depends(require_admin),
 ):
     """Approve a pending submission and start processing."""
     submission = db_get_submission(submission_id)
@@ -1707,8 +1859,7 @@ async def approve_submission(
     # Add to graph if not already there
     handle = submission["handle"]
     node_exists = any(
-        n.get("handle", "").lower() == handle
-        for n in graph_state["nodes"].values()
+        n.get("handle", "").lower() == handle for n in graph_state["nodes"].values()
     )
     if not node_exists:
         await add_submission_to_graph(handle)
@@ -1720,7 +1871,7 @@ async def approve_submission(
 
 
 @app.post("/admin/reject/{submission_id}")
-async def reject_submission(submission_id: str):
+async def reject_submission(submission_id: str, user: dict = Depends(require_admin)):
     """Reject a pending submission."""
     submission = db_get_submission(submission_id)
     if not submission:
@@ -1731,7 +1882,173 @@ async def reject_submission(submission_id: str):
 
     db_update_submission_approval(submission_id, "rejected")
 
-    return {"message": f"Submission {submission_id} rejected", "handle": submission["handle"]}
+    return {
+        "message": f"Submission {submission_id} rejected",
+        "handle": submission["handle"],
+    }
+
+
+# --- Authentication Endpoints ---
+
+
+def generate_pkce_pair():
+    """Generate PKCE code verifier and challenge."""
+    code_verifier = secrets.token_urlsafe(64)
+    code_challenge = (
+        base64.urlsafe_b64encode(hashlib.sha256(code_verifier.encode()).digest())
+        .decode()
+        .rstrip("=")
+    )
+    return code_verifier, code_challenge
+
+
+@app.get("/auth/x/login")
+async def x_login(request: Request):
+    """Initiate X OAuth 2.0 login flow with PKCE."""
+    if not X_CLIENT_ID:
+        raise HTTPException(
+            status_code=500,
+            detail="X OAuth not configured. Set X_CLIENT_SECRET_ID environment variable.",
+        )
+
+    # Generate PKCE pair
+    code_verifier, code_challenge = generate_pkce_pair()
+
+    # Generate state for CSRF protection
+    state = secrets.token_urlsafe(32)
+
+    # Store state and verifier (in production, use Redis with expiry)
+    oauth_states[state] = {
+        "code_verifier": code_verifier,
+        "created_at": datetime.utcnow().isoformat(),
+    }
+
+    # Clean up old states (simple cleanup)
+    if len(oauth_states) > 1000:
+        oldest_keys = sorted(
+            oauth_states.keys(), key=lambda k: oauth_states[k]["created_at"]
+        )[:500]
+        for k in oldest_keys:
+            del oauth_states[k]
+
+    # Build authorization URL
+    auth_url = (
+        "https://twitter.com/i/oauth2/authorize?"
+        f"response_type=code"
+        f"&client_id={X_CLIENT_ID}"
+        f"&redirect_uri={quote(X_CALLBACK_URL)}"
+        f"&scope=tweet.read%20users.read%20offline.access"
+        f"&state={state}"
+        f"&code_challenge={code_challenge}"
+        f"&code_challenge_method=S256"
+    )
+
+    return RedirectResponse(url=auth_url)
+
+
+@app.get("/auth/x/callback")
+async def x_callback(code: str = None, state: str = None, error: str = None):
+    """Handle X OAuth callback."""
+    # Handle errors
+    if error:
+        return RedirectResponse(url=f"{FRONTEND_URL}?error={error}")
+
+    if not code or not state:
+        return RedirectResponse(url=f"{FRONTEND_URL}?error=missing_params")
+
+    # Verify state
+    if state not in oauth_states:
+        return RedirectResponse(url=f"{FRONTEND_URL}?error=invalid_state")
+
+    state_data = oauth_states.pop(state)
+    code_verifier = state_data["code_verifier"]
+
+    # Exchange code for tokens
+    try:
+        async with httpx.AsyncClient() as client:
+            # Token request
+            token_data = {
+                "grant_type": "authorization_code",
+                "code": code,
+                "redirect_uri": X_CALLBACK_URL,
+                "code_verifier": code_verifier,
+            }
+
+            # Use basic auth for confidential clients
+            auth_header = base64.b64encode(
+                f"{X_CLIENT_ID}:{X_CLIENT_SECRET}".encode()
+            ).decode()
+
+            response = await client.post(
+                "https://api.twitter.com/2/oauth2/token",
+                data=token_data,
+                headers={
+                    "Authorization": f"Basic {auth_header}",
+                    "Content-Type": "application/x-www-form-urlencoded",
+                },
+            )
+
+            if response.status_code != 200:
+                print(f"Token exchange failed: {response.text}")
+                return RedirectResponse(
+                    url=f"{FRONTEND_URL}?error=token_exchange_failed"
+                )
+
+            tokens = response.json()
+            access_token = tokens["access_token"]
+
+            # Get user info
+            user_response = await client.get(
+                "https://api.twitter.com/2/users/me",
+                headers={"Authorization": f"Bearer {access_token}"},
+                params={"user.fields": "id,name,username,profile_image_url"},
+            )
+
+            if user_response.status_code != 200:
+                print(f"User info failed: {user_response.text}")
+                return RedirectResponse(url=f"{FRONTEND_URL}?error=user_info_failed")
+
+            user_data = user_response.json()["data"]
+
+            # Create JWT token
+            jwt_payload = {
+                "user_id": user_data["id"],
+                "handle": user_data["username"],
+                "name": user_data.get("name", user_data["username"]),
+            }
+            jwt_token = create_jwt_token(jwt_payload)
+
+            # Redirect to frontend with token
+            redirect_url = (
+                f"{FRONTEND_URL}?"
+                f"token={jwt_token}"
+                f"&user_id={user_data['id']}"
+                f"&handle={user_data['username']}"
+                f"&name={quote(user_data.get('name', ''))}"
+            )
+
+            return RedirectResponse(url=redirect_url)
+
+    except Exception as e:
+        print(f"OAuth error: {e}")
+        return RedirectResponse(url=f"{FRONTEND_URL}?error=oauth_error")
+
+
+@app.get("/auth/me")
+async def get_me(user: dict = Depends(require_auth)):
+    """Get current authenticated user info."""
+    return {
+        "user_id": user.get("user_id"),
+        "handle": user.get("handle"),
+        "name": user.get("name"),
+        "is_admin": user.get("handle", "").lower() in ADMIN_HANDLES,
+    }
+
+
+@app.post("/auth/logout")
+async def logout(user: dict = Depends(get_current_user)):
+    """Logout endpoint (client should clear local storage)."""
+    return {"message": "Logged out successfully"}
 
 
 if __name__ == "__main__":

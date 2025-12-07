@@ -1,0 +1,21 @@
+{
+  "relevant": false,
+  "score": 0.45,
+  "reasoning": "Candidate demonstrates solid academic research in robotics with ROSETTA (best paper award, code released) and BEHAVIOR benchmark, showing evidence of building and shipping in RL/reward modeling. However, all work is robotics-focused with no signs of large-scale ML training, transformers, scaling, or xAI's core stack like JAX/CUDA/distributed systems. Mission misalignment: obsessed with household robots and embodied AI, not foundational AI for understanding the universe.",
+  "detected_skills": [
+    "robotics benchmarks",
+    "reward modeling",
+    "RLHF-style preferences",
+    "structured prompting"
+  ],
+  "red_flags": [],
+  "recommended_role": "none",
+  "standout_tweets": [
+    5,
+    7,
+    8,
+    9,
+    10
+  ],
+  "exceptional_work": "ROSETTA: single-shot dense reward generation for unconstrained robotic preferences, beats baselines on ManiSkill3, 87% success rate, best paper at CRLH RSS with code."
+}

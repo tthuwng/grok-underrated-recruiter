@@ -6,6 +6,11 @@ import { AboutPage } from './components/AboutPage';
 import { SavedCandidatesView } from './components/SavedCandidatesView';
 import { DMComposer } from './components/DMComposer';
 import { GraphView } from './components/GraphView';
+import { Login } from './components/Login';
+import { AuthCallback } from './components/AuthCallback';
+import { MySubmissionsView } from './components/MySubmissionsView';
+import { AdminPanel } from './components/AdminPanel';
+import { CandidateDetailView } from './components/CandidateDetailView';
 import {
   fetchCandidates,
   searchCandidatesStream,
@@ -15,6 +20,9 @@ import {
   unsaveCandidate,
 } from './api/client';
 import type { Candidate, Stats } from './api/client';
+import { getStoredAuth, isAdmin, type User } from './lib/auth';
+
+type ViewType = 'search' | 'saved' | 'graph' | 'submit' | 'admin';
 
 function App() {
   const [candidates, setCandidates] = useState<Candidate[]>([]);
@@ -26,10 +34,29 @@ function App() {
   const [searchCriteria, setSearchCriteria] = useState<string | undefined>();
   const [showAbout, setShowAbout] = useState(false);
 
+  // Auth state
+  const [user, setUser] = useState<User | null>(null);
+  const [isAuthCallback, setIsAuthCallback] = useState(false);
+
   // New state for saved candidates and DM
-  const [currentView, setCurrentView] = useState<'search' | 'saved' | 'graph'>('search');
+  const [currentView, setCurrentView] = useState<ViewType>('search');
   const [savedHandles, setSavedHandles] = useState<Set<string>>(new Set());
   const [dmCandidate, setDmCandidate] = useState<Candidate | null>(null);
+  const [selectedHandle, setSelectedHandle] = useState<string | null>(null);
+
+  // Check for auth callback on mount
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.has('token') || params.has('error')) {
+      setIsAuthCallback(true);
+    } else {
+      // Load stored auth
+      const authState = getStoredAuth();
+      if (authState.isAuthenticated && authState.user) {
+        setUser(authState.user);
+      }
+    }
+  }, []);
 
   // Load initial data
   useEffect(() => {
@@ -137,6 +164,29 @@ function App() {
     }
   };
 
+  const handleAuthSuccess = () => {
+    const authState = getStoredAuth();
+    if (authState.user) {
+      setUser(authState.user);
+    }
+    setIsAuthCallback(false);
+  };
+
+  const handleAuthError = (error: string) => {
+    console.error('Auth error:', error);
+    setIsAuthCallback(false);
+  };
+
+  const handleLogout = () => {
+    setUser(null);
+    setCurrentView('search');
+  };
+
+  // Show auth callback page when processing OAuth redirect
+  if (isAuthCallback) {
+    return <AuthCallback onAuthSuccess={handleAuthSuccess} onAuthError={handleAuthError} />;
+  }
+
   return (
     <div style={styles.container}>
       <header style={styles.header}>
@@ -178,12 +228,36 @@ function App() {
             >
               Saved {savedHandles.size > 0 && `(${savedHandles.size})`}
             </button>
+            {user && (
+              <button
+                style={{
+                  ...styles.tabButton,
+                  ...(currentView === 'submit' ? styles.tabButtonActive : {}),
+                }}
+                onClick={() => setCurrentView('submit')}
+              >
+                Submit
+              </button>
+            )}
+            {user && isAdmin(user) && (
+              <button
+                style={{
+                  ...styles.tabButton,
+                  ...styles.adminTab,
+                  ...(currentView === 'admin' ? styles.tabButtonActive : {}),
+                }}
+                onClick={() => setCurrentView('admin')}
+              >
+                Admin
+              </button>
+            )}
             <button
               style={styles.aboutButton}
               onClick={() => setShowAbout(true)}
             >
               How it works
             </button>
+            <Login user={user} onLogout={handleLogout} />
           </div>
         </div>
       </header>
@@ -199,6 +273,15 @@ function App() {
         />
       ) : currentView === 'graph' ? (
         <GraphView />
+      ) : currentView === 'submit' && user ? (
+        <MySubmissionsView
+          onBack={() => setCurrentView('search')}
+        />
+      ) : currentView === 'admin' && user && isAdmin(user) ? (
+        <AdminPanel
+          user={user}
+          onBack={() => setCurrentView('search')}
+        />
       ) : (
         <main style={styles.main}>
           <SearchBar onSearch={handleSearch} isLoading={isLoading} />
@@ -251,9 +334,7 @@ function App() {
                 <CandidateCard
                   key={candidate.handle}
                   candidate={candidate}
-                  onClick={() => {
-                    window.open(`https://x.com/${candidate.handle}`, '_blank');
-                  }}
+                  onClick={() => setSelectedHandle(candidate.handle)}
                   isSaved={savedHandles.has(candidate.handle.toLowerCase())}
                   onToggleSave={() => handleToggleSave(candidate.handle)}
                 />
@@ -271,6 +352,15 @@ function App() {
         <DMComposer
           candidate={dmCandidate}
           onClose={() => setDmCandidate(null)}
+        />
+      )}
+
+      {selectedHandle && (
+        <CandidateDetailView
+          handle={selectedHandle}
+          onClose={() => setSelectedHandle(null)}
+          isSaved={savedHandles.has(selectedHandle.toLowerCase())}
+          onToggleSave={() => handleToggleSave(selectedHandle)}
         />
       )}
 
@@ -319,6 +409,10 @@ const styles: Record<string, React.CSSProperties> = {
     backgroundColor: 'var(--accent-primary)',
     color: '#000',
     borderColor: 'var(--accent-primary)',
+  },
+  adminTab: {
+    color: 'var(--accent-orange)',
+    borderColor: 'var(--accent-orange)',
   },
   savedButton: {
     padding: '8px 16px',

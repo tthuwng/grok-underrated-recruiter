@@ -1,0 +1,83 @@
+{
+  "handle": "TianhongLi6",
+  "bio": "EECS PhD student at MIT",
+  "followers": 433,
+  "technical_depth": {
+    "score": 10,
+    "evidence": "Novel contributions in generative models and representation learning: NeurIPS 2024 oral/spotlight on VQ-free autoregressive image generation (MAR), continuous tokens scaling (Fluid/ICLR 2025), MAGE (CVPR 2023 unifying rep and synthesis), ICLR 2024 spotlight ITIT; 4622 citations, h-index implied high from top papers >1000 cites."
+  },
+  "project_evidence": {
+    "score": 7,
+    "evidence": "Active GitHub (LTH14, 791 followers) with quality research repos including mage (CVPR23), mar (NeurIPS24 with Colab/HF), rcg (NeurIPS24), fractalgen, FSKD (CVPR20); code releases for papers but no massive stars or production-scale products."
+  },
+  "mission_alignment": {
+    "score": 10,
+    "evidence": "All X posts and publications focused on frontier AI: scaling autoregressive gen models w/o quantization, continuous tokens for T2I SOTA, vision-language gen with unpaired data; research synergy of rep learning + gen models."
+  },
+  "exceptional_ability": {
+    "score": 10,
+    "evidence": "Solved hard problems in AR image gen scaling (power-law loss, SOTA FID/GenEval), through-wall sensing w/ RF (early CVPR/ICCV); NeurIPS orals/spotlights, postdoc w/ Kaiming He, area chair ICLR/ICML/ICCV 2025."
+  },
+  "communication": {
+    "score": 8,
+    "evidence": "Clear concise X announcements of papers; well-organized personal site w/ pubs, code links, colabs; co-instructor MIT CV course; workshop organizer."
+  },
+  "final_score": 90.5,
+  "summary": "Tianhong Li is an exceptional ML researcher with top-tier publications in generative models and representation learning, releasing production-quality code for NeurIPS/CVPR papers. Strong fit for xAI research on frontier AI scaling and reasoning via novel architectures. Limited public discussion depth on X but evidenced by accepts/awards.",
+  "strengths": [
+    "Top conference publications (NeurIPS oral/spotlight, CVPR, ICLR)",
+    "Hands-on code for SOTA generative models",
+    "Working with leading advisors like Kaiming He"
+  ],
+  "concerns": [
+    "Low X posting volume (only ~8 posts, all paper announcements)",
+    "Primarily academic; no evident large-scale engineering experience"
+  ],
+  "recommended_role": "research",
+  "github_url": "https://github.com/LTH14",
+  "linkedin_url": "https://www.linkedin.com/in/tianhong-li-846390b6",
+  "top_repos": [
+    "LTH14/mage",
+    "LTH14/mar",
+    "LTH14/rcg",
+    "LTH14/fractalgen"
+  ],
+  "citations": [
+    "https://x.com/i/status/1847409108044886349",
+    "https://github.com/LTH14/mar",
+    "https://arxiv.org",
+    "https://engineering.mit.edu/fellows/tianhong-li/",
+    "https://arxiv.org/abs/2410.13863",
+    "https://github.com/LTH14/fractalgen",
+    "https://scholar.google.com/citations?user=AI2f3dkAAAAJ&hl=en",
+    "https://chenyuwang-monica.github.io/",
+    "https://github.com/lucidrains/autoregressive-diffusion-pytorch",
+    "https://x.com/i/status/1747968236178575639",
+    "https://x.com/i/user/1575638441923993600",
+    "https://x.com/TianhongLi6",
+    "https://www.linkedin.com/pub/dir/Tianhong/Li/us-0-United-States",
+    "https://arxiv.org/pdf/2410.13863?",
+    "https://github.com/mit-han-lab/hart",
+    "https://x.com/i/status/1593056409142579201",
+    "https://github.com/YuqingWang1029/TokenBridge",
+    "https://www.linkedin.com/in/okan-ozturkmenoglu/",
+    "https://www.linkedin.com/in/bcienfuegos/",
+    "https://x.com/i/status/1847414157664018662",
+    "https://github.com/LTH14/targeted-supcon",
+    "https://scholar.google.com/citations?user=AI2f3dkAAAAJ&amp;hl=en",
+    "https://www.semanticscholar.org/paper/Fluid%253A-Scaling-Autoregressive-Text-to-image-Models-Fan-Li/66510f90845907892a992b50f54f845eca077db9",
+    "https://www.linkedin.com/in/lilliana-sancho-8547a81",
+    "https://github.com/LTH14",
+    "https://x.com/i/status/1630592583335391234",
+    "https://x.com/i/status/1710108815301988410",
+    "https://arxiv.org/html/2410.13863v1",
+    "https://www.linkedin.com/in/zhiyi-zhao-879b85230",
+    "https://www.tianhongli.me/",
+    "https://www.linkedin.com/in/tianhong-li-846390b6",
+    "https://x.com/i/status/1747967987783549191",
+    "https://github.com/LTH14/FSKD/blob/master/README.md",
+    "https://scholar.google.com.hk/citations?user=AI2f3dkAAAAJ&hl=th",
+    "https://github.com/LTH14/mage/blob/main/LICENSE"
+  ],
+  "raw_response": "{\n  \"technical_depth\": {\"score\": 10, \"evidence\": \"Novel contributions in generative models and representation learning: NeurIPS 2024 oral/spotlight on VQ-free autoregressive image generation (MAR), continuous tokens scaling (Fluid/ICLR 2025), MAGE (CVPR 2023 unifying rep and synthesis), ICLR 2024 spotlight ITIT; 4622 citations, h-index implied high from top papers >1000 cites.\"},\n  \"project_evidence\": {\"score\": 7, \"evidence\": \"Active GitHub (LTH14, 791 followers) with quality research repos including mage (CVPR23), mar (NeurIPS24 with Colab/HF), rcg (NeurIPS24), fractalgen, FSKD (CVPR20); code releases for papers but no massive stars or production-scale products.\"},\n  \"mission_alignment\": {\"score\": 10, \"evidence\": \"All X posts and publications focused on frontier AI: scaling autoregressive gen models w/o quantization, continuous tokens for T2I SOTA, vision-language gen with unpaired data; research synergy of rep learning + gen models.\"},\n  \"exceptional_ability\": {\"score\": 10, \"evidence\": \"Solved hard problems in AR image gen scaling (power-law loss, SOTA FID/GenEval), through-wall sensing w/ RF (early CVPR/ICCV); NeurIPS orals/spotlights, postdoc w/ Kaiming He, area chair ICLR/ICML/ICCV 2025.\"},\n  \"communication\": {\"score\": 8, \"evidence\": \"Clear concise X announcements of papers; well-organized personal site w/ pubs, code links, colabs; co-instructor MIT CV course; workshop organizer.\"},\n  \"summary\": \"Tianhong Li is an exceptional ML researcher with top-tier publications in generative models and representation learning, releasing production-quality code for NeurIPS/CVPR papers. Strong fit for xAI research on frontier AI scaling and reasoning via novel architectures. Limited public discussion depth on X but evidenced by accepts/awards.\",\n  \"strengths\": [\"Top conference publications (NeurIPS oral/spotlight, CVPR, ICLR)\", \"Hands-on code for SOTA generative models\", \"Working with leading advisors like Kaiming He\"],\n  \"concerns\": [\"Low X posting volume (only ~8 posts, all paper announcements)\", \"Primarily academic; no evident large-scale engineering experience\"],\n  \"recommended_role\": \"research\",\n  \"github_url\": \"https://github.com/LTH14\",\n  \"linkedin_url\": \"https://www.linkedin.com/in/tianhong-li-846390b6\",\n  \"top_repos\": [\"LTH14/mage\", \"LTH14/mar\", \"LTH14/rcg\", \"LTH14/fractalgen\"]\n}"
+}

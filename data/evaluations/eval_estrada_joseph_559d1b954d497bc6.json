@@ -1,0 +1,24 @@
+{
+  "relevant": false,
+  "score": 0.25,
+  "reasoning": "Candidate has engineering leadership experience (Director of Eng, CTO of acquired startup) but tweets show no evidence of exceptional technical work like shipping complex ML systems or deep contributions in xAI's core stack. Content focuses on AI product usage complaints, superficial benchmarks (e.g., Python vs Go proxy test), and startup hustle without demonstrating ownership of hard problems or mission-aligned obsession with understanding the universe. Lacks technical depth beyond basic scripting and web dev opinions.",
+  "detected_skills": [
+    "Python",
+    "Go",
+    "Startup Building",
+    "AI Product Development",
+    "Web Frameworks (NextJS/Gatsby)"
+  ],
+  "red_flags": [
+    "No shipped open-source or exceptional projects evident",
+    "Buzzword-heavy AI commentary without code/math depth",
+    "Focus on consumer AI tools/UI gripes over core ML/infra"
+  ],
+  "recommended_role": "none",
+  "standout_tweets": [
+    10,
+    19,
+    5
+  ],
+  "exceptional_work": ""
+}

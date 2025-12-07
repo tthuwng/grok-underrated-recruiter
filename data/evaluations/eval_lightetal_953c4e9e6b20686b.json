@@ -1,0 +1,21 @@
+{
+  "relevant": true,
+  "score": 0.88,
+  "reasoning": "Candidate demonstrates exceptional ability through NeurIPS 2025 and ICLR 2025 papers on LLM inference scaling and reasoning, with open-sourced code for DISC method achieving strong benchmark gains (e.g., 4x accuracy on open models). Technical depth is evident in detailed explanations of adaptive decomposition, plug-and-play integration with models like Llama/Mistral, and standardized evals without retraining. Strong mission alignment with LLM reasoning/agents and ownership via code release and poster presentations, though collaborative academic context slightly tempers solo ownership.",
+  "detected_skills": [
+    "LLM inference scaling",
+    "reasoning decomposition",
+    "benchmark evaluation (MATH/APPS/LiveCodeBench)",
+    "open-source implementation",
+    "self-improving agents",
+    "reinforcement learning"
+  ],
+  "red_flags": [],
+  "recommended_role": "research",
+  "standout_tweets": [
+    6,
+    11,
+    17
+  ],
+  "exceptional_work": "DISC: Dynamic Decomposition Improves LLM Inference Scaling (NeurIPS 2025) \u2013 adaptive reasoning method boosting open-source LLMs by up to 4x accuracy on code/math benchmarks, with <300 lines of plug-and-play code released"
+}

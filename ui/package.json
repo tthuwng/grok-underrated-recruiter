@@ -4,7 +4,9 @@
   "version": "0.0.1",
   "type": "module",
   "pnpm": {
-    "onlyBuiltDependencies": ["esbuild"]
+    "onlyBuiltDependencies": [
+      "esbuild"
+    ]
   },
   "scripts": {
     "dev": "vite",
@@ -14,7 +16,7 @@
   "dependencies": {
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-force-graph-2d": "^1.25.0"
+    "react-force-graph-2d": "^1.29.0"
   },
   "devDependencies": {
     "@types/react": "^18.2.0",

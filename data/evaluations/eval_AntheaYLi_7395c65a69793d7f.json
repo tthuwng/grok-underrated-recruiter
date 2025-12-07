@@ -1,0 +1,23 @@
+{
+  "relevant": true,
+  "score": 0.78,
+  "reasoning": "Candidate shows evidence of building through open-sourced code for multimodal action-conditioned video prediction presented at ICCV 2025, with deep technical discussions on evolution strategies, LoRA ranks, and multiway cross-attention indicating real understanding beyond buzzwords. Work on world models and reasoning aligns moderately with xAI's mission of understanding the universe, though more vision/robotics-focused; heavy collaboration as a PhD student tempers ownership but top-conference outputs suggest exceptional ability. Communication is clear and concise in sharing research.",
+  "detected_skills": [
+    "multimodal learning",
+    "video prediction",
+    "world models",
+    "evolution strategies",
+    "RL",
+    "LoRA adaptations"
+  ],
+  "red_flags": [],
+  "recommended_role": "research",
+  "standout_tweets": [
+    3,
+    6,
+    7,
+    8,
+    9
+  ],
+  "exceptional_work": "Open-sourced Multimodal Action conditioned Video Prediction model for world models, enabling fine-grained action signals and downstream policy training, presented at ICCV 2025"
+}

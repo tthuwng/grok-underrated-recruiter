@@ -1,0 +1,22 @@
+{
+  "relevant": false,
+  "score": 0.15,
+  "reasoning": "This is a company marketing account for RudderStack, posting promotional content about customer data pipelines, case studies, and features, with no evidence of personal exceptional engineering work. Limited technical depth shown in one tweet on PostgreSQL tuning, but lacks ownership, deep ML expertise, or alignment with xAI's mission in AI training/inference. No shipped personal projects, open source, or hard problem-solving in relevant stacks like CUDA/JAX/distributed ML.",
+  "detected_skills": [
+    "data pipelines",
+    "event streaming",
+    "PostgreSQL optimization",
+    "customer data platforms"
+  ],
+  "red_flags": [
+    "pure promotional content without substance",
+    "company account, not individual engineer",
+    "no original technical contributions or code",
+    "focus on business/marketing over engineering"
+  ],
+  "recommended_role": "none",
+  "standout_tweets": [
+    14
+  ],
+  "exceptional_work": ""
+}

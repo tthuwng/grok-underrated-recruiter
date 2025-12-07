@@ -1,0 +1,22 @@
+{
+  "relevant": false,
+  "score": 0.3,
+  "reasoning": "Candidate works at OpenAI and mentions a fun project there [12] and interest in training agents/systems [9], but provides no evidence of exceptional personal contributions, shipped code, or deep technical artifacts. Tweets are dominated by shitposts, memes, and casual observations rather than demonstrations of building or solving hard problems. Lacks clear ownership of impressive work aligning with xAI's rigorous standards for mission-driven engineering excellence.",
+  "detected_skills": [
+    "ML training systems",
+    "agents",
+    "LLM inference"
+  ],
+  "red_flags": [
+    "Heavy shitposting and non-technical content",
+    "Vague project mentions without substance or links to work",
+    "No open source or shipped products evident"
+  ],
+  "recommended_role": "none",
+  "standout_tweets": [
+    9,
+    12,
+    8
+  ],
+  "exceptional_work": ""
+}

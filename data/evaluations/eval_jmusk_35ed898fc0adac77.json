@@ -1,0 +1,22 @@
+{
+  "relevant": false,
+  "score": 0.2,
+  "reasoning": "Bio indicates past engineering roles at X and Tesla_AI, suggesting some relevant experience, but tweets show no evidence of personal exceptional work, code, projects, or technical depth\u2014mostly sports commentary, politics, promotions, and shoutouts to others. Lacks ownership of hard problems or mission-aligned technical contributions like LLMs or training optimizations. No shipped products, open source, or deep experiments evident.",
+  "detected_skills": [
+    "Recommendation systems (recruiting mention)",
+    "Autonomy/ML (Tesla_AI background)"
+  ],
+  "red_flags": [
+    "Pure promotional content without substance",
+    "No original technical thinking",
+    "Heavy focus on sports/politics over engineering"
+  ],
+  "recommended_role": "none",
+  "standout_tweets": [
+    5,
+    6,
+    20,
+    22
+  ],
+  "exceptional_work": ""
+}

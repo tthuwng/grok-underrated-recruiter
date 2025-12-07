@@ -1,0 +1,14 @@
+{
+  "relevant": false,
+  "score": 0.1,
+  "reasoning": "No evidence of exceptional technical work, shipped products, or open-source contributions; tweets are dominated by Tesla fandom, FSD demos, memes, and casual observations without code, math, or deep engineering insights. Bio mentions SWE at getbestlifeapp but provides zero details on personal achievements or xAI-relevant tech like ML, distributed systems, or CUDA. Lacks mission alignment with AI understanding the universe, showing only superficial interest in Tesla's FSD.",
+  "detected_skills": [],
+  "red_flags": [
+    "No original technical content or projects",
+    "Pure promotional Tesla content without substance",
+    "Only retweets/shares/memes, no deep thinking"
+  ],
+  "recommended_role": "none",
+  "standout_tweets": [],
+  "exceptional_work": ""
+}

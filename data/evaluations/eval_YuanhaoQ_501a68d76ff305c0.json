@@ -1,0 +1,21 @@
+{
+  "relevant": true,
+  "score": 0.8,
+  "reasoning": "Candidate has shipped impressive work including CRISPR-GPT published in Nature Biomedical Engineering and open-sourced Biomni AI agent with GitHub repo, demonstrating building and exceptional ability in applied AI for biomedicine. Shows technical depth via RL for scientific reasoning, expert discussion training, and agent tools, aligning somewhat with xAI's mission through AI for scientific discovery. Ownership evident in leading/promoting projects from Stanford/Princeton, though team-based ('we' language).",
+  "detected_skills": [
+    "AI agents",
+    "LLM fine-tuning",
+    "Reinforcement learning",
+    "Biomedical AI",
+    "CRISPR design",
+    "Open-source development"
+  ],
+  "red_flags": [],
+  "recommended_role": "research",
+  "standout_tweets": [
+    5,
+    7,
+    10
+  ],
+  "exceptional_work": "CRISPR-GPT: conversational gene editing tool published in Nature Biomedical Engineering; Biomni: open-sourced biomedical AI agent with tools and databases."
+}

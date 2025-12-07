@@ -1,0 +1,22 @@
+{
+  "relevant": true,
+  "score": 0.85,
+  "reasoning": "Candidate demonstrates exceptional ability through multiple top-tier ML conference publications (NeurIPS, EMNLP, COLING) and shipping research artifacts like benchmarks (UserBench, CRMArena, APIGen-MT-5k) and frameworks (LoRA Soups, APIGen-MT), showing deep technical work in LLM agents, reasoning, and post-training. Technical depth is evident in detailed threads on CoT analysis, LoRA merging experiments, and probabilistic reasoning effects, beyond buzzwords. Strong mission alignment with LLM reasoning/evals, though some enterprise focus; clear ownership via presentations and leadership in threads.",
+  "detected_skills": [
+    "LLM agents",
+    "benchmarks and evals",
+    "LoRA fine-tuning/merging",
+    "Chain-of-Thought reasoning analysis",
+    "multi-turn interactions",
+    "post-training"
+  ],
+  "red_flags": [],
+  "recommended_role": "research",
+  "standout_tweets": [
+    1,
+    5,
+    12,
+    23
+  ],
+  "exceptional_work": "LoRA Soups for skill composition in LLMs; APIGen-MT framework and 5k dataset for agent training; CoT reasoning analysis disentangling memorization from genuine reasoning"
+}

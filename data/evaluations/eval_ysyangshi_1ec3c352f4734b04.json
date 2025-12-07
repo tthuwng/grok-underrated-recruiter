@@ -1,0 +1,17 @@
+{
+  "relevant": false,
+  "score": 0.2,
+  "reasoning": "Tweets focus entirely on product promotion, waitlist management, and credit drops for 'SOLO' (a coding agent), with no evidence of personal technical building, code, or deep engineering contributions. As Head of TRAE at ByteDance, there may be leadership in AI products, but nothing demonstrates exceptional hands-on ability, ownership of hard problems, or technical depth required for xAI. Lacks any discussion of core tech stacks like JAX, CUDA, or transformers training, and shows no mission alignment beyond generic AI tools.",
+  "detected_skills": [
+    "AI product leadership",
+    "Product promotion"
+  ],
+  "red_flags": [
+    "Pure promotional content without substance",
+    "No original technical thinking or code",
+    "No evidence of personal ownership of engineering work"
+  ],
+  "recommended_role": "none",
+  "standout_tweets": [],
+  "exceptional_work": ""
+}

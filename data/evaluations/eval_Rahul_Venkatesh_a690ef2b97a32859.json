@@ -1,0 +1,23 @@
+{
+  "relevant": true,
+  "score": 0.88,
+  "reasoning": "Candidate demonstrates exceptional ability through shipping open-source code and models for advanced vision world models like PSI and SpelkeNet, which outperform SOTA methods (e.g., SAM) on physics-aware segmentation and manipulation tasks. Technical depth is evident in detailed explanations of concepts like LRAS, counterfactual probing, and masked video prediction, aligned with xAI's mission of understanding the physical universe via AI. Strong ownership in leading project announcements and collaborations, though as a PhD student, contributions are team-based.",
+  "detected_skills": [
+    "Computer Vision",
+    "World Models",
+    "Video Prediction",
+    "Object Segmentation",
+    "3D Scene Understanding",
+    "Self-Supervised Learning",
+    "Autoregressive Modeling"
+  ],
+  "red_flags": [],
+  "recommended_role": "research",
+  "standout_tweets": [
+    5,
+    14,
+    19,
+    24
+  ],
+  "exceptional_work": "PSI framework for pure vision foundation world models via probabilistic structure integration, and SpelkeNet for physics-based object segmentation using LRAS, with open-sourced code/models outperforming SAM on SpelkeBench."
+}

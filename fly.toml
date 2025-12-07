@@ -1,0 +1,28 @@
+# fly.toml app configuration file generated for grok-recruiter-api on 2025-12-07T05:12:50-08:00
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
+
+app = 'grok-recruiter-api'
+primary_region = 'sjc'
+
+[build]
+
+# Single process deployment (worker disabled until Redis is configured)
+# To enable worker: uncomment worker process and add REDIS_URL secret
+[processes]
+  app = "uvicorn api.main:app --host 0.0.0.0 --port 8080"
+  # worker = "arq api.worker.WorkerSettings"  # Requires Redis
+
+[http_service]
+  internal_port = 8080
+  force_https = true
+  auto_stop_machines = 'stop'
+  auto_start_machines = true
+  min_machines_running = 1
+  processes = ['app']
+
+[[vm]]
+  memory = '1gb'
+  cpu_kind = 'shared'
+  cpus = 1

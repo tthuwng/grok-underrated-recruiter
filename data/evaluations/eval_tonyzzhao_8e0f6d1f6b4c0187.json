@@ -1,0 +1,22 @@
+{
+  "relevant": false,
+  "score": 0.35,
+  "reasoning": "Candidate shows leadership as CEO of Sunday Robotics with mentions of shipping ACT-1 and training models on H100 clusters, but tweets lack personal deep technical contributions, code, or experiments\u2014mostly team shoutouts and high-level promo. Robotics focus misaligns with xAI's core AI/universe understanding mission and stack like JAX/CUDA transformers. No clear evidence of exceptional individual ability from X presence; bio creds promising but not substantiated in tweets.",
+  "detected_skills": [
+    "robotics",
+    "model training",
+    "end-to-end neural networks"
+  ],
+  "red_flags": [
+    "mostly promotional/team credits without personal ownership",
+    "high-level buzz without code/math details",
+    "robotics/product focus over foundational AI"
+  ],
+  "recommended_role": "none",
+  "standout_tweets": [
+    12,
+    25,
+    30
+  ],
+  "exceptional_work": "Shipped ACT-1 end-to-end robotics model trained on 16 H100 nodes"
+}

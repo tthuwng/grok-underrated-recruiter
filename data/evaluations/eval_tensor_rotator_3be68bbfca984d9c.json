@@ -1,0 +1,21 @@
+{
+  "relevant": false,
+  "score": 0.3,
+  "reasoning": "Bio indicates strong experience in inference at Anthropic and Gemini at Google, plus a PhD, suggesting potential technical depth, but tweets provide no evidence of building or shipping exceptional work, deep technical dives, code, experiments, or ownership of hard problems. Content is mostly memes, jokes, and casual commentary on AI benchmarks like SWE-bench without personal contributions or details. Lacks mission-obsessed technical output expected for xAI caliber.",
+  "detected_skills": [
+    "Inference engineering",
+    "ML benchmarks awareness"
+  ],
+  "red_flags": [
+    "Mostly non-technical/meme content",
+    "No original technical contributions or projects shared",
+    "No evidence of building/shipping"
+  ],
+  "recommended_role": "none",
+  "standout_tweets": [
+    8,
+    9,
+    13
+  ],
+  "exceptional_work": ""
+}

@@ -1,0 +1,24 @@
+{
+  "relevant": false,
+  "score": 0.15,
+  "reasoning": "No clear evidence of personally building or shipping exceptional technical work; tweets mostly promote Tesla products and mention 'we' for company AI integrations without personal ownership or depth. Lacks demonstration of deep technical skills in xAI-relevant areas like ML training, distributed systems, or core stack; older tweets show minor infra tweaks like IPv6 but nothing rigorous. Mission alignment is tangential via Tesla AI in service/support, not core AI understanding of the universe.",
+  "detected_skills": [
+    "AI agent integration (business apps)",
+    "IT infrastructure",
+    "Web performance monitoring",
+    "IPv6 deployment",
+    "Load balancing"
+  ],
+  "red_flags": [
+    "Pure promotional content without substance",
+    "Lack of original technical thinking or code",
+    "No evidence of personal ownership of hard problems"
+  ],
+  "recommended_role": "none",
+  "standout_tweets": [
+    11,
+    12,
+    23
+  ],
+  "exceptional_work": ""
+}

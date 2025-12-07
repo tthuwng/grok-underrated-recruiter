@@ -1,0 +1,21 @@
+{
+  "relevant": true,
+  "score": 0.85,
+  "reasoning": "Candidate demonstrates exceptional ability through releasing open-source SOTA video-LMMs (Apollo family), benchmarks (SciVideoBench, TimeScope, ApolloBench), and frameworks like TPO, showing hands-on building in multimodal ML. Technical depth evident in specifics like long-context needle-in-haystack evals, temporal grounding, and agentic workflows for video reasoning, aligning with xAI's focus on reasoning and foundation models. Strong mission fit via science-oriented video understanding (physics/chemistry), though more research than core infra engineering.",
+  "detected_skills": [
+    "Video-LMMs",
+    "Multimodal foundation models",
+    "Benchmarks and evals",
+    "Preference optimization",
+    "Agentic workflows",
+    "Long-context reasoning"
+  ],
+  "red_flags": [],
+  "recommended_role": "research",
+  "standout_tweets": [
+    1,
+    6,
+    8
+  ],
+  "exceptional_work": "Open-sourced state-of-the-art video-LMM family (Apollo-3B/7B) with ApolloBench, plus SciVideoBench for scientific video reasoning and Temporal Preference Optimization framework."
+}

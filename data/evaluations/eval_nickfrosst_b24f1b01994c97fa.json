@@ -1,0 +1,25 @@
+{
+  "relevant": true,
+  "score": 0.85,
+  "reasoning": "As cofounder of Cohere, Nick Frosst has clear evidence of exceptional ability through shipping frontier models like SOTA translation (outperforming GPT-5), open-weight reasoning and vision models, on-prem LLMs, and overseeing >100 research papers. Tweets demonstrate technical depth in model specialization, reasoning-tool use decoupling, and enterprise deployment, aligning with xAI's stack (transformers, training optimizations). While ownership is team-attributed rather than personal code/ships, leadership in building competitive AI systems shows mission obsession and initiative over careerism.",
+  "detected_skills": [
+    "LLM training",
+    "Model specialization (translation, reasoning, vision)",
+    "Open-weight releases",
+    "Multilingual AI",
+    "Enterprise/on-prem inference",
+    "Research publication"
+  ],
+  "red_flags": [],
+  "recommended_role": "research",
+  "standout_tweets": [
+    15,
+    16,
+    18,
+    20,
+    21,
+    24,
+    26
+  ],
+  "exceptional_work": "Cofounder of Cohere: shipped SOTA translation model outperforming GPT-5, open-weight reasoning/vision models, on-prem LLMs, >100 papers, $500M raised for frontier enterprise AI."
+}

@@ -1,0 +1,21 @@
+{
+  "relevant": false,
+  "score": 0.35,
+  "reasoning": "Candidate shows solid engineering skills in building real-time voice AI agents and Rust/WebRTC applications at LiveKit, including shipping livekit-agents 1.0/1.2 with low-latency workflows. However, lacks evidence of exceptional ability in xAI core areas like large-scale ML training, transformers, JAX/CUDA optimization, or distributed HPC systems. Interests in CG/ML are surface-level without deep technical contributions aligned to understanding the universe via AI.",
+  "detected_skills": [
+    "Rust",
+    "WebRTC",
+    "Voice AI Agents",
+    "Real-time Systems",
+    "egui/wgpu",
+    "Mediapipe"
+  ],
+  "red_flags": [],
+  "recommended_role": "none",
+  "standout_tweets": [
+    4,
+    7,
+    19
+  ],
+  "exceptional_work": ""
+}

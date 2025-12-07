@@ -1,0 +1,19 @@
+{
+  "relevant": false,
+  "score": 0.15,
+  "reasoning": "Candidate's bio indicates high-level ML/NLP experience at Google and academia, but recent tweets show no evidence of building or shipping exceptional work, focusing instead on music, books, and casual quotes about language and reasoning. Lacks demonstration of technical depth through code, experiments, or problem-solving ownership relevant to xAI's stack or mission. No clear signs of mission obsession or hands-on engineering beyond superficial mentions like Prolog.",
+  "detected_skills": [
+    "ML/NLP (bio)",
+    "Language/Reasoning (tweets)"
+  ],
+  "red_flags": [
+    "Minimal original technical content",
+    "High volume of non-technical music posts"
+  ],
+  "recommended_role": "none",
+  "standout_tweets": [
+    7,
+    10
+  ],
+  "exceptional_work": ""
+}

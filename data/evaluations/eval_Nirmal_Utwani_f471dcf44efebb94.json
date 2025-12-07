@@ -1,0 +1,22 @@
+{
+  "relevant": false,
+  "score": 0.25,
+  "reasoning": "Candidate is a founding engineer at Amplitude, promoting SaaS analytics products with AI features, but shows no evidence of personally building exceptional technical projects, open-source contributions, or deep work in xAI's core stack like ML training, distributed systems, or low-level optimization. Tweets focus on high-level product launches, customer obsession, and company announcements rather than individual technical achievements or solving hard problems. Lacks mission alignment with understanding the universe via advanced AI, appearing more product-oriented than engineering-focused.",
+  "detected_skills": [
+    "SaaS Product Development",
+    "Customer Analytics",
+    "AI Product Features"
+  ],
+  "red_flags": [
+    "Pure promotional content without substance",
+    "No original technical thinking or code",
+    "No evidence of personal ownership of hard technical problems"
+  ],
+  "recommended_role": "none",
+  "standout_tweets": [
+    5,
+    9,
+    21
+  ],
+  "exceptional_work": ""
+}

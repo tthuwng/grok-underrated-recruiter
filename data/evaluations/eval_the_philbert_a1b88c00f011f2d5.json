@@ -1,0 +1,23 @@
+{
+  "relevant": true,
+  "score": 0.95,
+  "reasoning": "Candidate is lead maintainer of GCC Rust, demonstrating exceptional ability through hands-on implementation of advanced features like impl Trait (APIT/RPIT), const generics, fn traits, macros, and type systems, with blog posts, talks, and full-time development commitment. Deep technical depth in compiler development, Rust internals, and systems programming aligns well with xAI's Rust/C++/infrastructure stack, showing ownership of hard problems. Strong mission fit via obsession with building high-performance systems tools, though not directly ML-focused.",
+  "detected_skills": [
+    "Rust",
+    "Compiler Development",
+    "GCC",
+    "Type Systems",
+    "Systems Programming",
+    "Macros and Generics"
+  ],
+  "red_flags": [],
+  "recommended_role": "engineering",
+  "standout_tweets": [
+    1,
+    5,
+    7,
+    8,
+    19
+  ],
+  "exceptional_work": "Lead maintainer of GCC Rust: implemented impl Trait (APIT/RPIT desugaring), const generics, fn traits, macros, slices in libcore, and core type system after 1+ year of full-time development."
+}

@@ -1,0 +1,23 @@
+{
+  "relevant": false,
+  "score": 0.25,
+  "reasoning": "Candidate is a professor at Oxford and Research Director at Google DeepMind, showing familiarity with LLMs, robustness, and uncertainty quantification through sharing others' papers and workshops. However, tweets lack evidence of personal exceptional work, building, or shipping projects\u2014mostly promotions, job postings, and congratulations. No demonstration of hands-on ownership or deep technical contributions aligning with xAI's engineering focus on building scalable AI systems.",
+  "detected_skills": [
+    "LLMs",
+    "Uncertainty Quantification",
+    "Robust ML",
+    "Sub-token Modeling"
+  ],
+  "red_flags": [
+    "Pure promotional content without substance",
+    "No original technical thinking or personal projects",
+    "Focus on hiring and events over building"
+  ],
+  "recommended_role": "none",
+  "standout_tweets": [
+    1,
+    20,
+    3
+  ],
+  "exceptional_work": ""
+}

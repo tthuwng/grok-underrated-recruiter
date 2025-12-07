@@ -1,0 +1,24 @@
+{
+  "relevant": false,
+  "score": 0.25,
+  "reasoning": "Candidate has significant experience at Tesla AI on Optimus, Autopilot, and hardware from NVIDIA, indicating exposure to real-world AI at scale, but tweets provide no specific evidence of personal exceptional work, shipped products, or deep technical contributions like code or experiments. Content is mostly promotional, team hype, and recruiting for Tesla rather than demonstrating individual ownership or xAI-aligned mission obsession with foundational AI. Lacks technical depth beyond high-level mentions, with some philosophical digressions unrelated to engineering excellence.",
+  "detected_skills": [
+    "AI hardware",
+    "Autopilot debugging",
+    "Optimus AI",
+    "perf/watt optimization",
+    "chip bringup"
+  ],
+  "red_flags": [
+    "Pure promotional content without substance",
+    "Heavy recruiting focus",
+    "No original technical demos or code"
+  ],
+  "recommended_role": "none",
+  "standout_tweets": [
+    3,
+    11,
+    27
+  ],
+  "exceptional_work": ""
+}

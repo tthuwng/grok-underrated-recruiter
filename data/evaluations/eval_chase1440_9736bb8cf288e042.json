@@ -1,0 +1,23 @@
+{
+  "relevant": false,
+  "score": 0.28,
+  "reasoning": "Bio indicates relevant experience at MosaicML, Databricks, and Etched in ML infrastructure and inference, aligning with xAI's stack, but tweets show no evidence of personal exceptional work, shipped projects, code, or deep technical contributions. Content is mostly high-level opinions, hot takes on AI trends, compute, and agents without ownership or technical depth. Lacks clear proof of building hard things themselves, failing the non-negotiable evidence threshold.",
+  "detected_skills": [
+    "AI inference",
+    "ML infrastructure",
+    "Scaling discussions"
+  ],
+  "red_flags": [
+    "No personal projects, code, or shipped work shared",
+    "Mostly buzzword-heavy commentary without substance",
+    "Heavy non-technical content (sports, memes)"
+  ],
+  "recommended_role": "none",
+  "standout_tweets": [
+    2,
+    10,
+    12,
+    16
+  ],
+  "exceptional_work": ""
+}

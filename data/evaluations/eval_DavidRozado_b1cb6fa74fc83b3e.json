@@ -1,0 +1,24 @@
+{
+  "relevant": false,
+  "score": 0.25,
+  "reasoning": "Candidate conducts LLM evaluations on biases like positional effects in hiring, flattery, and political preferences, sharing methodologies and results via articles. However, no evidence of building or shipping software, open-source code, or hands-on work in core stacks like JAX, CUDA, or distributed training. Focus is on high-level research commentary rather than exceptional engineering ownership of hard problems.",
+  "detected_skills": [
+    "LLM evaluation",
+    "AI bias analysis",
+    "prompt engineering",
+    "data visualization"
+  ],
+  "red_flags": [
+    "Off-topic content (economics, vaccines, AC uptake)",
+    "No code or technical artifacts shared",
+    "Primarily links to external articles without deep implementation details"
+  ],
+  "recommended_role": "none",
+  "standout_tweets": [
+    2,
+    5,
+    9,
+    24
+  ],
+  "exceptional_work": ""
+}

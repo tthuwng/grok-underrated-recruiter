@@ -1,0 +1,23 @@
+{
+  "relevant": false,
+  "score": 0.25,
+  "reasoning": "Candidate shows interest in AI, physics, and science history but lacks evidence of building exceptional engineering projects, especially in xAI's core stack like JAX, CUDA, or distributed training. The only mentioned build is a minor browser extension for LaTeX rendering, which demonstrates basic web dev but not deep technical ownership or exceptional ability. Tweets are mostly high-level commentary, AI prompting demos, and founder promotion rather than shipping hard ML systems or solving complex problems.",
+  "detected_skills": [
+    "Physics knowledge",
+    "AI prompting",
+    "Basic web development",
+    "Entrepreneurship"
+  ],
+  "red_flags": [
+    "Limited original technical builds",
+    "More commentary than engineering",
+    "Founder/promotional focus over deep tech"
+  ],
+  "recommended_role": "none",
+  "standout_tweets": [
+    22,
+    8,
+    10
+  ],
+  "exceptional_work": "Built a browser extension converting LaTeX to Unicode math art"
+}

@@ -1,0 +1,13 @@
+{
+  "relevant": false,
+  "score": 0.0,
+  "reasoning": "This is the official Harvard Mathematics Department Twitter account, focused on promoting faculty/student awards, events, math history, and news articles. No evidence of personal exceptional engineering work, building projects, open-source contributions, or AI/ML technical depth relevant to xAI's stack. Lacks ownership of hard problems or mission-aligned content like LLMs, training, or scalable systems.",
+  "detected_skills": [],
+  "red_flags": [
+    "Pure promotional content without substance",
+    "Institutional account, not individual engineer"
+  ],
+  "recommended_role": "none",
+  "standout_tweets": [],
+  "exceptional_work": ""
+}

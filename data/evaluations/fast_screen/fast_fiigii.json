@@ -1,0 +1,1 @@
+{"pass_filter": true, "reason": "Works on CUTLASS and CUDA Compiler at NVIDIA, directly relevant to CUDA/ML systems engineering", "potential_role": "engineering"}

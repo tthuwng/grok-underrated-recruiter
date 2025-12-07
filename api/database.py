@@ -351,3 +351,13 @@ def increment_submission_attempts(submission_id: str) -> int:
         ).fetchone()
 
     return row[0] if row else 0
+
+
+def update_submission_stage(submission_id: str, stage: str) -> bool:
+    """Update just the stage of a submission."""
+    with get_db() as conn:
+        result = conn.execute(
+            "UPDATE submissions SET stage = ? WHERE id = ?",
+            (stage, submission_id)
+        )
+        return result.rowcount > 0

@@ -1,0 +1,19 @@
+{
+  "relevant": false,
+  "score": 0.25,
+  "reasoning": "Candidate is a CEO/co-founder of DecartAI, promoting a startup focused on AI training efficiency and real-time video generation, with a $21M seed raise, but tweets lack evidence of personal exceptional technical work, code, or deep engineering contributions. Content is mostly promotional hype, congrats, and high-level buzzwords without technical depth, experiments, or ownership of hard problems. No clear alignment with xAI's core mission or stack like JAX, CUDA, or transformers training.",
+  "detected_skills": [
+    "AI startup founding",
+    "generative AI business"
+  ],
+  "red_flags": [
+    "Pure promotional content without substance",
+    "No original technical thinking or code",
+    "Buzzwords without depth"
+  ],
+  "recommended_role": "none",
+  "standout_tweets": [
+    12
+  ],
+  "exceptional_work": ""
+}

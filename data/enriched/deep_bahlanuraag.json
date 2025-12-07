@@ -1,0 +1,103 @@
+{
+  "handle": "BahlAnuraag",
+  "bio": "Head of AIP, Commercial @PalantirTech",
+  "followers": 531,
+  "technical_depth": {
+    "score": 6,
+    "evidence": "Listed as inventor on multiple Palantir patents related to data resolution, network troubleshooting, and database systems (e.g., US11106692B1, US10721142B1). X posts discuss AI FDE, AIP primitives, Ontology at high level but no deep technical explanations or novel research."
+  },
+  "project_evidence": {
+    "score": 7,
+    "evidence": "Shipped products at Palantir scale including AIP (AI Platform) as Head of AIP Commercial. Contributor (@bahlanuraag) to Palantir's aip-community-registry GitHub repo (TypeScript/Python). No personal GitHub profile or popular OSS projects (1k+ stars) found."
+  },
+  "mission_alignment": {
+    "score": 7,
+    "evidence": "Frequent posts about Palantir AIP, AI in enterprise (e.g., AI FDE + AIP, xAI at DevCon2, Industry AI). Collaborations like Panasonic using AIP. Clearly interested in ML/AI via job, follows space, but enterprise-focused not pure frontier AGI."
+  },
+  "exceptional_ability": {
+    "score": 7,
+    "evidence": "Leadership role at Palantir (Head of AIP Commercial, prior Edge & IoT Engineering lead), patents indicate solving hard data/systems problems at scale. Competent track record in high-impact environment."
+  },
+  "communication": {
+    "score": 7,
+    "evidence": "Clear, concise X posts promoting Palantir AI products and events. Explains concepts like 'AI FDE + AIP = Builder velocity' straightforwardly, engages community."
+  },
+  "final_score": 67.5,
+  "summary": "Anuraag Bahl has strong Palantir experience in AI platform commercialization and prior engineering contributions evidenced by patents, making him a solid engineering candidate with enterprise AI exposure. Lacks public deep technical discussions or personal OSS projects. Suited for infrastructure/engineering roles leveraging scalable systems knowledge.",
+  "strengths": [
+    "Palantir AIP leadership and scale deployments",
+    "Patents demonstrating systems engineering depth"
+  ],
+  "concerns": [
+    "No personal GitHub or open-source projects",
+    "X activity promotional, not technically deep"
+  ],
+  "recommended_role": "engineering",
+  "github_url": null,
+  "linkedin_url": "https://www.linkedin.com/in/anuraag-bahl",
+  "top_repos": [
+    "palantir/aip-community-registry"
+  ],
+  "citations": [
+    "https://x.com/i/status/1832595066952585659",
+    "https://x.com/i/status/1820559675890544975",
+    "https://x.com/i/status/1894899820328034616",
+    "https://x.com/i/status/1879947447973408863",
+    "https://x.com/i/status/1816656907693699532",
+    "https://patents.justia.com/assignee/palantir-technology-inc?page=34",
+    "https://x.com/i/status/1840115614687604966",
+    "https://www.linkedin.com/in/anuraag-bahl",
+    "https://patents.justia.com/inventor/anuraag-bahl",
+    "https://x.com/i/status/1836828442001568083",
+    "https://x.com/BahlAnuraag/status/1940892644257018002",
+    "https://x.com/i/status/1898594533039903126",
+    "https://x.com/i/status/1879945290163318950",
+    "https://patents.justia.com/inventor/sri-krishna-vempati",
+    "https://x.com/i/status/1733173128635760643",
+    "https://patents.google.com/patent/US11106692B1/en",
+    "https://x.com/i/status/1836835244269318423",
+    "https://x.com/i/status/1940892443916083696",
+    "https://www.zawya.com/en/press-release/companies-news/appliedai-unveils-the-worlds-first-lwm-and-work-knowledge-graph-for-supervised-automation-in-regulated-industries-pm5xo8hg",
+    "https://wiza.co/d/palantir-technologies/c66b/anuraag-bahl",
+    "https://x.com/i/status/1940892644257018002",
+    "https://patents.justia.com/assignee/palantir-technology-inc?page=36",
+    "https://x.com/i/status/1836976372658401314",
+    "https://github.com/palantir/aip-community-registry",
+    "https://scholargps.com/scholars/25215217503719/ankit-shankar",
+    "https://techxmedia.com/en/appliedai-unveils-ai-workflow-platform-opus-com/",
+    "https://www.linkedin.com/posts/anuraag-bahl_palantir-reindustrialize-activity-7212459816751939584-RmqW",
+    "https://x.com/BahlAnuraag",
+    "https://x.com/i/status/1765820051587051877",
+    "https://x.com/BahlAnuraag/status/1806683792800698720",
+    "https://x.com/i/status/1940107682205094267",
+    "https://x.com/i/status/1898572363803033603",
+    "https://x.com/i/user/1733311598302023680",
+    "https://x.com/BahlAnuraag/status/1892944674295332887",
+    "https://www.fmeasure.com/patent_citation/?patent_id=10142195",
+    "https://x.com/i/status/1895541988692541867",
+    "https://x.com/i/status/1841954389411381611",
+    "https://x.com/i/status/1733338267410674060",
+    "https://www.fmeasure.com/patent_citation/?patent_id=20040117387A1",
+    "https://x.com/i/status/1840349246618235087",
+    "https://x.com/i/status/1894808081382678584",
+    "https://x.com/i/status/1842358603455267254",
+    "https://x.com/i/status/1806683792800698720",
+    "https://rocketreach.co/anuraag-bahl-email_72089014",
+    "https://x.com/i/status/1842533328487915918",
+    "https://x.com/i/status/1879947444680815056",
+    "https://www.investing.com/news/analyst-ratings/goldman-sachs-maintains-neutral-on-palantir-holds-80-target-93CH-3953855",
+    "https://www.linkedin.com/in/anuraag-bahl/fr",
+    "https://x.com/i/status/1932593883667460182",
+    "https://x.com/i/status/1832171469456933303",
+    "https://x.com/i/status/1806480521133785525",
+    "https://x.com/i/status/1765823327157772469",
+    "https://x.com/i/status/1836944888744599953",
+    "https://x.com/i/status/1941004636389056672",
+    "https://www.linkedin.com/posts/anuraag-bahl_introducing-palantir-fedstart-activity-7077419892546682880-eb2t",
+    "https://patents.justia.com/inventor/samuel-tarng",
+    "https://patents.google.com/patent/US10721142",
+    "https://x.com/i/status/1932576822841200757",
+    "https://x.com/i/status/1895720519871463459"
+  ],
+  "raw_response": "{\n  \"technical_depth\": {\"score\": 6, \"evidence\": \"Listed as inventor on multiple Palantir patents related to data resolution, network troubleshooting, and database systems (e.g., US11106692B1, US10721142B1). X posts discuss AI FDE, AIP primitives, Ontology at high level but no deep technical explanations or novel research.\"},\n  \"project_evidence\": {\"score\": 7, \"evidence\": \"Shipped products at Palantir scale including AIP (AI Platform) as Head of AIP Commercial. Contributor (@bahlanuraag) to Palantir's aip-community-registry GitHub repo (TypeScript/Python). No personal GitHub profile or popular OSS projects (1k+ stars) found.\"},\n  \"mission_alignment\": {\"score\": 7, \"evidence\": \"Frequent posts about Palantir AIP, AI in enterprise (e.g., AI FDE + AIP, xAI at DevCon2, Industry AI). Collaborations like Panasonic using AIP. Clearly interested in ML/AI via job, follows space, but enterprise-focused not pure frontier AGI.\"},\n  \"exceptional_ability\": {\"score\": 7, \"evidence\": \"Leadership role at Palantir (Head of AIP Commercial, prior Edge & IoT Engineering lead), patents indicate solving hard data/systems problems at scale. Competent track record in high-impact environment.\"},\n  \"communication\": {\"score\": 7, \"evidence\": \"Clear, concise X posts promoting Palantir AI products and events. Explains concepts like 'AI FDE + AIP = Builder velocity' straightforwardly, engages community.\"},\n  \"summary\": \"Anuraag Bahl has strong Palantir experience in AI platform commercialization and prior engineering contributions evidenced by patents, making him a solid engineering candidate with enterprise AI exposure. Lacks public deep technical discussions or personal OSS projects. Suited for infrastructure/engineering roles leveraging scalable systems knowledge.\",\n  \"strengths\": [\"Palantir AIP leadership and scale deployments\", \"Patents demonstrating systems engineering depth\"],\n  \"concerns\": [\"No personal GitHub or open-source projects\", \"X activity promotional, not technically deep\"],\n  \"recommended_role\": \"engineering\",\n  \"github_url\": null,\n  \"linkedin_url\": \"https://www.linkedin.com/in/anuraag-bahl\",\n  \"top_repos\": [\"palantir/aip-community-registry\"]\n}"
+}

@@ -1,0 +1,23 @@
+{
+  "relevant": false,
+  "score": 0.2,
+  "reasoning": "Candidate is CEO of Skydio, leading autonomous drone development with real-world impact in robotics and AI-driven flight, showing mission obsession in building infrastructure-scale products. However, no evidence of personal hands-on exceptional engineering work, deep technical depth (e.g., code, ML optimizations, or xAI-relevant stack like JAX/CUDA), or focus on LLMs/reasoning; tweets are primarily promotional and high-level company announcements crediting teams. Lacks direct alignment with xAI's core AI mission and engineering roles.",
+  "detected_skills": [
+    "robotics",
+    "autonomous systems",
+    "hardware-software integration",
+    "leadership"
+  ],
+  "red_flags": [
+    "pure promotional content without substance",
+    "no original technical contributions shown",
+    "no personal ownership of code or deep tech problems"
+  ],
+  "recommended_role": "none",
+  "standout_tweets": [
+    5,
+    11,
+    19
+  ],
+  "exceptional_work": ""
+}

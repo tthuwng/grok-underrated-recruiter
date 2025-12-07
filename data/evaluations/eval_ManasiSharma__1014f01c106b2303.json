@@ -1,0 +1,23 @@
+{
+  "relevant": true,
+  "score": 0.8,
+  "reasoning": "Candidate demonstrates strong evidence of building impactful ML evaluation tools like ResearchRubrics, a human-authored benchmark with code release, dataset, and arXiv paper, showing technical depth in agent reasoning evals, LLM-as-judge, and complexity frameworks. Mission alignment is excellent with focus on frontier model reasoning, agents, and RL, matching xAI's goals, though ownership is shared in a large team context. Communication is clear and substantive, with low follower count but high-quality shipping over hype.",
+  "detected_skills": [
+    "agent evaluation",
+    "reasoning benchmarks",
+    "LLM-as-judge",
+    "RL/post-training",
+    "prompt engineering"
+  ],
+  "red_flags": [
+    "Limited evidence of individual ownership; mostly 'we' language in team projects"
+  ],
+  "recommended_role": "research",
+  "standout_tweets": [
+    2,
+    4,
+    13,
+    30
+  ],
+  "exceptional_work": "Led or contributed significantly to ResearchRubrics benchmark (101 prompts, 2.5K expert rubrics, code release) for evaluating deep research agents, achieving human-aligned automated scoring."
+}

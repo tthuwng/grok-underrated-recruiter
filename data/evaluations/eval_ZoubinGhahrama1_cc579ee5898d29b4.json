@@ -1,0 +1,17 @@
+{
+  "relevant": false,
+  "score": 0.25,
+  "reasoning": "Candidate has an impressive resume in AI research leadership (VP at DeepMind, ex-Google Brain), but tweets provide no evidence of personal exceptional work, hands-on building, shipping code, or deep technical dives\u2014mostly promotional hype for Google/DeepMind projects. Lacks ownership of hard problems or mission-aligned technical contributions evident from X presence. Focuses on high-level excitement rather than demonstrating builder mindset xAI seeks.",
+  "detected_skills": [
+    "AI Research Leadership",
+    "Machine Learning Awareness"
+  ],
+  "red_flags": [
+    "Pure promotional content without substance",
+    "No original technical thinking or code",
+    "No evidence of personal ownership"
+  ],
+  "recommended_role": "none",
+  "standout_tweets": [],
+  "exceptional_work": ""
+}

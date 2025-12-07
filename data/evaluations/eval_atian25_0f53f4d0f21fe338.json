@@ -1,0 +1,22 @@
+{
+  "relevant": false,
+  "score": 0.45,
+  "reasoning": "Candidate shows solid engineering experience as core dev on OSS projects like EggJS/CNPM and current lead on Trae AI IDE, with some technical tweets on debugging (e.g., PowerShell rmdir issues, process manager). However, work is primarily in web/Node.js/IDE space with surface-level AI model integration, lacking depth in xAI-relevant areas like ML training, distributed systems, or core stack (Rust/C++/CUDA/JAX). Tweets are mostly promotional updates rather than evidence of solving hard, mission-critical AI problems.",
+  "detected_skills": [
+    "IDE development",
+    "Open source (Node.js/EggJS)",
+    "AI model integration",
+    "Debugging (PowerShell, processes)"
+  ],
+  "red_flags": [
+    "Heavy promotional content for Trae",
+    "Limited original technical depth in tweets",
+    "No evidence of low-level ML/infra work"
+  ],
+  "recommended_role": "none",
+  "standout_tweets": [
+    1,
+    11
+  ],
+  "exceptional_work": "Core developer of EggJS/CNPM open source projects and lead developer of Trae AI IDE"
+}

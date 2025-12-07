@@ -1,0 +1,24 @@
+{
+  "relevant": true,
+  "score": 0.84,
+  "reasoning": "Candidate demonstrates exceptional ability by building and shipping sophisticated LLM benchmarks like Vibe Code Bench, which tests end-to-end web app development with real dev environments, showing hands-on engineering. Strong technical depth in analyzing model failure modes (e.g., tool calls, Docker issues) and running controlled evals across multiple domains, with clear mission alignment to advancing AI capabilities via rigorous evaluation. Ownership is evident through repeated releases and detailed breakdowns, though team-based ('we'), fitting research-oriented roles over core training/infra.",
+  "detected_skills": [
+    "LLM evaluation",
+    "benchmark design",
+    "AI agent testing",
+    "competitive programming benchmarks",
+    "multimodal benchmarks"
+  ],
+  "red_flags": [],
+  "recommended_role": "research",
+  "standout_tweets": [
+    14,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22
+  ],
+  "exceptional_work": "Created Vibe Code Bench: benchmark evaluating AI models' ability to build full web applications from scratch using terminal access, databases, and libraries, revealing only top models succeed."
+}

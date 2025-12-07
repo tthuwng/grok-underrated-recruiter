@@ -1,0 +1,22 @@
+{
+  "relevant": true,
+  "score": 0.85,
+  "reasoning": "Candidate demonstrates exceptional ability through multiple peer-reviewed papers at top conferences (ICML, ICLR, EMNLP, ACL) on LLM inference scaling, reasoning strategies, and security benchmarks, with open-source code releases showing hands-on building. Technical depth is evident in rigorous evaluations of methods like CoT, self-consistency, and Mixture of Agents, backed by experiments on reasoning vs. non-reasoning models. Strong mission alignment with xAI's focus on advanced AI via LLM evals and optimization, plus clear ownership from internship work at Together AI.",
+  "detected_skills": [
+    "LLM evaluation",
+    "inference-time scaling",
+    "reasoning strategies",
+    "benchmarks",
+    "prompt security",
+    "open-source tooling"
+  ],
+  "red_flags": [],
+  "recommended_role": "research",
+  "standout_tweets": [
+    5,
+    10,
+    11,
+    22
+  ],
+  "exceptional_work": "Raccoon benchmark for LLM prompt extraction attacks (ACL Findings paper + open-source code); rigorous eval of verifier-free inference scaling methods (ICML/ICLR papers)"
+}

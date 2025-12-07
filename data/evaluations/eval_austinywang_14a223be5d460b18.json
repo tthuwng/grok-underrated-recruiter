@@ -1,0 +1,26 @@
+{
+  "relevant": false,
+  "score": 0.25,
+  "reasoning": "Candidate shows initiative in building and launching AI products like ManaflowAI (AI agents/ops) and Bin (AI BI dashboards), with YC acceptance and media mentions indicating some shipping ability. However, content is heavily promotional with no evidence of deep technical work in xAI-relevant areas like ML training, transformers, distributed systems, or core infrastructure; early tweets reveal beginner-level web dev projects lacking exceptional depth. No mission alignment with understanding the universe or hardcore AI systems, focusing instead on no-code tools and productivity apps.",
+  "detected_skills": [
+    "React",
+    "Three.js",
+    "WebGL",
+    "Python (numpy/pandas)",
+    "AI agents (high-level)",
+    "Frontend development",
+    "Startup product launches"
+  ],
+  "red_flags": [
+    "Pure promotional content without code or technical depth",
+    "No original deep technical thinking or experiments",
+    "Focus on no-code AI tools, not core ML/infra"
+  ],
+  "recommended_role": "none",
+  "standout_tweets": [
+    9,
+    11,
+    12
+  ],
+  "exceptional_work": ""
+}

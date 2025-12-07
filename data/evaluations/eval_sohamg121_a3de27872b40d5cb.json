@@ -1,0 +1,25 @@
+{
+  "relevant": true,
+  "score": 0.9,
+  "reasoning": "Candidate has shipped Voxtral, MistralAI's first open-source audio LLMs with technical depth in on-policy DPO, continued pretraining, and custom evals like GSM8K-speech, demonstrating exceptional ability in building multimodal models. Strong evidence of hands-on work at top labs (Mistral, DeepMind) with mission alignment to advanced AI systems. Minor off-topic complaints but no major red flags; prioritizes shipping over hype.",
+  "detected_skills": [
+    "multimodal LLMs",
+    "audio LLMs",
+    "DPO",
+    "continued pretraining",
+    "ASR optimization",
+    "model evals",
+    "open-source releases"
+  ],
+  "red_flags": [],
+  "recommended_role": "research",
+  "standout_tweets": [
+    9,
+    10,
+    11,
+    12,
+    13,
+    14
+  ],
+  "exceptional_work": "Contributed to and shipped Voxtral audio LLMs at MistralAI, including on-policy DPO for response quality, continued pretraining for transcription/QA, and evals for speech reasoning (GSM8K-speech, MMLU-Speech), released Apache 2.0"
+}

@@ -1,0 +1,24 @@
+{
+  "relevant": true,
+  "score": 0.97,
+  "reasoning": "Candidate maintains vLLM, a high-impact open-source LLM inference engine with 40k stars and 1000 contributors, shipping features like full-speed MoE support via Transformers backend, BERT/encoder models, and interleaved sliding window attention, demonstrating exceptional ability and ownership of hard inference problems. Shows deep technical depth in transformers, backends, and optimizations without buzzwords, plus strong mission alignment to efficient AI scaling. Excellent communication through clear announcements and community building like forums and docs overhauls.",
+  "detected_skills": [
+    "LLM inference",
+    "Transformers integration",
+    "MoE models",
+    "Sliding window attention",
+    "Open-source maintenance",
+    "Documentation tooling (MkDocs, Ruff)",
+    "Python engineering"
+  ],
+  "red_flags": [],
+  "recommended_role": "engineering",
+  "standout_tweets": [
+    2,
+    3,
+    5,
+    7,
+    8
+  ],
+  "exceptional_work": "Maintained vLLM-project: implemented Transformers backend for full-speed MoE/BERT/sliding-window support, ported docs to MkDocs, formatted with Ruff, launched user forum."
+}

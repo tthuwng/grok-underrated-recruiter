@@ -1,0 +1,22 @@
+{
+  "relevant": false,
+  "score": 0.25,
+  "reasoning": "Candidate has relevant background from 7 years at Google (DeepMind) and academic role in 3D vision/radiance fields, but recent tweets show no evidence of building or shipping exceptional work\u2014mostly conference live-tweeting, student congrats, and casual commentary. Lacks demonstration of deep ownership on hard problems or xAI-aligned mission (e.g., large-scale training, LLMs), focusing instead on CV conferences without code/math/experiments shared. Does not meet 'evidence of exceptional ability' threshold for rigorous xAI engineering roles.",
+  "detected_skills": [
+    "Computer Vision",
+    "3D Vision",
+    "Radiance Fields",
+    "Deep Learning (DeepMind exp)"
+  ],
+  "red_flags": [
+    "No original technical content or builds shared",
+    "Heavy conference promotion/live-tweeting without substance",
+    "Academic focus over engineering ships"
+  ],
+  "recommended_role": "none",
+  "standout_tweets": [
+    4,
+    16
+  ],
+  "exceptional_work": ""
+}

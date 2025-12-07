@@ -1,0 +1,24 @@
+{
+  "relevant": true,
+  "score": 0.88,
+  "reasoning": "Candidate is a DeepMind research scientist with clear evidence of exceptional ability through involvement in multiple high-impact NeurIPS-level projects on advanced ML topics like diffusion model fine-tuning, neural fields, discrete EBM sampling, and ML-for-systems applications such as prefetching with hierarchical NNs and GNNs on assembly code. Demonstrates technical depth via specific references to techniques and joint papers, with strong ownership implied by personal excitement and highlighting contributions. Good mission alignment with ML systems and optimization, though more general ML than xAI-specific scaling/reasoning; communication is clear and substantive.",
+  "detected_skills": [
+    "ML research",
+    "diffusion models",
+    "energy-based models",
+    "neural fields",
+    "graph neural networks",
+    "ML for systems",
+    "prefetching optimization"
+  ],
+  "red_flags": [],
+  "recommended_role": "research",
+  "standout_tweets": [
+    1,
+    2,
+    3,
+    5,
+    14
+  ],
+  "exceptional_work": "Led/contributed to NeurIPS papers on ML-for-systems prefetching with hierarchical NNs, GNNs for program behavior prediction on assembly code, diffusion fine-tuning via backprop variations, and discrete EBM sampling."
+}

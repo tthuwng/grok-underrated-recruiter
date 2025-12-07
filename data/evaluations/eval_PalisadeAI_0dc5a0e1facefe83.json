@@ -1,0 +1,23 @@
+{
+  "relevant": false,
+  "score": 0.25,
+  "reasoning": "PalisadeAI focuses on AI safety evaluations, reports, and demonstrations of capabilities like hacking CTFs and shutdown resistance, showing some technical depth in LLM testing but no evidence of building or shipping core engineering projects (e.g., models, infrastructure, or open-source code). Content is organizational ('we') rather than individual ownership of hard engineering problems, and mission emphasizes policy advising on risks over advancing AI for understanding the universe. Lacks proof of exceptional engineering ability like coding in Rust/C++/CUDA or training optimizations.",
+  "detected_skills": [
+    "AI evaluations",
+    "LLM testing",
+    "safety research",
+    "prompt engineering"
+  ],
+  "red_flags": [
+    "Organizational account, not individual engineer",
+    "No code or shipped products",
+    "Policy/safety focus over building AI systems"
+  ],
+  "recommended_role": "none",
+  "standout_tweets": [
+    1,
+    2,
+    11
+  ],
+  "exceptional_work": ""
+}

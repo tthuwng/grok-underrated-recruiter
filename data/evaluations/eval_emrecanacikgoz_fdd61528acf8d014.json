@@ -1,0 +1,21 @@
+{
+  "relevant": true,
+  "score": 0.82,
+  "reasoning": "Candidate demonstrates exceptional ability through multiple top-conference publications (NeurIPS, ACL) on agentic self-improvement (TT-SI, ToolRL) and evaluation frameworks (TD-Eval), with code releases and leaderboards showing hands-on building. Technical depth evident in detailed findings on uncertainty-guided adaptation, ablations, and RL methods, aligning with xAI's focus on LLMs, reasoning, and optimization. Strong mission fit in self-evolving agents and agentic learning, though more academic than production-scale engineering.",
+  "detected_skills": [
+    "Agentic RL",
+    "LLM self-improvement",
+    "Test-time adaptation",
+    "Task-oriented dialogue evaluation",
+    "Uncertainty estimation",
+    "Ablation studies"
+  ],
+  "red_flags": [],
+  "recommended_role": "research",
+  "standout_tweets": [
+    14,
+    20,
+    11
+  ],
+  "exceptional_work": "TT-SI: Test-time self-improvement algorithm enabling LLM agents to adapt using uncertainty-guided data generation and one-shot updates, outperforming SFT with 68x less data; ToolRL for agentic learning; TD-Eval framework with released code/leaderboard."
+}

@@ -1,0 +1,22 @@
+{
+  "relevant": true,
+  "score": 0.75,
+  "reasoning": "Candidate's bio and tweets indicate co-leadership of Veo at Google DeepMind, a state-of-the-art video generation model with shipped updates like Veo 3, providing evidence of exceptional ability in building advanced ML systems. However, tweets lack technical depth, code, experiments, or personal ownership details, focusing mostly on casual content. Strong mission alignment with AI advancement but better suited for research than hands-on engineering given the director role.",
+  "detected_skills": [
+    "Video Generation",
+    "ML Research Leadership",
+    "Generative Models"
+  ],
+  "red_flags": [
+    "Mostly casual and non-technical tweets",
+    "No shared code, math, or experiments",
+    "Limited evidence of personal hands-on building"
+  ],
+  "recommended_role": "research",
+  "standout_tweets": [
+    18,
+    19,
+    27
+  ],
+  "exceptional_work": "Co-lead of Veo at Google DeepMind, shipping SOTA video generation models including Veo 3 portrait mode."
+}

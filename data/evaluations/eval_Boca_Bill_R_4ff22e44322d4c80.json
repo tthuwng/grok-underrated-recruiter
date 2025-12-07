@@ -1,0 +1,19 @@
+{
+  "relevant": false,
+  "score": 0.15,
+  "reasoning": "Candidate is VP of Starship Engineering at SpaceX, demonstrating high-level leadership in aerospace hardware and systems like GNC and catch fittings, which shows exceptional ability in rocketry but no evidence of AI/ML work, software engineering, or xAI-relevant tech stack. Tweets focus exclusively on SpaceX launches and hardware feats without any mention of coding, open-source contributions, transformers, training, or AI mission alignment. While impressive in domain expertise, lacks direct fit for xAI's AI-focused engineering roles.",
+  "detected_skills": [
+    "Aerospace Engineering",
+    "Guidance Navigation Control (GNC)",
+    "Hardware Systems Leadership",
+    "Rocketry"
+  ],
+  "red_flags": [],
+  "recommended_role": "none",
+  "standout_tweets": [
+    2,
+    3,
+    8
+  ],
+  "exceptional_work": "VP Starship Engineering at SpaceX, contributing to successful booster catches and Starship development progress"
+}

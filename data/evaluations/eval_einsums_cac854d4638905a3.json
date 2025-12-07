@@ -1,0 +1,21 @@
+{
+  "relevant": false,
+  "score": 0.15,
+  "reasoning": "No evidence of building or shipping exceptional technical work; tweets are mostly commentary, bug reports on consumer AI tools like ChatGPT, and opinions on AI labs without code, projects, or deep technical contributions. Lacks demonstration of ownership over hard problems or mission-aligned obsession with core xAI tech like training/inference. Bug reporting shows some user-level engagement but not exceptional engineering ability.",
+  "detected_skills": [
+    "AI product testing",
+    "bug reproduction"
+  ],
+  "red_flags": [
+    "No original technical content or builds",
+    "Mostly retweets/links/opinions",
+    "Negative commentary on xAI"
+  ],
+  "recommended_role": "none",
+  "standout_tweets": [
+    16,
+    17,
+    21
+  ],
+  "exceptional_work": ""
+}

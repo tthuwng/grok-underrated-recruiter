@@ -1,0 +1,111 @@
+{
+  "handle": "alexzhuang_",
+  "bio": "cs @ uwaterloo",
+  "followers": 100,
+  "technical_depth": {
+    "score": 10,
+    "evidence": "Published papers in NeurIPS 2024 Datasets & Benchmarks Spotlight (MMLU-Pro), ACL 2023 (Program of Thoughts), core contributor to StructLM (generalist models for structured knowledge, arXiv), undergrad research at TIGER Lab."
+  },
+  "project_evidence": {
+    "score": 7,
+    "evidence": "GitHub https://github.com/azhx with 41 repos, pinned contribution to TIGER-AI-Lab/StructLM; lab projects like RALACs action recognition; Hack the North 2018 participant; no high-star personal repos visible (17 followers)."
+  },
+  "mission_alignment": {
+    "score": 10,
+    "evidence": "AI/LLM research focus (StructLM, MMLU-Pro, PoT); interned at TIGER Lab then joined xAI; early X posts on GPT-4, Karpathy software 3.0, Hinton."
+  },
+  "exceptional_ability": {
+    "score": 10,
+    "evidence": "CRA Outstanding Undergraduate Researcher Award 2024; multiple top-tier AI publications as UWaterloo undergrad; recruited to xAI post-internship; solved hard problems in structured LLM grounding and benchmarks."
+  },
+  "communication": {
+    "score": 7,
+    "evidence": "Clear X posts sharing AI insights (e.g., Karpathy quote, Hinton/Hamilton timelines); co-authored papers in top venues; no exceptional writing samples but adequate."
+  },
+  "final_score": 89.5,
+  "summary": "Exceptional UWaterloo CS undergrad with top AI conference publications and awards, already joined xAI after TIGER Lab internship. Demonstrates deep technical ability in frontier AI research but limited public project visibility and X activity.",
+  "strengths": [
+    "Top-tier AI research publications as undergrad",
+    "Recruited to xAI, CRA award",
+    "Contributions to StructLM and benchmarks"
+  ],
+  "concerns": [
+    "Low GitHub stars/followers, no popular OSS",
+    "Sparse recent X activity, no LinkedIn found"
+  ],
+  "recommended_role": "research",
+  "github_url": "https://github.com/azhx",
+  "linkedin_url": null,
+  "top_repos": [
+    "TIGER-AI-Lab/StructLM (contributor)",
+    "azhx personal repos (41 total, details sparse)"
+  ],
+  "citations": [
+    "https://x.com/i/status/992880541350465537",
+    "https://www.linkedin.com/in/eddyzhou",
+    "https://medium.com/%40AlexZhuang/teaching-computers-to-paint-like-van-gogh-fc4cd7c22dab",
+    "https://hackthenorth2018.devpost.com/project-gallery?page=3",
+    "https://x.com/i/user/1685294022615818241",
+    "https://ca.linkedin.com/in/alex-zhuang-00040484",
+    "https://alexzhuang.com/",
+    "https://arxiv.org/html/2209.14408v3",
+    "https://x.com/i/status/1117756973003476994",
+    "https://x.com/i/status/1866256845830267296",
+    "https://wenhuchen.github.io/lab.html",
+    "https://ca.linkedin.com/in/alex-zhuang-939026245",
+    "https://x.com/i/status/1954064104249078083",
+    "https://x.com/i/status/1536850772440322049",
+    "https://x.com/i/status/1599547169970626560",
+    "https://x.com/i/status/1082101775140712448",
+    "https://cra.org/crn/wp-content/uploads/sites/7/2024/01/January-CRN-2024_FINAL.pdf",
+    "https://x.com/i/status/1081782000544071680",
+    "https://github.com/luciusssss/ZhuangBench",
+    "https://x.com/i/status/1607995732728115200",
+    "https://mxueguang.github.io/",
+    "https://arxiv.org/html/2402.16671v7",
+    "https://x.com/i/status/1981992738406142349",
+    "https://www.researchgate.net/scientific-contributions/Weiming-Ren-2283486607",
+    "https://x.com/alexzhuang_",
+    "https://github.com/alfredzhuang",
+    "https://x.com/i/status/1652164205116571650",
+    "https://tiger-ai-lab.github.io/StructLM/",
+    "https://twstalker.com/_KevinTong",
+    "https://github.com/sduzh",
+    "https://x.com/i/status/1526386672165744640",
+    "https://x.com/i/user/51472019",
+    "https://huggingface.co/datasets/IVUL-KAUST/MOLE-plus",
+    "https://x.com/i/status/1526609800741605376",
+    "https://zhuanlan.zhihu.com/p/569627961",
+    "https://openreview.net/profile?id=~Rongqi_Fan1",
+    "https://x.com/i/user/1130643695529734144",
+    "https://x.com/i/user/720908406",
+    "https://x.com/i/status/992876606979952640",
+    "https://cs.uwaterloo.ca/news/cheriton-school-computer-science-students-2024-cra-outstanding-undergraduate-researcher-awards",
+    "https://github.com/ZiwenZhuang",
+    "https://x.com/i/status/1980453054274248912",
+    "https://www.researchgate.net/publication/364026112_RADACS_Towards_Higher-Order_Reasoning_using_Action_Recognition_in_Autonomous_Vehicles",
+    "https://www.linkedin.com/in/alex-zhuang-124aa7224",
+    "https://x.com/i/status/1536107153173401602",
+    "https://x.com/i/status/1820909823019602225",
+    "https://www.researchgate.net/publication/388402389_Humanity%27s_Last_Exam",
+    "https://x.com/i/status/1605778257386823681",
+    "https://cs.uwaterloo.ca/~w2ren/",
+    "https://www.linkedin.com/in/azhuang639",
+    "https://ca.linkedin.com/in/alexzhuang01",
+    "https://www.researchgate.net/scientific-contributions/Derek-Rayside-11355024",
+    "https://github.com/azhx?tab=repositories",
+    "https://www.semanticscholar.org/author/Xueguang-Ma/2461713",
+    "https://aclanthology.org/2024.acl-long.764.pdf",
+    "https://x.com/i/status/1536149521717149697",
+    "https://x.com/i/status/1974017336396104098",
+    "https://x.com/i/user/903335006155788288",
+    "https://x.com/i/status/1118620548689465345",
+    "https://github.com/zhuang-li",
+    "https://x.com/i/status/1820854232813383689",
+    "https://www.alphaxiv.org/overview/2507.17747v1",
+    "https://devpost.com/AlexZhuang/following",
+    "https://github.com/azhx",
+    "https://cra.org/about/awards/outstanding-undergraduate-researcher-award/"
+  ],
+  "raw_response": "{\n  \"technical_depth\": {\"score\": 10, \"evidence\": \"Published papers in NeurIPS 2024 Datasets & Benchmarks Spotlight (MMLU-Pro), ACL 2023 (Program of Thoughts), core contributor to StructLM (generalist models for structured knowledge, arXiv), undergrad research at TIGER Lab.\"},\n  \"project_evidence\": {\"score\": 7, \"evidence\": \"GitHub https://github.com/azhx with 41 repos, pinned contribution to TIGER-AI-Lab/StructLM; lab projects like RALACs action recognition; Hack the North 2018 participant; no high-star personal repos visible (17 followers).\"},\n  \"mission_alignment\": {\"score\": 10, \"evidence\": \"AI/LLM research focus (StructLM, MMLU-Pro, PoT); interned at TIGER Lab then joined xAI; early X posts on GPT-4, Karpathy software 3.0, Hinton.\"},\n  \"exceptional_ability\": {\"score\": 10, \"evidence\": \"CRA Outstanding Undergraduate Researcher Award 2024; multiple top-tier AI publications as UWaterloo undergrad; recruited to xAI post-internship; solved hard problems in structured LLM grounding and benchmarks.\"},\n  \"communication\": {\"score\": 7, \"evidence\": \"Clear X posts sharing AI insights (e.g., Karpathy quote, Hinton/Hamilton timelines); co-authored papers in top venues; no exceptional writing samples but adequate.\"},\n  \"summary\": \"Exceptional UWaterloo CS undergrad with top AI conference publications and awards, already joined xAI after TIGER Lab internship. Demonstrates deep technical ability in frontier AI research but limited public project visibility and X activity.\",\n  \"strengths\": [\"Top-tier AI research publications as undergrad\", \"Recruited to xAI, CRA award\", \"Contributions to StructLM and benchmarks\"],\n  \"concerns\": [\"Low GitHub stars/followers, no popular OSS\", \"Sparse recent X activity, no LinkedIn found\"],\n  \"recommended_role\": \"research\",\n  \"github_url\": \"https://github.com/azhx\",\n  \"linkedin_url\": null,\n  \"top_repos\": [\"TIGER-AI-Lab/StructLM (contributor)\", \"azhx personal repos (41 total, details sparse)\"]\n}"
+}

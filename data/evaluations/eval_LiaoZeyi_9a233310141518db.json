@@ -1,0 +1,23 @@
+{
+  "relevant": true,
+  "score": 0.77,
+  "reasoning": "Candidate demonstrates exceptional ability through leading the development of RedTeamCUA, a sophisticated adversarial testing framework built on OSWorld, with detailed benchmarks (RTC-Bench) and empirical results on CUAs/prompt injection, evidenced by ICLR 2025 spotlight acceptances. Shows deep technical depth in agent safety, alignment, and evals via specific metrics (ASR/AR) and threat models, aligning somewhat with xAI's reasoning/ML interests though more safety-focused. Clear ownership in joint projects with academic output, but lacks production shipping or core xAI stack (e.g., JAX/CUDA).",
+  "detected_skills": [
+    "LLM agent safety",
+    "adversarial testing frameworks",
+    "prompt injection analysis",
+    "benchmarks/evals",
+    "OSWorld integration"
+  ],
+  "red_flags": [
+    "Academic/PhD focus over production engineering",
+    "Joint leadership without solo deep ownership evident"
+  ],
+  "recommended_role": "research",
+  "standout_tweets": [
+    2,
+    10,
+    12
+  ],
+  "exceptional_work": "Led RedTeamCUA framework and RTC-Bench for realistic adversarial testing of computer-use agents against indirect prompt injection, with ICLR 2025 spotlights on AIHF (alignment via Inverse-RL) and EIA (environmental injection attacks)"
+}

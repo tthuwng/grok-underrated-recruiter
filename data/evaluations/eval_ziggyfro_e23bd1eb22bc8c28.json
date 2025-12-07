@@ -1,0 +1,14 @@
+{
+  "relevant": false,
+  "score": 0.15,
+  "reasoning": "Bio indicates experience at SpaceX and The Boring Company, suggesting some engineering background in hardware/aerospace, but tweets provide no evidence of exceptional work, shipped projects, or technical depth in xAI-relevant areas like ML, CUDA, or distributed systems. Content focuses on personal life, jokes, politics, and aviation hobbies without demonstrating building or ownership of hard technical problems. No clear answer to 'What exceptional work have you done?' from X presence.",
+  "detected_skills": [],
+  "red_flags": [],
+  "recommended_role": "none",
+  "standout_tweets": [
+    5,
+    6,
+    21
+  ],
+  "exceptional_work": ""
+}

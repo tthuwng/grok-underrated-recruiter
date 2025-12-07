@@ -1,0 +1,102 @@
+{
+  "handle": "rhubarbwu",
+  "bio": "Researcher @togethercompute; MS '24 @UofTCompSci/@VectorInst",
+  "followers": 175,
+  "technical_depth": {
+    "score": 10,
+    "evidence": "NeurIPS 2024 main conference paper 'Linguistic Collapse: Neural Collapse in (Large) Language Models'; MSc thesis on LLM dynamics under Prof. Vardan Papyan; multiple publications including AAAI, ICML workshop; trained dozens of LLMs; GitHub repos with NC library and analysis code"
+  },
+  "project_evidence": {
+    "score": 7,
+    "evidence": "Active GitHub (23 repos): linguistic-collapse (17 stars, NeurIPS code), neural-collapse (16 stars, NC library), Multimodal-CLIP-Applications/CLIP_FAISS_NNs (CLIP prototypes), Game-of-Life (C++/CUDA), ENAS-Experiments; Cohere ML intern (finetuned LLMs); no high-star or production-scale projects"
+  },
+  "mission_alignment": {
+    "score": 10,
+    "evidence": "Researcher at Together AI (frontier LLM company); MSc/BSc UofT CS AI/Vector Institute; pubs on LLMs, NAS poisoning; NeurIPS 2024/2025 attendance; X posts on LLM neural collapse"
+  },
+  "exceptional_ability": {
+    "score": 9,
+    "evidence": "NeurIPS publication as recent MS grad; high GPA 3.94; analyzed LLM inductive biases/interpretability; Cohere embeddings intern blending datasets for multilingual LLMs; AAAI top 20 oral finalist"
+  },
+  "communication": {
+    "score": 9,
+    "evidence": "Clear X thread explaining NeurIPS paper concepts (NC1-4, scaling trends); well-structured CV; accepted NeurIPS paper demonstrates strong technical writing"
+  },
+  "final_score": 89.5,
+  "summary": "Rupert Wu is a strong recent MS grad from UofT/Vector with a NeurIPS 2024 publication on neural collapse in LLMs and researcher role at Together AI. Demonstrates deep ML research experience and engineering skills via internships and GitHub projects. Ideal for research-oriented engineering roles.",
+  "strengths": [
+    "NeurIPS publication and multiple ML papers",
+    "Experience training/analyzing LLMs at Vector/Together/Cohere",
+    "Systems programming skills (CUDA, Rust, etc.)"
+  ],
+  "concerns": [
+    "Limited evidence of large-scale production engineering",
+    "Low GitHub stars and sparse recent technical X posts"
+  ],
+  "recommended_role": "research",
+  "github_url": "https://github.com/rhubarbwu",
+  "linkedin_url": "https://www.linkedin.com/in/wu-robert",
+  "top_repos": [
+    "rhubarbwu/linguistic-collapse",
+    "rhubarbwu/neural-collapse",
+    "rhubarbwu/Multimodal-CLIP-Applications"
+  ],
+  "citations": [
+    "https://x.com/i/status/1981479803279810655",
+    "https://github.com/rhubarbwu/neural-collapse",
+    "https://www.linkedin.com/pulse/15-ways-use-rhubarb-academy-of-culinary-nutrition",
+    "https://www.facebook.com/globalcareersfair/posts/-want-to-land-a-job-at-the-un-here-are-3-quick-tips-to-make-your-application-sta/919122970379063/",
+    "https://x.com/i/status/1989207610147692895",
+    "https://github.com/rhubarbwu/csc209",
+    "https://github.com/rhubarbwu/ENAS-Experiments",
+    "https://huggingface.co/rhubarbwu",
+    "https://github.com/rhubarbwu/Game-of-Life",
+    "https://github.com/rhubarbwu/cellrs",
+    "https://neurips.cc/virtual/2024/session/108366",
+    "https://www.linkedin.com/pulse/cumin-rhubarb-crumble-how-approach-digital-marketing-alison-knott",
+    "https://x.com/i/status/1988528411908706597",
+    "https://www.linkedin.com/pub/dir/Rupert/%2B/cn-0-China",
+    "https://x.com/i/status/1981273297687105931",
+    "https://github.com/rhubarbwu/linguistic-collapse",
+    "https://github.com/rhubarbwu/neural-collapse/blob/main/setup.py",
+    "https://www.linkedin.com/posts/candicegottliebclark_its-national-strawberry-rhubarb-pie-day-activity-7205576887606153216-rYig",
+    "https://openreview.net/profile?id=~Robert_Wu1",
+    "https://www.cs.toronto.edu/~rupert/209/lec08.pdf",
+    "https://x.com/rhubarbwu",
+    "https://huggingface.co/rhubarbwu/models",
+    "https://www.linkedin.com/pulse/british-rhubarb-lee-tate-0vike",
+    "https://github.com/rhubarbwu",
+    "https://x.com/i/status/1988492163362299964",
+    "https://x.com/i/status/1867266180333154583",
+    "https://huggingface.co/rhubarbwu/activity/papers",
+    "https://www.zoominfo.com/p/Rupert-Wu/2577642772",
+    "https://www.linkedin.com/company/rhubarbagency",
+    "https://github.com/rhubarbwu/CLIP_FAISS_NNs",
+    "https://x.com/i/status/1867266283626172881",
+    "https://www.linkedin.com/posts/farmer-lee-jones-03a244a_if-you-ask-me-rhubarb-tastes-like-sunshinebut-activity-7059539906238312449-CCAz",
+    "https://x.com/i/status/1867260838480162987",
+    "https://www.linkedin.com/pulse/rhubarb-michelle-cracknell",
+    "https://github.com/orgs/AI-secure/followers",
+    "https://arxiv.org/abs/2405.17767",
+    "https://x.com/i/status/1959111676944331071",
+    "https://x.com/i/status/1867266349078393223",
+    "https://x.com/i/status/1984324604886991149",
+    "https://orcid.org/0009-0005-6465-0154",
+    "https://www.linkedin.com/pulse/rhubarb-medicinal-plants-dr-tohid-nooralvandi",
+    "https://www.linkedin.com/posts/rensheng-%25EF%25BC%2588rupert%25EF%25BC%2589-wu-454a9223_here-are-five-books-that-id-recommend-as-activity-6743717465597059072-9zIR",
+    "https://www.linkedin.com/posts/laurieneverman_rhubarb-pudding-cake-plus-9-more-yummy-rhubarb-activity-7065740434806865920-s0CO",
+    "https://x.com/i/status/1981479524157313438",
+    "https://x.com/i/status/1959122911249539212",
+    "https://github.com/rhubarbwu/Multimodal-CLIP-Applications",
+    "https://x.com/i/status/1867266070450778173",
+    "https://x.com/i/user/1033091292899815425",
+    "https://www.cs.toronto.edu/~rupert/209/lec04.pdf",
+    "https://www.signalhire.com/profiles/rupert-wu/232224715",
+    "https://www.cs.toronto.edu/~rupert/cv.pdf",
+    "https://x.com/i/status/1984324542031151309",
+    "https://x.com/i/status/1964041000667529557",
+    "https://arxiv.org/html/2405.17767v2",
+    "https://www.linkedin.com/pub/dir/Rupert/Wu"
+  ],
+  "raw_response": "{\n  \"technical_depth\": {\"score\": 10, \"evidence\": \"NeurIPS 2024 main conference paper 'Linguistic Collapse: Neural Collapse in (Large) Language Models'; MSc thesis on LLM dynamics under Prof. Vardan Papyan; multiple publications including AAAI, ICML workshop; trained dozens of LLMs; GitHub repos with NC library and analysis code\"},\n  \"project_evidence\": {\"score\": 7, \"evidence\": \"Active GitHub (23 repos): linguistic-collapse (17 stars, NeurIPS code), neural-collapse (16 stars, NC library), Multimodal-CLIP-Applications/CLIP_FAISS_NNs (CLIP prototypes), Game-of-Life (C++/CUDA), ENAS-Experiments; Cohere ML intern (finetuned LLMs); no high-star or production-scale projects\"},\n  \"mission_alignment\": {\"score\": 10, \"evidence\": \"Researcher at Together AI (frontier LLM company); MSc/BSc UofT CS AI/Vector Institute; pubs on LLMs, NAS poisoning; NeurIPS 2024/2025 attendance; X posts on LLM neural collapse\"},\n  \"exceptional_ability\": {\"score\": 9, \"evidence\": \"NeurIPS publication as recent MS grad; high GPA 3.94; analyzed LLM inductive biases/interpretability; Cohere embeddings intern blending datasets for multilingual LLMs; AAAI top 20 oral finalist\"},\n  \"communication\": {\"score\": 9, \"evidence\": \"Clear X thread explaining NeurIPS paper concepts (NC1-4, scaling trends); well-structured CV; accepted NeurIPS paper demonstrates strong technical writing\"},\n  \"summary\": \"Rupert Wu is a strong recent MS grad from UofT/Vector with a NeurIPS 2024 publication on neural collapse in LLMs and researcher role at Together AI. Demonstrates deep ML research experience and engineering skills via internships and GitHub projects. Ideal for research-oriented engineering roles.\",\n  \"strengths\": [\"NeurIPS publication and multiple ML papers\", \"Experience training/analyzing LLMs at Vector/Together/Cohere\", \"Systems programming skills (CUDA, Rust, etc.)\"],\n  \"concerns\": [\"Limited evidence of large-scale production engineering\", \"Low GitHub stars and sparse recent technical X posts\"],\n  \"recommended_role\": \"research\",\n  \"github_url\": \"https://github.com/rhubarbwu\",\n  \"linkedin_url\": \"https://www.linkedin.com/in/wu-robert\",\n  \"top_repos\": [\"rhubarbwu/linguistic-collapse\", \"rhubarbwu/neural-collapse\", \"rhubarbwu/Multimodal-CLIP-Applications\"]\n}"
+}

@@ -1,0 +1,18 @@
+{
+  "relevant": false,
+  "score": 0.15,
+  "reasoning": "No evidence of exceptional technical ability or building hard engineering projects; tweets focus on product marketing, launches, and promotions for Enterpret AI (customer feedback tool) without code, deep tech details, or open-source contributions. Past roles at Scale AI and others suggest potential experience, but nothing substantive shown here to indicate xAI-caliber engineering. Lacks mission alignment with AI systems for understanding the universe, emphasizing customer growth and VoC instead.",
+  "detected_skills": [
+    "Product Management",
+    "Customer Analytics",
+    "Startup Promotion"
+  ],
+  "red_flags": [
+    "Pure promotional content without substance",
+    "Spam patterns (iPhone giveaways)",
+    "No original technical thinking"
+  ],
+  "recommended_role": "none",
+  "standout_tweets": [],
+  "exceptional_work": ""
+}

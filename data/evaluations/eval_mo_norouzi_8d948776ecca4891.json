@@ -1,0 +1,22 @@
+{
+  "relevant": false,
+  "score": 0.25,
+  "reasoning": "Candidate is co-founder/CEO of Ideogram AI, shipping generative image models like v3.0 and Canvas, showing product leadership and shipping velocity. However, tweets lack evidence of personal deep technical contributions, code, experiments, or solving hard problems\u2014mostly promotional hype without technical depth. No clear alignment with xAI's core mission of understanding the universe via LLMs/training; focus is on applied design/media generation.",
+  "detected_skills": [
+    "Generative AI product development",
+    "AI startup leadership",
+    "Image generation models"
+  ],
+  "red_flags": [
+    "Pure promotional content without substance",
+    "No original technical thinking or code shared",
+    "Limited evidence of personal hands-on engineering"
+  ],
+  "recommended_role": "none",
+  "standout_tweets": [
+    8,
+    20,
+    21
+  ],
+  "exceptional_work": "Co-founded Ideogram AI and shipped v3.0 with API and realism upgrades"
+}

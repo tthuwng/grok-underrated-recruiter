@@ -1,0 +1,91 @@
+{
+  "handle": "juleszqiu",
+  "bio": "@radicalvcfund, @HarvardMath \u2229 @Harvard_History",
+  "followers": 92,
+  "technical_depth": {
+    "score": 4,
+    "evidence": "Harvard Math secondary (BA 2019, Phi Beta Kappa), but no published papers, novel research, or deep technical discussions/posts found. Posts are high-level AI hype (e.g., Sunday Robotics ACT-1, NeurIPS events)."
+  },
+  "project_evidence": {
+    "score": 1,
+    "evidence": "No GitHub profile, repositories, or open-source contributions found despite searches. No evidence of side projects, shipped products, or code."
+  },
+  "mission_alignment": {
+    "score": 10,
+    "evidence": "Principal AI investor at Radical Ventures (@radicalvcfund), posts about frontier AI (Sunday Robotics launch, NVDA, hosting Jeff Dean & Geoff Hinton at NeurIPS), moderating AI panels, dinners with Nvidia Jim Fan."
+  },
+  "exceptional_ability": {
+    "score": 4,
+    "evidence": "Progressed to VP at Coatue Management post-Harvard, now Principal at top AI VC; strong network/connections. No evidence of solving hard engineering problems or unique technical insights."
+  },
+  "communication": {
+    "score": 7,
+    "evidence": "Clear, concise X/LinkedIn posts (e.g., event invites, investment announcements); hosts panels/dinners effectively."
+  },
+  "final_score": 47.5,
+  "summary": "Jules Qiu is a talented AI VC investor with a strong math background from Harvard and impressive early career progression in top funds like Coatue and Radical Ventures. However, lacks any visible engineering experience, projects, or technical depth beyond education.",
+  "strengths": [
+    "Elite AI ecosystem connections (Dean, Hinton, Fan, startup CEOs)",
+    "Harvard Math education",
+    "Passion for frontier AI demonstrated via investing/hosting"
+  ],
+  "concerns": [
+    "No software engineering or technical project evidence",
+    "Career focused on VC/investing, not building",
+    "Low X activity with no deep technical content"
+  ],
+  "recommended_role": "none",
+  "github_url": null,
+  "linkedin_url": "https://www.linkedin.com/in/jules-qiu",
+  "top_repos": [],
+  "citations": [
+    "https://www.linkedin.com/posts/jules-qiu_calling-all-ai-founders-and-researchers-activity-7394809913010475008-a7yk",
+    "https://x.com/radicalvcfund/status/1970935479622402139",
+    "https://github.com/julieqiu",
+    "https://mobile.x.com/Exp_Mark",
+    "https://radical.vc/teams/",
+    "https://www.sotwe.com/Radicalvcfund",
+    "https://www.sotwe.com/micro1_ai",
+    "https://x.com/i/status/1991204839578300813",
+    "https://twitter.com/search?q=Jeff%2520L%2520Heaton&f=user",
+    "https://x.com/i/status/1991224188682559842",
+    "https://www.linkedin.com/posts/jules-qiu_im-hosting-a-private-dinner-in-sf-for-early-stage-activity-7379573052243759104-6qFO",
+    "https://twitter.com/selinazwang/with_replies",
+    "https://x.com/tonyzzhao/with_replies",
+    "https://x.com/i/status/1991230208502902955",
+    "https://www.linkedin.com/in/jules-qiu",
+    "https://rocketreach.co/jules-qiu-email_857553901",
+    "https://www.linkedin.com/posts/jules-qiu-841132127_beyond-excited-to-join-coatues-stellar-team-activity-6962425577161064448-3164",
+    "https://twstalker.com/Tianyi_Zh",
+    "https://www.linkedin.com/posts/jules-qiu_sf-tech-week-day-1-founders-and-marketers-activity-7381585065178222592-ER3r",
+    "https://stanforddaily.com/2025/04/16/stanford-should-stand-with-harvard/",
+    "https://www.linkedin.com/posts/jules-qiu_im-joining-radical-ventures-every-tech-activity-7356394750129696770-dwa_",
+    "https://theorg.com/org/coatue-management/org-chart/jules-qiu",
+    "https://x.com/i/user/1654603020192333827",
+    "https://www.twstalker.com/Harvard_History",
+    "https://twitter.com/search?q=Jim%2520R%2520Eddington",
+    "https://qconsf.com/track-hosts/julieqiu",
+    "https://x.com/tonyzzhao?lang=en",
+    "https://twstalker.com/thomastjoshi",
+    "https://www.linkedin.com/posts/jules-qiu_distyl-was-my-first-investment-as-an-early-stage-activity-7376486832403828736-sbLl",
+    "https://github.com/pyvideo/data/blob/master/pycon-us-2018/videos/julie-qiu-build-a-search-engine-with-python-elasticsearch-pycon-2018.json",
+    "https://x.com/radicalvcfund/status/1975278834170937604",
+    "https://histecon.fas.harvard.edu/news.html",
+    "https://x.com/selinazwang?lang=en",
+    "https://twstalker.com/RAYBEAZY",
+    "https://www.youtube.com/watch?v=zCragLHzP1Y",
+    "https://www.linkedin.com/posts/jules-qiu_ai-nyc-sf-activity-7064702832171515904-rqsO",
+    "https://histecon.fas.harvard.edu/Jules_Qiu.htm",
+    "https://twstalker.com/khalilhimura",
+    "https://x.com/motierventures?lang=en",
+    "https://www.histecon.magd.cam.ac.uk/undergraduate_exchange.htm",
+    "https://x.com/hashtag/harvardmath?src=hashtag_click",
+    "https://www.zoominfo.com/p/Julie-Qiu/10192291726",
+    "https://ai.qconferences.com/speakers/julieqiu",
+    "https://x.com/i/status/1992772567590142424",
+    "https://neo.com/investor/jules-qiu?ind=Gaming",
+    "https://x.com/radicalvcfund/status/1953579336256434676",
+    "https://histecon.fas.harvard.edu/past_undergraduate_associates.htm"
+  ],
+  "raw_response": "{\n  \"technical_depth\": {\"score\": 4, \"evidence\": \"Harvard Math secondary (BA 2019, Phi Beta Kappa), but no published papers, novel research, or deep technical discussions/posts found. Posts are high-level AI hype (e.g., Sunday Robotics ACT-1, NeurIPS events).\"},\n  \"project_evidence\": {\"score\": 1, \"evidence\": \"No GitHub profile, repositories, or open-source contributions found despite searches. No evidence of side projects, shipped products, or code.\"},\n  \"mission_alignment\": {\"score\": 10, \"evidence\": \"Principal AI investor at Radical Ventures (@radicalvcfund), posts about frontier AI (Sunday Robotics launch, NVDA, hosting Jeff Dean & Geoff Hinton at NeurIPS), moderating AI panels, dinners with Nvidia Jim Fan.\"},\n  \"exceptional_ability\": {\"score\": 4, \"evidence\": \"Progressed to VP at Coatue Management post-Harvard, now Principal at top AI VC; strong network/connections. No evidence of solving hard engineering problems or unique technical insights.\"},\n  \"communication\": {\"score\": 7, \"evidence\": \"Clear, concise X/LinkedIn posts (e.g., event invites, investment announcements); hosts panels/dinners effectively.\"},\n  \"summary\": \"Jules Qiu is a talented AI VC investor with a strong math background from Harvard and impressive early career progression in top funds like Coatue and Radical Ventures. However, lacks any visible engineering experience, projects, or technical depth beyond education.\",\n  \"strengths\": [\"Elite AI ecosystem connections (Dean, Hinton, Fan, startup CEOs)\", \"Harvard Math education\", \"Passion for frontier AI demonstrated via investing/hosting\"],\n  \"concerns\": [\"No software engineering or technical project evidence\", \"Career focused on VC/investing, not building\", \"Low X activity with no deep technical content\"],\n  \"recommended_role\": \"none\",\n  \"github_url\": null,\n  \"linkedin_url\": \"https://www.linkedin.com/in/jules-qiu\",\n  \"top_repos\": []\n}"
+}

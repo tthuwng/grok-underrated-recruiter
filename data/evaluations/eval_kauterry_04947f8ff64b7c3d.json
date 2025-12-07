@@ -1,0 +1,24 @@
+{
+  "relevant": false,
+  "score": 0.3,
+  "reasoning": "Bio indicates solid background (Meta AI, Stanford, founding at Pramaana Labs) with hints of shipping via launch announcements, but tweets lack concrete evidence of exceptional personal contributions, code, or deep technical work. Posts are mostly promotional links, casual observations (e.g., Python context managers, PyTorch fandom), and non-technical content, showing no rigorous technical depth or mission obsession aligned with xAI's focus on advanced AI training/inference. No clear answer to 'What exceptional work have you done?' beyond vague pride in team launches.",
+  "detected_skills": [
+    "Python",
+    "PyTorch",
+    "Transformers",
+    "LLM prompting"
+  ],
+  "red_flags": [
+    "Pure promotional content without substance",
+    "Limited original technical content"
+  ],
+  "recommended_role": "none",
+  "standout_tweets": [
+    2,
+    7,
+    11,
+    16,
+    17
+  ],
+  "exceptional_work": ""
+}

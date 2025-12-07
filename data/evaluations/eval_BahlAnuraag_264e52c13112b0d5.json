@@ -1,0 +1,18 @@
+{
+  "relevant": false,
+  "score": 0.15,
+  "reasoning": "No evidence of personal exceptional technical work, building, or shipping code/products; tweets are purely promotional for Palantir events, AIP platform, and fellowships without any original technical contributions or deep dives. Lacks demonstration of hands-on engineering, deep ML expertise, or mission-aligned obsession with core AI problems like training/inference. Position in commercial/AIP leadership suggests sales/marketing focus rather than engineering ownership.",
+  "detected_skills": [
+    "AI product promotion",
+    "Event marketing",
+    "Developer relations"
+  ],
+  "red_flags": [
+    "Pure promotional content without substance",
+    "No original technical thinking",
+    "No evidence of building or coding"
+  ],
+  "recommended_role": "none",
+  "standout_tweets": [],
+  "exceptional_work": ""
+}

@@ -1,0 +1,24 @@
+{
+  "relevant": false,
+  "score": 0.45,
+  "reasoning": "Bio indicates building coding assistants at a YC W23 startup and prior roles at elite robotics firms like KittyHawk and Waymo, suggesting potential exceptional ability, but tweets provide no concrete evidence of shipped products, open-source contributions, or deep technical work. Content is mostly memes, casual opinions, and surface-level AI commentary without code, math, experiments, or ownership of hard problems. Lacks mission obsession with xAI-scale challenges like training/inference optimization; high noise-to-signal ratio.",
+  "detected_skills": [
+    "LLM evaluation",
+    "model benchmarking",
+    "robotics/autonomy",
+    "coding assistants"
+  ],
+  "red_flags": [
+    "Mostly non-technical memes and jokes",
+    "No shipped work or code shared",
+    "Low original technical content"
+  ],
+  "recommended_role": "none",
+  "standout_tweets": [
+    14,
+    29,
+    12,
+    8
+  ],
+  "exceptional_work": ""
+}

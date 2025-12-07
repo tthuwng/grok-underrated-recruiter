@@ -1,0 +1,24 @@
+{
+  "relevant": true,
+  "score": 0.82,
+  "reasoning": "Candidate demonstrates exceptional ability through leading and open-sourcing FlowMo, a diffusion autoencoder for image tokenization accepted to ICCV 2025, with code, models, and a detailed explanatory thread showing deep technical ownership. Exhibits strong technical depth in diffusion models, tokenizers, evaluation metrics like gFID, and critiques of common practices, far beyond buzzwords. Solid mission alignment via work on video diffusion and inverse graphics relevant to multimodal understanding, though more CV-focused than large-scale LLM training; excellent communication in concise, insightful tweets.",
+  "detected_skills": [
+    "diffusion models",
+    "computer vision",
+    "image tokenization",
+    "autoencoders",
+    "ML evaluation metrics",
+    "inverse problems"
+  ],
+  "red_flags": [],
+  "recommended_role": "research",
+  "standout_tweets": [
+    14,
+    22,
+    27,
+    28,
+    29,
+    30
+  ],
+  "exceptional_work": "Led FlowMo: diffusion autoencoder achieving SOTA image tokenization performance, open-sourced models/code, accepted to ICCV 2025"
+}

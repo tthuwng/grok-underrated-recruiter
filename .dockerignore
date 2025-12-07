@@ -1,0 +1,48 @@
+# Git
+.git
+.gitignore
+
+# Python
+__pycache__
+*.py[cod]
+*$py.class
+*.so
+.Python
+.env
+.venv
+env/
+venv/
+ENV/
+.mypy_cache/
+.pytest_cache/
+
+# Node
+ui/node_modules
+ui/dist
+
+# IDE
+.idea
+.vscode
+*.swp
+*.swo
+
+# Data (raw data not needed in container after migration)
+data/raw/
+
+# Documentation
+*.md
+!README.md
+
+# Jupyter
+*.ipynb
+.ipynb_checkpoints/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Test
+tests/
